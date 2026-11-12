@@ -35,3 +35,49 @@ function onVideo(v) {
   if (!v.paused) attach(v);
 }
 setInterval(() => { document.querySelectorAll('video').forEach(onVideo); }, 1000);
+
+/* ---- what YouTube itself knows about this video ----
+   "Music in this video" (songs YouTube identified by listening), chapters, description,
+   and comments that contain a timestamped tracklist. Sent to the app as soon as available. */
+const txt = v => !v ? '' : typeof v === 'string' ? v : (v.simpleText || v.content || (v.runs ? v.runs.map(r => r.text).join('') : ''));
+function jsonVar(name) {
+  for (const s of document.querySelectorAll('script')) {
+    const t = s.textContent, i = t.indexOf(name + ' = ');
+    if (i < 0) continue;
+    const a = t.indexOf('{', i);
+    let depth = 0, inStr = false, esc = false;
+    for (let k = a; k < t.length; k++) {
+      const c = t[k];
+      if (inStr) { if (esc) esc = false; else if (c === '\\') esc = true; else if (c === '"') inStr = false; continue; }
+      if (c === '"') inStr = true; else if (c === '{') depth++; else if (c === '}' && --depth === 0) { try { return JSON.parse(t.slice(a, k + 1)); } catch (e) { return null; } }
+    }
+  }
+  return null;
+}
+function walkObj(o, fn) { const st = [o]; let n = 0; while (st.length && n++ < 400000) { const x = st.pop(); if (x && typeof x === 'object') { fn(x); for (const k in x) st.push(x[k]); } } }
+function ytInfo() {
+  const d = jsonVar('ytInitialData'), pr = jsonVar('ytInitialPlayerResponse');
+  const music = [], chapters = []; let desc = '', title = '';
+  if (d) walkObj(d, x => {
+    if (x.chapterRenderer) chapters.push({ t: (x.chapterRenderer.timeRangeStartMillis || 0) / 1000, title: txt(x.chapterRenderer.title) });
+    if (x.macroMarkersListItemRenderer) { const m = x.macroMarkersListItemRenderer, tm = txt(m.timeDescription); const p = tm.split(':').map(Number);
+      if (p.length > 1 && p.every(n => !isNaN(n))) chapters.push({ t: p.reduce((a, b) => a * 60 + b, 0), title: txt(m.title) }); }
+    if (x.videoAttributeViewModel) { const v = x.videoAttributeViewModel; const t1 = txt(v.title); if (t1) music.push({ title: t1, artist: txt(v.subtitle) }); }
+    if (x.carouselLockupRenderer) { let song = '', artist = '';
+      for (const r of (x.carouselLockupRenderer.infoRows || [])) { const ir = r.infoRowRenderer; if (!ir) continue;
+        const k = txt(ir.title).toLowerCase(), v = txt(ir.defaultMetadata) || txt(ir.expandedMetadata);
+        if (/song|أغنية|اغنية|الأغنية/.test(k)) song = v; if (/artist|فنان|الفنان/.test(k)) artist = v; }
+      if (song) music.push({ title: song, artist }); }
+    if (!desc && x.attributedDescription) desc = txt(x.attributedDescription);
+    if (!title && x.videoPrimaryInfoRenderer) title = txt(x.videoPrimaryInfoRenderer.title);
+  });
+  if (pr && pr.videoDetails) { if (!desc) desc = pr.videoDetails.shortDescription || ''; if (!title) title = pr.videoDetails.title || ''; }
+  const seen = new Set(), uniq = arr => arr.filter(m => { const k = JSON.stringify(m).toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; });
+  const comments = [...document.querySelectorAll('ytd-comment-thread-renderer #content-text')].map(e => e.innerText)
+    .filter(t => (t.match(/\d{1,2}:\d{2}/g) || []).length >= 3).slice(0, 5);
+  return { title, music: uniq(music), chapters: uniq(chapters), desc, comments };
+}
+let lastInfo = '';
+function sendInfo() { try { const i = ytInfo(), s = JSON.stringify(i); if (s !== lastInfo) { lastInfo = s; ipcRenderer.send('yt-info', i); } } catch (e) {} }
+window.addEventListener('DOMContentLoaded', () => setTimeout(sendInfo, 1500));
+setInterval(sendInfo, 5000);

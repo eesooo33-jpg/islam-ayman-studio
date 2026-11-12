@@ -130,6 +130,57 @@ canvas.wave{display:block;width:100%;background:#0d0b0f;border:1px solid var(--l
 .knob input[type=range]{width:100%;accent-color:var(--wine2)} .knob select{width:100%}
 .ab{display:inline-flex}.ab .btn{border-radius:0}.ab .btn:first-child{border-radius:0 10px 10px 0}.ab .btn:last-child{border-radius:10px 0 0 10px}
 .ab .btn.on{background:linear-gradient(180deg,var(--wine2),var(--wine));border-color:var(--wine2)}
+.apps{display:flex;flex-wrap:wrap;gap:4px 10px;min-width:220px}
+.apps a{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.apps i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.genres{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.genre{background:#120f14;border:1px solid var(--line);border-radius:14px;padding:12px;color:var(--text);cursor:pointer;text-align:center;font-family:inherit;display:grid;gap:2px;transition:.15s}
+.genre b{font-size:15px}.genre small{color:var(--muted);font-size:12px}
+.genre:hover{border-color:var(--wine3)}.genre.on{background:linear-gradient(180deg,var(--wine2),var(--wine));border-color:var(--wine2)}.genre.on small{color:#f2dfe5}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{background:#120f14;border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--muted)}.chip b{color:var(--text);margin-inline-start:4px}
+.daw{margin-top:18px;padding:16px;border:1px solid var(--line);border-radius:14px;background:#120f14}
+.lg{flex:none;display:inline-block;vertical-align:middle}
+.logo-btn{display:inline-flex;align-items:center;gap:8px}
+/* ---- studio look ---- */
+body{background:
+  linear-gradient(180deg,rgba(9,8,11,.0) 0%,rgba(9,8,11,.55) 60%,#09080b 100%),
+  radial-gradient(1200px 500px at 50% -120px,rgba(201,74,106,.35),transparent 70%),
+  repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 2px,transparent 2px 46px),
+  repeating-linear-gradient(0deg,rgba(0,0,0,.35) 0 22px,rgba(255,255,255,.02) 22px 23px,rgba(0,0,0,.0) 23px 46px),
+  conic-gradient(from 45deg at 50% 50%,#141118 0 25%,#0f0d12 0 50%,#141118 0 75%,#0f0d12 0) 0 0/46px 46px,
+  #0b0a0e;background-attachment:fixed}
+header{position:relative;box-shadow:0 1px 0 #2c2530,0 10px 30px rgba(0,0,0,.5)}
+header::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:linear-gradient(90deg,transparent,#c94a6a 20%,#ff2d55 50%,#c94a6a 80%,transparent);box-shadow:0 0 18px 2px rgba(255,45,85,.55)}
+img.gear{width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 10px 14px rgba(0,0,0,.6))}
+.module img.gear{width:150px;height:150px;margin:-14px auto 4px;display:block;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.module{text-align:center;background:linear-gradient(170deg,rgba(40,32,44,.85),rgba(18,15,20,.92));backdrop-filter:blur(6px);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 18px 40px rgba(0,0,0,.45)}
+.module:hover img.gear{transform:translateY(-8px) scale(1.06) rotate(-2deg)}
+.module h3{font-size:20px}
+.ptitle img.gear{width:64px;height:64px}
+.drop img.gear{width:110px;height:110px;margin:0 auto;display:block}
+.hero{text-align:center;margin:6px 0 26px;direction:ltr}
+.hero-small{font:800 13px/1 "Segoe UI",Arial,sans-serif;letter-spacing:.6em;color:#c94a6a}
+.hero-name{font:900 clamp(34px,6vw,64px)/1.05 "Arial Black","Segoe UI Black",Impact,sans-serif;letter-spacing:.04em;margin-top:8px;
+  background:linear-gradient(180deg,#fff 30%,#f2dfe5 60%,#c94a6a);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 40px rgba(255,45,85,.25)}
+.hero-sub{direction:rtl;color:var(--muted);margin-top:10px;font-size:15px}
+#welcome{position:fixed;inset:0;z-index:100;display:grid;place-items:center;cursor:pointer;
+  background:radial-gradient(800px 500px at 50% 40%,rgba(163,32,63,.45),transparent 70%),#07060a;animation:wOut .7s ease 3.2s forwards}
+#welcome.gone{display:none}
+.w-in{text-align:center;direction:ltr}
+.w-deck{width:220px;height:220px;animation:wDrop 1s cubic-bezier(.2,.8,.2,1) both;filter:drop-shadow(0 20px 30px rgba(0,0,0,.7))}
+.w-small{font:800 16px/1 "Segoe UI",Arial,sans-serif;letter-spacing:.8em;color:#c94a6a;margin-top:6px;animation:wUp .8s .4s both}
+.w-name{font:900 clamp(40px,8vw,88px)/1 "Arial Black","Segoe UI Black",Impact,sans-serif;letter-spacing:.04em;color:#fff;margin-top:12px;
+  text-shadow:0 0 30px rgba(255,45,85,.6),0 0 80px rgba(255,45,85,.35);animation:wUp .8s .6s both}
+.w-sub{font:700 12px/1 "Segoe UI",Arial,sans-serif;letter-spacing:.5em;color:#a79aa2;margin-top:18px;animation:wUp .8s .9s both}
+.w-bar{width:240px;height:3px;background:#2a2228;border-radius:3px;margin:22px auto 0;overflow:hidden}
+.w-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7a1530,#ff2d55);animation:wLoad 2.6s .5s ease forwards}
+@keyframes wDrop{from{opacity:0;transform:translateY(-40px) scale(.85)}to{opacity:1;transform:none}}
+@keyframes wUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes wLoad{to{width:100%}}
+@keyframes wOut{to{opacity:0;visibility:hidden}}
+@media (prefers-reduced-motion:reduce){#welcome,.w-deck,.w-small,.w-name,.w-sub,.w-bar i{animation-duration:.01s!important;animation-delay:0s!important}}
+.shz-now{margin-top:12px;padding:14px;border-radius:12px;background:#0d0b0f;border:1px solid var(--line);text-align:center;color:var(--muted)}
+.shz-now .big{font:900 40px/1 Consolas,monospace;color:#fff;margin-bottom:6px}
 footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding:20px;direction:ltr}
 </style>
 </head>
@@ -213,6 +264,13 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
       <rect x="11" y="24" width="42" height="9" rx="2" fill="#0b090c"/><rect x="14" y="27" width="16" height="3" rx="1.5" fill="url(#gw)"/><circle cx="47" cy="28.5" r="2" fill="#3fd17a"/>
       <rect x="11" y="37" width="42" height="9" rx="2" fill="#0b090c"/><rect x="14" y="40" width="24" height="3" rx="1.5" fill="url(#gw)"/><circle cx="47" cy="41.5" r="2" fill="#ffb020"/>
     </symbol>
+    <symbol id="i-keys" viewBox="0 0 64 64">
+      <rect x="3" y="14" width="58" height="38" rx="5" fill="#1d1820" stroke="#3a2f3d" stroke-width="2"/>
+      <g fill="#0b090c" stroke="#5a4a5d"><circle cx="12" cy="22" r="3.5"/><circle cx="22" cy="22" r="3.5"/><circle cx="32" cy="22" r="3.5"/></g>
+      <rect x="40" y="18" width="16" height="8" rx="1.5" fill="#0b090c"/><path d="M42 23 l3-3 3 4 3-5 3 4" stroke="#c94a6a" fill="none" stroke-width="1.2"/>
+      <g fill="#f2dfe5"><rect x="7" y="31" width="6" height="17" rx="1"/><rect x="14" y="31" width="6" height="17" rx="1"/><rect x="21" y="31" width="6" height="17" rx="1"/><rect x="28" y="31" width="6" height="17" rx="1"/><rect x="35" y="31" width="6" height="17" rx="1"/><rect x="42" y="31" width="6" height="17" rx="1"/><rect x="49" y="31" width="6" height="17" rx="1"/></g>
+      <g fill="url(#gw)"><rect x="11.5" y="31" width="4" height="10" rx="1"/><rect x="18.5" y="31" width="4" height="10" rx="1"/><rect x="32.5" y="31" width="4" height="10" rx="1"/><rect x="39.5" y="31" width="4" height="10" rx="1"/><rect x="46.5" y="31" width="4" height="10" rx="1"/></g>
+    </symbol>
     <symbol id="i-vinyl" viewBox="0 0 64 64">
       <circle cx="32" cy="32" r="30" fill="#0b090c" stroke="#3a2f3d"/>
       <circle cx="32" cy="32" r="24" fill="none" stroke="#1d1820"/><circle cx="32" cy="32" r="18" fill="none" stroke="#1d1820"/>
@@ -222,6 +280,15 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
   </defs>
 </svg>
 
+<div id="welcome" role="dialog" aria-label="Welcome">
+  <div class="w-in">
+    <img src="icons/deck.png" class="w-deck" alt="">
+    <div class="w-small">WELCOME</div>
+    <div class="w-name">DJ ISLAM AYMAN</div>
+    <div class="w-bar"><i></i></div>
+    <div class="w-sub">ISLAM AYMAN STUDIO</div>
+  </div>
+</div>
 <header>
   <div class="logo" onclick="go('home')">
     <svg class="disc" id="logoDisc"><use href="#i-vinyl"/></svg>
@@ -233,27 +300,31 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
 <main>
   <!-- HOME -->
   <section id="v-home">
+    <div class="hero"><div class="hero-small">WELCOME BACK</div><div class="hero-name">DJ ISLAM AYMAN</div><div class="hero-sub">اختار الأداة اللي عايز تشتغل عليها</div></div>
     <div class="grid">
       <div class="module" onclick="go('single')"><span class="led"></span>
-        <svg><use href="#i-deck"/></svg>
+        <img class="gear" src="icons/deck.png" alt="">
         <h3>ظبّط اسم الأغنية والكفر</h3><p>الاسم يتكتب فرانكو أو يتنضّف من الكلام الزيادة، والكفر بتاعك يتحط على الأغنية.</p></div>
       <div class="module" onclick="go('batch')"><span class="led"></span>
-        <svg><use href="#i-crate"/></svg>
+        <img class="gear" src="icons/crate.png" alt="">
         <h3>ظبّط بلاي ليست كاملة</h3><p>اختار فولدر فيه أغاني كتير، وكلها تتظبط مرة واحدة.</p></div>
       <div class="module" onclick="go('enh')"><span class="led"></span>
-        <svg><use href="#i-mixer"/></svg>
+        <img class="gear" src="icons/mixer.png" alt="">
         <h3>ارفع جودة الأغنية</h3><p>شيل الوشّ، رجّع الحدّة، ظبّط الـ EQ، وارفع الصوت لمستوى الدي جي.</p></div>
+      <div class="module" onclick="go('remix')"><span class="led"></span>
+        <img class="gear" src="icons/keys.png" alt="">
+        <h3>اعمل ريمكس</h3><p>حط أغنية واختار House أو Techno أو Afro أو مهرجانات… والبرنامج يعمل الريمكس، ويصدّره لـ Ableton و FL و Logic.</p></div>
       <div class="module" onclick="go('tag')"><span class="led"></span>
-        <svg><use href="#i-sampler"/></svg>
+        <img class="gear" src="icons/sampler.png" alt="">
         <h3>شيل بصمة الصوت</h3><p>شيل "DJ Sasso" أو "Here comes…" أو أي كلمة مش عاجباك، والمزيكا تفضل زي ما هي.</p></div>
       <div class="module" onclick="go('mix')"><span class="led"></span>
-        <svg><use href="#i-phones"/></svg>
+        <img class="gear" src="icons/phones.png" alt="">
         <h3>اعرف أسامي التراكات</h3><p>يسمع الميكس أو الست، ويكتبلك اسم كل تراك وتوقيته.</p></div>
       <div class="module" onclick="go('search')"><span class="led"></span>
-        <svg><use href="#i-cdj"/></svg>
+        <img class="gear" src="icons/cdj.png" alt="">
         <h3>دوّر على أغنية</h3><p>Spotify و YouTube و Shazam، ومحلات الشرا القانونية للدي جي.</p></div>
       <div class="module" onclick="go('data')"><span class="led"></span>
-        <svg><use href="#i-rack"/></svg>
+        <img class="gear" src="icons/rack.png" alt="">
         <h3>البيانات وسجل التعديلات</h3><p>كل تعديلاتك وإعداداتك متسجلة ومحفوظة، حتى لو مسحت البرنامج أو نزّلت نسخة جديدة.</p></div>
     </div>
   </section>
@@ -261,7 +332,7 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
   <!-- SINGLE -->
   <section id="v-single" class="hidden">
     <div class="panel">
-      <div class="ptitle"><svg><use href="#i-deck"/></svg><div><h2>ظبّط اسم الأغنية والكفر</h2></div>
+      <div class="ptitle"><img class="gear" src="icons/deck.png" alt=""><div><h2>ظبّط اسم الأغنية والكفر</h2></div>
         <button class="btn back" onclick="go('home')">رجوع</button></div>
       <div id="s-drop" class="drop">
         <svg><use href="#i-vinyl"/></svg>
@@ -297,7 +368,7 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
   <!-- BATCH -->
   <section id="v-batch" class="hidden">
     <div class="panel">
-      <div class="ptitle"><svg><use href="#i-crate"/></svg><div><h2>ظبّط بلاي ليست كاملة</h2></div>
+      <div class="ptitle"><img class="gear" src="icons/crate.png" alt=""><div><h2>ظبّط بلاي ليست كاملة</h2></div>
         <button class="btn back" onclick="go('home')">رجوع</button></div>
       <div class="row">
         <button class="btn primary" id="b-pick">اختار فولدر الأغاني</button>
@@ -305,7 +376,7 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
         <label class="chk" style="margin:0"><input type="checkbox" id="b-showtitle" data-keep> اسم الأغنية على الكفر</label>
         <span id="b-count" style="color:var(--muted);font-size:14px"></span>
       </div>
-      <div class="note">الأغاني الأصلية مش هتتغير. النسخ الجديدة هتتحفظ في فولدر جديد اسمه <b class="latin">DJ ISLAM AYMAN</b> جوه نفس الفولدر. وتقدر تعدّل أي اسم في الجدول قبل الحفظ.</div>
+      <div class="note">الأغاني الأصلية مش هتتغير. لما تدوس "ظبّط كل الأغاني"، البرنامج هيسألك تحفظ النسخ الجديدة فين. وتقدر تعدّل أي اسم في الجدول قبل الحفظ.</div>
       <div id="b-area" class="hidden">
         <div class="tbl-wrap"><table>
           <thead><tr><th style="width:30px"><input type="checkbox" id="b-all" checked></th><th>الاسم الأصلي</th><th>اسم الأغنية (فرانكو)</th><th>المطرب (فرانكو)</th><th>الحالة</th></tr></thead>
@@ -320,7 +391,7 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
   <!-- MIX TRACK ID -->
   <section id="v-mix" class="hidden">
     <div class="panel">
-      <div class="ptitle"><svg><use href="#i-phones"/></svg><div><h2>اعرف أسامي التراكات</h2></div>
+      <div class="ptitle"><img class="gear" src="icons/phones.png" alt=""><div><h2>اعرف أسامي التراكات</h2></div>
         <button class="btn back" onclick="go('home')">رجوع</button></div>
 
       <div class="tabs"><span class="tab on" data-t="yt">لينك يوتيوب</span><span class="tab" data-t="file">ملف ميكس من جهازك</span><span class="tab" data-t="lib">مكتبتي <b id="lib-n" style="opacity:.7"></b></span><span class="tab" data-t="set">الإعدادات</span></div>
@@ -328,7 +399,7 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
       <div id="m-yt">
         <ol class="steps" id="m-steps-app">
           <li>حط لينك الفيديو ودوس "شغّل واسمع".</li>
-          <li>الفيديو هيشتغل في شباك جوه البرنامج، والبرنامج بيسمعه ويكتب التراكات وهو شغّال.</li>
+          <li>الفيديو هيشتغل في شباك جوه البرنامج. البرنامج بيسمعه، وبيقرا كمان اللي يوتيوب نفسه عرفه عن الأغاني اللي في الفيديو، والفصول والوصف والتعليقات، ويكتبلك أسامي التراكات.</li>
           <li>عايز يخلص أسرع؟ قدّم الفيديو بإيدك دقيقة دقيقة، والتوقيت هيتظبط لوحده.</li>
         </ol>
         <ol class="steps hidden" id="m-steps-web">
@@ -345,10 +416,24 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
       </div>
 
       <div id="m-file" class="hidden">
-        <div class="drop" id="m-drop"><svg><use href="#i-phones"/></svg>
+        <div class="drop" id="m-drop"><img class="gear" src="icons/phones.png" alt="">
           <div style="font-size:17px;margin-top:8px">اسحب ملف الميكس هنا أو دوس للاختيار</div>
           <div style="font-size:13px;margin-top:4px">MP3 أو WAV · ساعة ميكس بتخلص في دقايق</div>
           <input type="file" id="m-fin" accept=".mp3,.wav,audio/mpeg,audio/wav" hidden></div>
+        <div class="daw" id="shz">
+          <h3 style="margin:0 0 6px;font-size:16px" class="logo-btn" id="shz-h">وضع شازام</h3>
+          <ol class="steps" style="margin:4px 0 10px">
+            <li>افتح Shazam على الموبايل، ودوس مطوّلاً على زرار Shazam الكبير عشان يشتغل <b>Auto Shazam</b>.</li>
+            <li>حط الموبايل جنب سماعة الكمبيوتر، وعلّي الصوت شوية.</li>
+            <li>دوس الزرار تحت واختار ملف الميكس. البرنامج هيقطّعه ويشغّل 12 ثانية من كل دقيقة ورا بعض، وشازام هيتعرّف على كل تراك.</li>
+            <li>لما يخلص، افتح Library في شازام، هتلاقي التراكات كلها بالترتيب.</li>
+          </ol>
+          <div class="row"><button class="btn primary logo-btn" id="shz-go">اختار الميكس وشغّله لشازام</button>
+            <select id="shz-step" data-keep><option value="60">مقطع من كل دقيقة</option><option value="90">مقطع كل دقيقة ونص</option><option value="120">مقطع كل دقيقتين</option></select>
+            <input type="file" id="shz-file" accept=".mp3,.wav,audio/mpeg,audio/wav" hidden></div>
+          <div id="shz-now" class="shz-now hidden"></div>
+          <div class="tbl-wrap hidden" id="shz-wrap" style="max-height:220px"><table><thead><tr><th>المقطع</th><th>الوقت في الميكس</th><th></th></tr></thead><tbody id="shz-list"></tbody></table></div>
+        </div>
       </div>
 
       <div id="m-lib" class="hidden">
@@ -384,10 +469,10 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
   <!-- ENHANCE -->
   <section id="v-enh" class="hidden">
     <div class="panel">
-      <div class="ptitle"><svg><use href="#i-mixer"/></svg><div><h2>ارفع جودة الأغنية</h2></div>
+      <div class="ptitle"><img class="gear" src="icons/mixer.png" alt=""><div><h2>ارفع جودة الأغنية</h2></div>
         <button class="btn back" onclick="go('home')">رجوع</button></div>
       <div id="e-drop" class="drop">
-        <svg><use href="#i-mixer"/></svg>
+        <img class="gear" src="icons/mixer.png" alt="">
         <div style="font-size:17px;margin-top:8px">اسحب الأغنية هنا أو دوس للاختيار</div>
         <div style="font-size:13px;margin-top:4px">MP3 · WAV · M4A · FLAC</div>
         <input type="file" id="e-file" accept="audio/*,.mp3,.m4a,.wav,.flac,.aac,.ogg" hidden>
@@ -426,7 +511,7 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
   <!-- DATA & HISTORY -->
   <section id="v-data" class="hidden">
     <div class="panel">
-      <div class="ptitle"><svg><use href="#i-rack"/></svg><div><h2>البيانات وسجل التعديلات</h2></div>
+      <div class="ptitle"><img class="gear" src="icons/rack.png" alt=""><div><h2>البيانات وسجل التعديلات</h2></div>
         <button class="btn back" onclick="go('home')">رجوع</button></div>
       <div class="note" style="margin-top:0" id="d-where"></div>
       <ul class="steps" style="margin-top:10px">
@@ -443,13 +528,62 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
     </div>
   </section>
 
+  <!-- REMIX -->
+  <section id="v-remix" class="hidden">
+    <div class="panel">
+      <div class="ptitle"><img class="gear" src="icons/keys.png" alt=""><div><h2>اعمل ريمكس</h2></div>
+        <button class="btn back" onclick="go('home')">رجوع</button></div>
+      <div id="r-drop" class="drop">
+        <img class="gear" src="icons/keys.png" alt="">
+        <div style="font-size:17px;margin-top:8px">اسحب الأغنية هنا أو دوس للاختيار</div>
+        <div style="font-size:13px;margin-top:4px">MP3 · WAV · M4A · FLAC</div>
+        <input type="file" id="r-file" accept="audio/*,.mp3,.m4a,.wav,.flac,.aac,.ogg" hidden>
+      </div>
+      <div id="r-edit" class="hidden">
+        <div class="row" style="justify-content:space-between"><div><b id="r-name" class="latin"></b> <span id="r-dur" style="color:var(--muted);font-size:13px"></span></div>
+          <div class="chips"><span class="chip">BPM <b id="r-bpm" class="latin">…</b></span><span class="chip">المقام <b id="r-key" class="latin">…</b></span></div></div>
+        <h3 style="margin:18px 0 8px;font-size:16px">عايز الأغنية دي تبقى إيه؟</h3>
+        <div class="genres" id="r-genres"></div>
+        <div class="enh-grid" style="margin-top:14px">
+          <label class="knob"><input type="checkbox" id="r-keep" data-keep><span><b>خلّي سرعة الأغنية زي ما هي</b><small>من غير ما يغيّرها لسرعة النوع</small></span></label>
+          <label class="knob"><input type="checkbox" id="r-acap" data-keep><span><b>صوت المطرب بس على الإيقاع الجديد</b><small>يشيل المزيكا الأصلية خالص (أكابيلا)</small></span></label>
+          <label class="knob"><input type="checkbox" id="r-dj" data-keep checked><span><b>Intro و Outro للدي جي</b><small>8 مازورة إيقاع في الأول والآخر عشان تمكس بسهولة</small></span></label>
+        </div>
+        <div class="row" style="margin-top:16px">
+          <button class="btn primary" id="r-run" disabled>🎛 اعمل الريمكس</button>
+          <button class="btn" id="r-play" disabled>▶ تشغيل</button>
+          <span class="ab"><button class="btn" id="r-a" disabled>الأصلية</button><button class="btn on" id="r-b" disabled>الريمكس</button></span>
+          <input type="range" id="r-pos" min="0" max="1000" value="0" style="direction:ltr;flex:1;min-width:160px;accent-color:var(--wine2)" disabled>
+          <span id="r-time" class="latin" style="font-family:Consolas,monospace;color:var(--muted)">0:00</span>
+        </div>
+        <div class="row" style="margin-top:14px">
+          <select id="r-fmt" data-keep><option value="mp3">MP3 320</option><option value="wav">WAV</option></select>
+          <button class="btn primary" id="r-save" disabled>احفظ الريمكس</button>
+          <button class="btn" id="r-other">أغنية تانية</button>
+        </div>
+        <div class="progress" id="r-prog"><i></i></div>
+        <div class="msg" id="r-msg"></div>
+        <div id="r-daw" class="daw hidden">
+          <h3 style="margin:0 0 6px;font-size:16px">كمّل في برامج الهندسة الصوتية</h3>
+          <div class="note" style="margin-top:0">البرنامج بيصدّر الريمكس متقسّم (صوت، مزيكا، درامز، باص) + ملف فيه الـ BPM والمقام، وتفتحهم في البرنامج اللي بتشتغل عليه.</div>
+          <div class="row" style="margin-top:10px"><button class="btn primary" id="r-stems">صدّر الأجزاء (Stems)</button></div>
+          <div class="row" style="margin-top:10px" id="r-dawbtns"></div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn logo-btn" data-ai="suno">افتح Suno</button><button class="btn" data-ai="udio">افتح Udio</button>
+          </div>
+          <div class="note">Suno و Udio مواقع ذكاء اصطناعي. البرنامج بيفتحهولك وبينسخ وصف الستايل جاهز، وانت ترفع ملف الصوت (vocals) وتلصق الوصف. ملحوظة: المواقع دي ممكن ترفض أغاني ليها حقوق.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- TAG REMOVER -->
   <section id="v-tag" class="hidden">
     <div class="panel">
-      <div class="ptitle"><svg><use href="#i-sampler"/></svg><div><h2>شيل بصمة الصوت</h2></div>
+      <div class="ptitle"><img class="gear" src="icons/sampler.png" alt=""><div><h2>شيل بصمة الصوت</h2></div>
         <button class="btn back" onclick="go('home')">رجوع</button></div>
       <div id="t-drop" class="drop">
-        <svg><use href="#i-sampler"/></svg>
+        <img class="gear" src="icons/sampler.png" alt="">
         <div style="font-size:17px;margin-top:8px">اسحب الأغنية هنا أو دوس للاختيار</div>
         <div style="font-size:13px;margin-top:4px">MP3 · WAV · M4A · FLAC</div>
         <input type="file" id="t-file" accept="audio/*,.mp3,.m4a,.wav,.flac,.aac,.ogg" hidden>
@@ -493,7 +627,7 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
   <!-- SEARCH -->
   <section id="v-search" class="hidden">
     <div class="panel">
-      <div class="ptitle"><svg><use href="#i-cdj"/></svg><div><h2>دوّر على أغنية</h2></div>
+      <div class="ptitle"><img class="gear" src="icons/cdj.png" alt=""><div><h2>دوّر على أغنية</h2></div>
         <button class="btn back" onclick="go('home')">رجوع</button></div>
       <input type="search" id="q" placeholder="اكتب اسم الأغنية أو المطرب…">
       <div class="links" id="links"></div>
@@ -506,6 +640,10 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
 <script src="fp.js"></script>
 <script src="lame.min.js"></script>
 <script>
+/* ================= brand logos (Simple Icons, CC0) ================= */
+const LOGOS={"Spotify":{"hex":"1ED760","path":"M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"},"Apple Music":{"hex":"FA243C","path":"M23.994 6.124a9.23 9.23 0 00-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 00-1.877-.726 10.496 10.496 0 00-1.564-.15c-.04-.003-.083-.01-.124-.013H5.986c-.152.01-.303.017-.455.026-.747.043-1.49.123-2.193.4-1.336.53-2.3 1.452-2.865 2.78-.192.448-.292.925-.363 1.408-.056.392-.088.785-.1 1.18 0 .032-.007.062-.01.093v12.223c.01.14.017.283.027.424.05.815.154 1.624.497 2.373.65 1.42 1.738 2.353 3.234 2.801.42.127.856.187 1.293.228.555.053 1.11.06 1.667.06h11.03a12.5 12.5 0 001.57-.1c.822-.106 1.596-.35 2.295-.81a5.046 5.046 0 001.88-2.207c.186-.42.293-.87.37-1.324.113-.675.138-1.358.137-2.04-.002-3.8 0-7.595-.003-11.393zm-6.423 3.99v5.712c0 .417-.058.827-.244 1.206-.29.59-.76.962-1.388 1.14-.35.1-.706.157-1.07.173-.95.045-1.773-.6-1.943-1.536a1.88 1.88 0 011.038-2.022c.323-.16.67-.25 1.018-.324.378-.082.758-.153 1.134-.24.274-.063.457-.23.51-.516a.904.904 0 00.02-.193c0-1.815 0-3.63-.002-5.443a.725.725 0 00-.026-.185c-.04-.15-.15-.243-.304-.234-.16.01-.318.035-.475.066-.76.15-1.52.303-2.28.456l-2.325.47-1.374.278c-.016.003-.032.01-.048.013-.277.077-.377.203-.39.49-.002.042 0 .086 0 .13-.002 2.602 0 5.204-.003 7.805 0 .42-.047.836-.215 1.227-.278.64-.77 1.04-1.434 1.233-.35.1-.71.16-1.075.172-.96.036-1.755-.6-1.92-1.544-.14-.812.23-1.685 1.154-2.075.357-.15.73-.232 1.108-.31.287-.06.575-.116.86-.177.383-.083.583-.323.6-.714v-.15c0-2.96 0-5.922.002-8.882 0-.123.013-.25.042-.37.07-.285.273-.448.546-.518.255-.066.515-.112.774-.165.733-.15 1.466-.296 2.2-.444l2.27-.46c.67-.134 1.34-.27 2.01-.403.22-.043.442-.088.663-.106.31-.025.523.17.554.482.008.073.012.148.012.223.002 1.91.002 3.822 0 5.732z"},"YouTube Music":{"hex":"FF0000","path":"M12 0C5.376 0 0 5.376 0 12s5.376 12 12 12 12-5.376 12-12S18.624 0 12 0zm0 19.104c-3.924 0-7.104-3.18-7.104-7.104S8.076 4.896 12 4.896s7.104 3.18 7.104 7.104-3.18 7.104-7.104 7.104zm0-13.332c-3.432 0-6.228 2.796-6.228 6.228S8.568 18.228 12 18.228s6.228-2.796 6.228-6.228S15.432 5.772 12 5.772zM9.684 15.54V8.46L15.816 12l-6.132 3.54z"},"YouTube":{"hex":"FF0000","path":"M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"},"Deezer":{"hex":"A238FF","path":"M18.81 4.16v3.03H24V4.16h-5.19zM6.27 8.38v3.027h5.189V8.38h-5.19zm12.54 0v3.027H24V8.38h-5.19zM6.27 12.594v3.027h5.189v-3.027h-5.19zm6.271 0v3.027h5.19v-3.027h-5.19zm6.27 0v3.027H24v-3.027h-5.19zM0 16.81v3.029h5.19v-3.03H0zm6.27 0v3.029h5.189v-3.03h-5.19zm6.271 0v3.029h5.19v-3.03h-5.19zm6.27 0v3.029H24v-3.03h-5.19Z"},"SoundCloud":{"hex":"FF5500","path":"M23.999 14.165c-.052 1.796-1.612 3.169-3.4 3.169h-8.18a.68.68 0 0 1-.675-.683V7.862a.747.747 0 0 1 .452-.724s.75-.513 2.333-.513a5.364 5.364 0 0 1 2.763.755 5.433 5.433 0 0 1 2.57 3.54c.282-.08.574-.121.868-.12.884 0 1.73.358 2.347.992s.948 1.49.922 2.373ZM10.721 8.421c.247 2.98.427 5.697 0 8.672a.264.264 0 0 1-.53 0c-.395-2.946-.22-5.718 0-8.672a.264.264 0 0 1 .53 0ZM9.072 9.448c.285 2.659.37 4.986-.006 7.655a.277.277 0 0 1-.55 0c-.331-2.63-.256-5.02 0-7.655a.277.277 0 0 1 .556 0Zm-1.663-.257c.27 2.726.39 5.171 0 7.904a.266.266 0 0 1-.532 0c-.38-2.69-.257-5.21 0-7.904a.266.266 0 0 1 .532 0Zm-1.647.77a26.108 26.108 0 0 1-.008 7.147.272.272 0 0 1-.542 0 27.955 27.955 0 0 1 0-7.147.275.275 0 0 1 .55 0Zm-1.67 1.769c.421 1.865.228 3.5-.029 5.388a.257.257 0 0 1-.514 0c-.21-1.858-.398-3.549 0-5.389a.272.272 0 0 1 .543 0Zm-1.655-.273c.388 1.897.26 3.508-.01 5.412-.026.28-.514.283-.54 0-.244-1.878-.347-3.54-.01-5.412a.283.283 0 0 1 .56 0Zm-1.668.911c.4 1.268.257 2.292-.026 3.572a.257.257 0 0 1-.514 0c-.241-1.262-.354-2.312-.023-3.572a.283.283 0 0 1 .563 0Z"},"Beatport":{"hex":"01FF95","path":"M21.429 17.055a7.114 7.114 0 0 1-.794 3.246 6.917 6.917 0 0 1-2.181 2.492 6.698 6.698 0 0 1-3.063 1.163 6.653 6.653 0 0 1-3.239-.434 6.796 6.796 0 0 1-2.668-1.932 7.03 7.03 0 0 1-1.481-2.983 7.124 7.124 0 0 1 .049-3.345 7.015 7.015 0 0 1 1.566-2.937l-4.626 4.73-2.421-2.479 5.201-5.265a3.791 3.791 0 0 0 1.066-2.675V0h3.41v6.613a7.172 7.172 0 0 1-.519 2.794 7.02 7.02 0 0 1-1.559 2.353l-.153.156a6.768 6.768 0 0 1 3.49-1.725 6.687 6.687 0 0 1 3.845.5 6.873 6.873 0 0 1 2.959 2.564 7.118 7.118 0 0 1 1.118 3.8Zm-3.089 0a3.89 3.89 0 0 0-.611-2.133 3.752 3.752 0 0 0-1.666-1.424 3.65 3.65 0 0 0-2.158-.233 3.704 3.704 0 0 0-1.92 1.037 3.852 3.852 0 0 0-1.031 1.955 3.908 3.908 0 0 0 .205 2.213c.282.7.76 1.299 1.374 1.721a3.672 3.672 0 0 0 2.076.647 3.637 3.637 0 0 0 2.635-1.096c.347-.351.622-.77.81-1.231.188-.461.285-.956.286-1.456Z"},"Shazam":{"hex":"0088FF","path":"M12 0C5.373 0-.001 5.371-.001 12c0 6.625 5.374 12 12.001 12s12-5.375 12-12c0-6.629-5.373-12-12-12M9.872 16.736c-1.287 0-2.573-.426-3.561-1.281-1.214-1.049-1.934-2.479-2.029-4.024-.09-1.499.42-2.944 1.436-4.067C6.86 6.101 8.907 4.139 8.993 4.055c.555-.532 1.435-.511 1.966.045.53.557.512 1.439-.044 1.971-.021.02-2.061 1.976-3.137 3.164-.508.564-.764 1.283-.719 2.027.049.789.428 1.529 1.07 2.086.844.73 2.51.891 3.553-.043.619-.559 1.372-1.377 1.38-1.386.52-.567 1.4-.603 1.965-.081.565.52.603 1.402.083 1.969-.035.035-.852.924-1.572 1.572-1.005.902-2.336 1.357-3.666 1.357m8.41-.099c-1.143 1.262-3.189 3.225-3.276 3.309-.27.256-.615.385-.96.385-.368 0-.732-.145-1.006-.43-.531-.559-.512-1.439.044-1.971.021-.02 2.063-1.977 3.137-3.166.508-.563.764-1.283.719-2.027-.048-.789-.428-1.529-1.07-2.084-.844-.73-2.51-.893-3.552.044-.621.556-1.373 1.376-1.38 1.384-.521.566-1.399.604-1.966.084-.564-.521-.604-1.404-.082-1.971.034-.037.85-.926 1.571-1.573 1.979-1.778 5.221-1.813 7.227-.077 1.214 1.051 1.935 2.48 2.028 4.025.092 1.497-.419 2.945-1.434 4.068"},"Suno":{"hex":"FFFFFF","path":"M16.5 0C20.642 0 24 5.373 24 12h-9c0 6.627-3.358 12-7.5 12C3.358 24 0 18.627 0 12h9c0-6.627 3.358-12 7.5-12Z"},"Ableton Live":{"hex":"FFFFFF","path":"M0 6.4v11.2h1.6V6.4zm3.2 0v11.2h1.6V6.4zm3.2 0v11.2H8V6.4zm3.2 0v11.2h1.6V6.4zm3.2 0V8H24V6.4zm0 3.2v1.6H24V9.6zm0 3.2v1.6H24v-1.6zm0 3.2v1.6H24V16z"},"Anghami":{"hex":"A13CFF","path":"M12 0a12 12 0 1 0 0 24 12 12 0 0 0 0-24zm1.6 4.6a7.6 7.6 0 1 1-6.5 11.5 6.2 6.2 0 1 0 6.5-11.5z"}};
+const logo=(n,sz=16)=>{const l=LOGOS[n];return l?`<svg class="lg" width="${sz}" height="${sz}" viewBox="0 0 24 24" aria-hidden="true"><path fill="#${l.hex}" d="${l.path}"/></svg>`:"";};
+
 /* ================= saved data (never lost) ================= */
 const APP=window.djApp||null;               // set by the Windows/Mac app
 const Store={
@@ -539,6 +677,9 @@ function learnFranco(orig,edited){
   if(ow.length===ew.length) ow.forEach((w,i)=>{ const c=w.replace(/[ً-ٰٟـ]/g,''); if(AR.test(c) && francoWord(c)!==ew[i]) USERDICT.word[c]=ew[i]; });
   Store.set('franco',USERDICT);
 }
+
+/* ================= welcome ================= */
+(()=>{const w=document.getElementById('welcome'); const hide=()=>w.classList.add('gone'); w.addEventListener('click',hide); w.addEventListener('animationend',e=>{if(e.animationName==='wOut')hide();});})();
 
 /* ================= navigation ================= */
 
@@ -826,6 +967,22 @@ async function coverJpeg(songTitle){
   return new Uint8Array(await blob.arrayBuffer());
 }
 function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},2000);}
+// save a finished file: always asks WHERE to save (Windows/Mac "Save as" dialog)
+async function saveOut(blob,name){
+  if(APP&&APP.saveFile){ const p=await APP.saveFile(name,new Uint8Array(await blob.arrayBuffer())); return p?{name:p.split(/[\\/]/).pop(),path:p}:null; }
+  if(window.showSaveFilePicker){ try{ const h=await showSaveFilePicker({suggestedName:name}); const w=await h.createWritable(); await w.write(blob); await w.close(); return {name:h.name}; }
+    catch(e){ if(e.name==='AbortError') return null; } }
+  download(blob,name); return {name};
+}
+function savedMsg(id,r){
+  msg(id,'تمام ✓ اتحفظت: '+(r.path||r.name),true);
+  if(r.path&&APP&&APP.showInFolder){ const b=document.createElement('button'); b.className='btn'; b.style.cssText='padding:4px 10px;margin-inline-start:10px';
+    b.textContent='افتح مكانها'; b.onclick=()=>APP.showInFolder(r.path); $(id).append(b); }
+}
+// folders picked through the app (Windows/Mac dialog), files read on demand
+function appFile(f){ return {name:f.name,size:f.size,lastModified:f.mtime,webkitRelativePath:f.rel,type:'',path:f.path,
+  arrayBuffer:async()=>{const u=await APP.readFile(f.path);return u.buffer.slice(u.byteOffset,u.byteOffset+u.byteLength);}}; }
+async function pickAudioFolder(title){ const dir=await APP.pickFolder(title); if(!dir) return null; return (await APP.listAudio(dir)).map(appFile); }
 async function processTrack(t,opts){
   if(!t.isMp3) return new Blob([t.bytes],{type:t.file.type||'application/octet-stream'});
   const cover = (opts.cover && !t.hasCover) ? await coverJpeg(opts.showTitle? t.title : '') : null;
@@ -879,19 +1036,14 @@ function refreshSingle(){
 ['s-title','s-artist'].forEach(id=>$(id).addEventListener('input',refreshSingle));
 $('s-showtitle').onchange=refreshSingle;
 function resetSingle(){S=null;sFile.value='';sDrop.classList.remove('hidden');$('s-edit').classList.add('hidden');}
-$('s-savecover').onclick=()=>$('s-canvas').toBlob(b=>download(b,'DJ ISLAM AYMAN - '+safeFile(S?.title||'Cover')+'.jpg'),'image/jpeg',.95);
+$('s-savecover').onclick=()=>$('s-canvas').toBlob(async b=>{const r=await saveOut(b,'DJ ISLAM AYMAN - '+safeFile(S?.title||'Cover')+'.jpg'); if(r) savedMsg('s-msg',r);},'image/jpeg',.95);
 $('s-save').onclick=async()=>{
   refreshSingle(); busy(true);
   try{
     const blob=await processTrack(S,{cover:$('s-cover').checked,showTitle:$('s-showtitle').checked});
     const name=outName(S);
-    if(window.showSaveFilePicker){
-      try{
-        const h=await showSaveFilePicker({suggestedName:name,types:[{description:'Audio',accept:{[blob.type||'audio/mpeg']:[S.ext]}}]});
-        const w=await h.createWritable(); await w.write(blob); await w.close();
-        msg('s-msg','تمام ✓ اتحفظت باسم: '+h.name,true); singleDone(h.name);
-      }catch(e){ if(e.name!=='AbortError') throw e; }
-    } else { download(blob,name); msg('s-msg','تمام ✓ اتنزلت باسم: '+name,true); singleDone(name); }
+    const r=await saveOut(blob,name);
+    if(r){ savedMsg('s-msg',r); singleDone(r.name); }
   }catch(e){msg('s-msg','حصلت مشكلة: '+e.message,false);}
   busy(false);
 };
@@ -908,6 +1060,9 @@ async function* walk(dir,prefix=''){
 const bInput=Object.assign(document.createElement('input'),{type:'file',multiple:true,webkitdirectory:true});
 bInput.onchange=()=>loadBatch([...bInput.files].filter(f=>AUDIO.test(f.name)),null);
 $('b-pick').onclick=async()=>{
+  if(APP&&APP.pickFolder){
+    const files=await pickAudioFolder('اختار فولدر الأغاني'); if(files){ busy(true); await loadBatch(files,null); } return;
+  }
   if(window.showDirectoryPicker){
     try{
       const dir=await showDirectoryPicker({mode:'readwrite',id:'djmusic'});
@@ -959,7 +1114,11 @@ $('b-run').onclick=async()=>{
   if(!rows.length) return;
   busy(true); $('b-run').disabled=true; const prog=$('b-prog'); prog.classList.add('show');
   let out=null, ok=0, bad=0; const used=new Set();
-  try{ if(B.dir) out=await B.dir.getDirectoryHandle(OUT,{create:true}); }catch(e){ msg('b-msg','مقدرتش أعمل الفولدر: '+e.message,false); }
+  let outDir=null;
+  if(APP&&APP.pickFolder){
+    outDir=await APP.pickFolder('تحفظ الأغاني المتظبطة فين؟');
+    if(!outDir){ busy(false); $('b-run').disabled=false; prog.classList.remove('show'); return; }
+  } else { try{ if(B.dir) out=await B.dir.getDirectoryHandle(OUT,{create:true}); }catch(e){ msg('b-msg','مقدرتش أعمل الفولدر: '+e.message,false); } }
   const opts={cover:$('b-cover').checked,showTitle:$('b-showtitle').checked};
   for(let k=0;k<rows.length;k++){
     const r=rows[k], t=B.items[+r.dataset.i], st=r.querySelector('.st');
@@ -973,13 +1132,14 @@ $('b-run').onclick=async()=>{
       let name=outName(t), n=2; const base=name.replace(/\.[^.]+$/,'');
       while(used.has(name.toLowerCase())) name=`${base} (${n++})${t.ext}`;
       used.add(name.toLowerCase());
-      if(out){ const fh=await out.getFileHandle(name,{create:true}); const w=await fh.createWritable(); await w.write(blob); await w.close(); }
+      if(outDir){ await APP.writeFile(outDir,name,new Uint8Array(await blob.arrayBuffer())); }
+      else if(out){ const fh=await out.getFileHandle(name,{create:true}); const w=await fh.createWritable(); await w.write(blob); await w.close(); }
       else { download(blob,name); await new Promise(r=>setTimeout(r,400)); }
       st.textContent='✓ تمام'; r.className='done'; ok++; logEdit('ظبّط بلاي ليست كاملة',t.file.name,'→ '+name);
     }catch(e){ st.textContent='✗ '+e.message; r.className='fail'; bad++; }
     prog.firstElementChild.style.width=((k+1)/rows.length*100)+'%';
   }
-  msg('b-msg', `خلصت ✓ ${ok} أغنية اتظبطت` + (bad?` · ${bad} فيها مشكلة`:'') + (out?` · موجودين في فولدر "${OUT}"`:''), !bad);
+  msg('b-msg', `خلصت ✓ ${ok} أغنية اتظبطت` + (bad?` · ${bad} فيها مشكلة`:'') + (outDir?` · موجودين في: ${outDir}`:out?` · موجودين في فولدر "${OUT}"`:''), !bad);
   $('b-run').disabled=false; busy(false);
 };
 
@@ -1043,6 +1203,7 @@ async function addToLibrary(files){
 const libInput=Object.assign(document.createElement('input'),{type:'file',multiple:true,webkitdirectory:true});
 libInput.onchange=()=>addToLibrary([...libInput.files].filter(f=>AUDIO.test(f.name)));
 $('lib-add').onclick=async()=>{
+  if(APP&&APP.pickFolder){ const files=await pickAudioFolder('اختار فولدر أغانيك'); if(files) await addToLibrary(files); return; }
   if(window.showDirectoryPicker){
     try{ const dir=await showDirectoryPicker({id:'djlib'}); busy(true); $('lib-status').textContent='بيدوّر على الأغاني…';
       const files=[]; for await(const h of walk(dir)) files.push(await h.getFile()); await addToLibrary(files);
@@ -1083,56 +1244,76 @@ async function identify(pcm,t){
 
 /* ---------- results ---------- */
 const keyOf=h=>normAr(h.artist)+'|'+normAr(h.title);
-const heard=()=>M.hits.filter(h=>h.src!=='desc');
+const STAMPED=new Set(['desc','chap','cmt']);
+const heard=()=>M.hits.filter(h=>h.src==='lib'||h.src==='ear');
 function addHit(t,h){
   const near=M.hits.find(x=>keyOf(x)===keyOf(h) && t>=x.start-WIN && t<=x.end+3*HOPW);
   if(near){ near.start=Math.min(near.start,t); near.end=Math.max(near.end,t); }
   else M.hits.push({...h,start:t,end:t});
   renderMix();
 }
-function parseDesc(txt){
+function splitAT(name){ const sp=name.split(/\s+[-–—]\s+/); return sp.length>1?{artist:sp[0].trim(),title:sp.slice(1).join(' - ').trim()}:{artist:'',title:name.trim()}; }
+function parseDesc(txt,src='desc'){
   const out=[];
   for(const line of (txt||'').split(/\n/)){
     const m=line.match(/(\d{1,2}:)?\d{1,2}:\d{2}/); if(!m) continue;
     const parts=m[0].split(':').map(Number); const t=parts.length===3?parts[0]*3600+parts[1]*60+parts[2]:parts[0]*60+parts[1];
     let name=line.replace(m[0],'').replace(/^[\s\-–—.)\]|:#\d]*?(?=\S)/,'').replace(/[\s\-–—|()\[\]]+$/,'').trim();
-    if(!name) continue;
-    const sp=name.split(/\s+[-–—]\s+/);
-    out.push({start:t,end:t,artist:sp.length>1?sp[0]:'',title:sp.length>1?sp.slice(1).join(' - '):name,src:'desc'});
+    if(!name||name.length<2) continue;
+    out.push({start:t,end:t,...splitAT(name),src});
   }
   return out;
 }
+// everything with a time that isn't from listening: chapters → description → comments → what you pasted
+function stampedAll(){
+  const y=M.yt||{}, list=[];
+  for(const c of (y.chapters||[])) if(c.title) list.push({start:c.t,end:c.t,...splitAT(c.title),src:'chap'});
+  const add=arr=>{ for(const d of arr) if(!list.some(x=>Math.abs(x.start-d.start)<8||keyOf(x)===keyOf(d))) list.push(d); };
+  add(parseDesc(y.desc,'desc')); for(const c of (y.comments||[])) add(parseDesc(c,'cmt')); add(parseDesc($('m-desc').value,'desc'));
+  return list.sort((a,b)=>a.start-b.start);
+}
 function merged(){
-  const ear=heard();
-  const all=parseDesc($('m-desc').value).sort((a,b)=>a.start-b.start);
-  const desc=all.filter((d,i)=>{const end=i+1<all.length?all[i+1].start:Infinity;
+  const ear=heard(), all=stampedAll();
+  const st=all.filter((d,i)=>{const end=i+1<all.length?all[i+1].start:Infinity;
     // skip it if listening already covered a real part of that slot (not just the tail of the previous track)
     const covered=ear.some(h=>Math.min(h.end+HOPW,end)-Math.max(h.start,d.start) > Math.min(30,(end-d.start)/2));
     return !covered && !ear.some(h=>keyOf(h)===keyOf(d));});
-  return [...ear,...desc].sort((a,b)=>a.start-b.start);
+  const timed=[...ear,...st].sort((a,b)=>a.start-b.start);
+  // songs YouTube identified in the video (no times): add the ones we don't have yet
+  const ytm=((M.yt&&M.yt.music)||[]).filter(m=>m.title&&!timed.some(h=>normAr(h.title)===normAr(m.title))).map(m=>({...m,start:null,src:'ytm'}));
+  return [...timed,...ytm];
 }
-const SRC={lib:['ear','من مكتبتك'],ear:['ear','أونلاين'],desc:['desc','من الوصف']};
+const SRC={lib:['ear','سمعها (مكتبتك)'],ear:['ear','سمعها (أونلاين)'],ytm:['ear','يوتيوب سمعها'],chap:['desc','فصول الفيديو'],desc:['desc','الوصف'],cmt:['desc','التعليقات']};
+// every music app, one tap each
+const APPS=[['Spotify','#1DB954',(q,h)=>h.spotify||'https://open.spotify.com/search/'+q],['Anghami','#A13CFF',q=>'https://play.anghami.com/search/'+q],
+  ['Apple Music','#FA57C1',(q,h)=>h.apple||'https://music.apple.com/search?term='+q],['YouTube Music','#FF0033',q=>'https://music.youtube.com/search?q='+q],
+  ['YouTube','#FF0000',q=>'https://www.youtube.com/results?search_query='+q],['Deezer','#A238FF',q=>'https://www.deezer.com/search/'+q],
+  ['SoundCloud','#FF5500',q=>'https://soundcloud.com/search?q='+q],['Beatport','#A8E00F',q=>'https://www.beatport.com/search?q='+q],
+  ['Shazam','#0088FF',q=>'https://www.shazam.com/search?term='+q]];
 function renderMix(){
   const list=merged();
   $('m-res').classList.toggle('hidden',!list.length);
   $('m-body').innerHTML=list.map(h=>{
     const q=encodeURIComponent((h.artist?h.artist+' ':'')+h.title);
     const name=(h.artist?esc(h.artist)+' - ':'')+esc(h.title);
-    return `<tr><td class="tm">${fmt(h.start)}</td><td class="latin" style="text-align:right">${name}</td>
+    return `<tr><td class="tm">${h.start==null?'—':fmt(h.start)}</td><td class="latin" style="text-align:right">${name}</td>
       <td><span class="src ${SRC[h.src][0]}">${SRC[h.src][1]}</span></td>
-      <td><a href="${h.spotify||'https://open.spotify.com/search/'+q}" target="_blank">Spotify</a><a href="https://www.youtube.com/results?search_query=${q}" target="_blank">YouTube</a><a href="https://www.beatport.com/search?q=${q}" target="_blank">Beatport</a>${h.apple?`<a href="${h.apple}" target="_blank">iTunes</a>`:''}</td></tr>`;
+      <td class="apps">${APPS.map(([n,c,u])=>`<a href="${u(q,h)}" target="_blank" title="${n}">${logo(n,15)||`<i style="background:${c}"></i>`}${n}</a>`).join('')}</td></tr>`;
   }).join('');
 }
 $('m-desc').addEventListener('input',renderMix);
 $('m-copy').onclick=()=>{
-  const txt=merged().map(h=>fmt(h.start)+' '+(h.artist?h.artist+' - ':'')+h.title).join('\n');
+  const txt=merged().map(h=>(h.start==null?'':fmt(h.start)+' ')+(h.artist?h.artist+' - ':'')+h.title).join('\n');
   navigator.clipboard.writeText(txt).then(()=>msg('m-msg','اتنسخت ✓',true),()=>prompt('انسخ من هنا:',txt));
 };
-function startCheck(){
-  if(!LIB.tracks.length && !$('m-token').value.trim()){ msg('m-msg','المكتبة لسه فاضية. روح لتاب "مكتبتي" وضيف فولدر أغانيك الأول، عشان البرنامج يعرف التراكات.',false); return false; }
-  return true;
+function startCheck(){ return true; }   // works without a library: YouTube info, AudD and the description fill in
+function doneMsg(){
+  const list=merged(), n=list.length, by=s=>list.filter(h=>h.src===s).length;
+  logEdit('اعرف أسامي التراكات',$('m-link').value.trim()||'ملف ميكس',n+' تراك');
+  if(!n){ msg('m-msg','ملقاش أسامي تراكات. جرّب تضيف أغانيك في "مكتبتي"، أو تحط مفتاح AudD في الإعدادات، أو تلصق الوصف لو فيه تراك ليست.',false); return; }
+  const parts=[['lib','من مكتبتك'],['ear','أونلاين'],['ytm','يوتيوب سمعها'],['chap','فصول الفيديو'],['desc','الوصف'],['cmt','التعليقات']].filter(([k])=>by(k)).map(([k,t])=>by(k)+' '+t);
+  msg('m-msg',`خلص ✓ لقى ${n} تراك (${parts.join(' · ')})`,true);
 }
-function doneMsg(){ const n=heard().length; logEdit('اعرف أسامي التراكات',$('m-link').value.trim()||'ملف ميكس',n+' تراك'); msg('m-msg',`خلص ✓ عرف ${n} تراك بالسمع`+(merged().some(h=>h.src==='desc')?' · والباقي اتكمّل من الوصف':''),true); }
 
 /* ---------- live listening (YouTube) ---------- */
 const LV={buf:new Float32Array(FP.SR*WIN),fill:0,since:0,time:0};
@@ -1148,12 +1329,13 @@ function liveFeed(chunk,mediaTime){
 }
 function setLive(on,text){$('m-live').classList.toggle('on',on);$('m-live').lastElementChild.textContent=text;busy(on);
   if(APP) $('m-open').textContent=on?'وقّف الاستماع':'شغّل واسمع'; else $('m-listen').textContent=on?'وقّف الاستماع':'ابدأ الاستماع';}
-function startLive(){ M.running=true; M.hits=[]; lastOnline=-1e9; liveReset(); renderMix(); $('m-msg').className='msg'; setLive(true,'مستني الفيديو يشتغل…'); }
+function startLive(){ M.running=true; M.hits=[]; M.yt=null; lastOnline=-1e9; liveReset(); renderMix(); $('m-msg').className='msg'; setLive(true,'مستني الفيديو يشتغل…'); }
 function stopLive(){ if(!M.running) return; M.running=false; setLive(false,'وقف'); doneMsg(); }
 const ytOk=u=>/^https?:\/\/(www\.|m\.|music\.)?(youtube\.com|youtu\.be)\//i.test(u);
 
 if(APP){
   APP.onAudio(d=>{ if(d.reset) liveReset(); else liveFeed(new Float32Array(d.samples),d.time); });
+  if(APP.onYtInfo) APP.onYtInfo(info=>{ M.yt=info; renderMix(); });
   APP.onYtClosed(()=>stopLive());
   $('m-open').onclick=()=>{
     if(M.running){ APP.closeYouTube(); stopLive(); return; }
@@ -1176,6 +1358,41 @@ if(APP){
     cap={stop(){at.forEach(t=>t.stop());ctx.close();cap=null;stopLive();}}; at[0].onended=()=>cap&&cap.stop();
     startLive();
   };
+}
+
+/* ---------- Shazam mode: play a 12 s piece from every minute, the phone's Auto Shazam identifies them ---------- */
+$('shz-h').insertAdjacentHTML('afterbegin',logo('Shazam',22)); $('shz-go').insertAdjacentHTML('afterbegin',logo('Shazam',18));
+const SH={running:false,stop:false,src:null,ctx:null};
+$('shz-go').onclick=()=>{ if(SH.running){ SH.stop=true; try{SH.src&&SH.src.stop();}catch(e){} return; } $('shz-file').click(); };
+$('shz-file').onchange=()=>{ const f=$('shz-file').files[0]; $('shz-file').value=''; if(f) shazamReel(f); };
+async function shazamReel(file){
+  const isWav=/\.wav$/i.test(file.name); if(!isWav&&!/\.mp3$/i.test(file.name)) return msg('m-msg','الملف لازم يكون MP3 أو WAV',false);
+  SH.running=true; SH.stop=false; busy(true); $('m-msg').className='msg';
+  const go=$('shz-go'), now=$('shz-now'), list=$('shz-list'); go.lastChild.textContent=' وقّف'; now.classList.remove('hidden'); $('shz-wrap').classList.remove('hidden'); list.innerHTML='';
+  try{
+    const dur=await fileDuration(file), SNIP=12, step=+$('shz-step').value;
+    let head=0,wavHdr=null,bps,align=1;
+    if(isWav){ wavHdr=new Uint8Array(await file.slice(0,44).arrayBuffer()); head=44; const dv=new DataView(wavHdr.buffer); bps=dv.getUint32(28,true); align=dv.getUint16(32,true); }
+    else { const h=new Uint8Array(await file.slice(0,10).arrayBuffer()); if(h[0]===73&&h[1]===68&&h[2]===51) head=10+ss(h,6); bps=(file.size-head)/dur; }
+    const times=[]; for(let t=Math.min(30,dur/3); t<dur-SNIP; t+=step) times.push(t);
+    list.innerHTML=times.map((t,i)=>`<tr id="shz-r${i}"><td>${i+1}</td><td class="latin">${fmt(t)}</td><td class="st"></td></tr>`).join('');
+    const ctx=SH.ctx||(SH.ctx=new AudioContext()); await ctx.resume();
+    for(let i=0;i<times.length&&!SH.stop;i++){
+      const t=times[i]; let from=head+Math.floor(t*bps); if(isWav) from-=(from-head)%align; const to=Math.min(file.size,from+Math.floor((SNIP+1)*bps));
+      let buf; if(isWav){ const hdr=wavHdr.slice(),dv=new DataView(hdr.buffer); dv.setUint32(4,36+(to-from),true); dv.setUint32(40,to-from,true); buf=await new Blob([hdr,file.slice(from,to)]).arrayBuffer(); }
+      else buf=await file.slice(from,to).arrayBuffer();
+      let ab; try{ ab=await ctx.decodeAudioData(buf); }catch(e){ continue; }
+      now.innerHTML=`<div class="big latin">${fmt(t)}</div><div>المقطع ${i+1} من ${times.length} · شازام بيسمع…</div>`;
+      document.querySelectorAll('#shz-list tr').forEach(r=>r.classList.remove('done')); const row=$('shz-r'+i); row.classList.add('done'); row.querySelector('.st').textContent='▶'; row.scrollIntoView({block:'nearest'});
+      const src=ctx.createBufferSource(); src.buffer=ab; const g=ctx.createGain(); src.connect(g); g.connect(ctx.destination);
+      const T=ctx.currentTime+0.05, L=Math.min(SNIP,ab.duration); g.gain.setValueAtTime(0,T); g.gain.linearRampToValueAtTime(1,T+0.08); g.gain.setValueAtTime(1,T+L-0.1); g.gain.linearRampToValueAtTime(0,T+L);
+      SH.src=src; src.start(T,0,L); await new Promise(r=>{src.onended=r;});
+      row.querySelector('.st').textContent='✓';
+      if(!SH.stop) await new Promise(r=>setTimeout(r,700));
+    }
+    if(!SH.stop){ msg('m-msg',`خلص ✓ شغّل ${times.length} مقطع. افتح Library في شازام، هتلاقي التراكات بالترتيب، والجدول ده فيه وقت كل مقطع في الميكس.`,true); logEdit('وضع شازام',file.name,times.length+' مقطع'); }
+  }catch(e){ msg('m-msg','حصلت مشكلة: '+e.message,false); }
+  SH.running=false; busy(false); go.lastChild.textContent=' اختار الميكس وشغّله لشازام'; now.classList.add('hidden');
 }
 
 /* ---------- mix file from my computer ---------- */
@@ -1403,11 +1620,8 @@ $('t-save').onclick=async()=>{
     const tag=TG.track.isMp3&&TG.track.parsed.frames.length ? id3Only(TG.track.parsed.frames) : [];
     const blob=new Blob([...tag,...mp3],{type:'audio/mpeg'});
     const name=safeFile(cleanName(TG.track.file.name))+'.mp3';
-    if(window.showSaveFilePicker){
-      try{ const h=await showSaveFilePicker({suggestedName:name,types:[{description:'MP3',accept:{'audio/mpeg':['.mp3']}}]});
-        const w=await h.createWritable(); await w.write(blob); await w.close(); msg('t-msg','تمام ✓ اتحفظت باسم: '+h.name,true); tLog(h.name); }
-      catch(e){ if(e.name!=='AbortError') throw e; $('t-msg').className='msg'; }
-    } else { download(blob,name); msg('t-msg','تمام ✓ اتنزلت باسم: '+name,true); tLog(name); }
+    const r=await saveOut(blob,name);
+    if(r){ savedMsg('t-msg',r); tLog(r.name); } else $('t-msg').className='msg';
   }catch(e){ msg('t-msg','حصلت مشكلة: '+e.message,false); }
   prog.classList.remove('show'); $('t-save').disabled=false; busy(false);
 };
@@ -1573,16 +1787,247 @@ $('e-save').onclick=async()=>{
     else { const mp3=await encodeMp3(EN.out,p=>{prog.firstElementChild.style.width=(p*100)+'%';$('e-msg').className='msg show ok';$('e-msg').textContent='بيحفظ… '+Math.round(p*100)+'%';});
       const tag=EN.track.isMp3&&EN.track.parsed.frames.length?id3Only(EN.track.parsed.frames):[]; blob=new Blob([...tag,...mp3],{type:'audio/mpeg'}); }
     const name=safeFile(cleanName(EN.track.file.name))+(isWav?'.wav':'.mp3');
-    let saved=null;
-    if(window.showSaveFilePicker){
-      try{ const h=await showSaveFilePicker({suggestedName:name,types:[{description:isWav?'WAV':'MP3',accept:{[isWav?'audio/wav':'audio/mpeg']:[isWav?'.wav':'.mp3']}}]});
-        const w=await h.createWritable(); await w.write(blob); await w.close(); saved=h.name; }
-      catch(e){ if(e.name!=='AbortError') throw e; }
-    } else { download(blob,name); saved=name; }
-    if(saved){ msg('e-msg','تمام ✓ اتحفظت باسم: '+saved,true); logEdit('ارفع جودة الأغنية',EN.track.file.name,(EN.done||[]).join(' · ')+' → '+saved); }
+    const r=await saveOut(blob,name);
+    if(r){ savedMsg('e-msg',r); logEdit('ارفع جودة الأغنية',EN.track.file.name,(EN.done||[]).join(' · ')+' → '+r.name); }
     else $('e-msg').className='msg';
   }catch(e){ msg('e-msg','حصلت مشكلة: '+e.message,false); }
   prog.classList.remove('show'); $('e-save').disabled=false; busy(false);
+};
+
+/* ================= Remix (اعمل ريمكس) ================= */
+const GENRES=[
+ {id:'house',name:'House',bpm:124, kick:'x...x...x...x...',clap:'....x.......x...',ohh:'..x...x...x...x.',chh:'o.o.o.o.o.o.o.o.',bass:'..x...x...x...x.'},
+ {id:'deep',name:'Deep House',bpm:120,swing:.12, kick:'x...x...x...x...',rim:'....x.......x...',shk:'oxoxoxoxoxoxoxox',bass:'..x..x....x..x..',soft:1},
+ {id:'tech',name:'Tech House',bpm:126, kick:'x...x...x...x...',clap:'....x.......x...',chh:'xoxoxoxoxoxoxoxo',ohh:'..x...x...x...x.',bass:'.xx..xx..xx..xx.'},
+ {id:'techno',name:'Techno',bpm:130, kick:'x...x...x...x...',clap:'....x.......x...',chh:'xxxxxxxxxxxxxxxx',rum:'.xxx.xxx.xxx.xxx',hard:1},
+ {id:'afro',name:'Afro House',bpm:122,swing:.1, kick:'x...x...x...x...',clap:'....o.......o...',shk:'xoxoxoxoxoxoxoxo',perc:'x..x..x...x.x...',perc2:'...x.....x....x.',bass:'x.....x...x.....'},
+ {id:'edm',name:'EDM',bpm:128, kick:'x...x...x...x...',clap:'....x.......x...',ohh:'..x...x...x...x.',bass:'..x...x...x...x.',saw:1},
+ {id:'trap',name:'Trap',bpm:140, kick:'x.....x...x.....',snare:'........x.......',chh:'xxxxxxxxxxxxxxxx',b808:'x.....x...x.....'},
+ {id:'mahr',name:'مهرجانات',bpm:100, kick:'x.......x.......',snare:'..x...x.....x...',chh:'xoxoxoxoxoxoxoxo',perc:'x..x..x.x..x..x.',bass:'x.......x.......',saw:1},
+ {id:'regg',name:'Reggaeton',bpm:95, kick:'x...x...x...x...',snare:'...x..x....x..x.',chh:'o.o.o.o.o.o.o.o.',b808:'x.......x.......'},
+ {id:'dnb',name:'Drum & Bass',bpm:174, kick:'x.........x.....',snare:'....x.......x...',chh:'x.x.x.x.x.x.x.x.',b808:'x.........x.....'},
+];
+const RX={buf:null,track:null,out:null,genre:null,info:null,stems:null,parts:null,ctx:null,srcs:[],gA:null,gB:null,t0:0,from:0,playing:false,which:'b',raf:0};
+$('r-genres').innerHTML=GENRES.map(g=>`<button class="genre" data-g="${g.id}"><b>${g.name}</b><small class="latin">${g.bpm} BPM</small></button>`).join('');
+$('r-genres').onclick=e=>{const b=e.target.closest('.genre'); if(!b) return; RX.genre=GENRES.find(g=>g.id===b.dataset.g);
+  document.querySelectorAll('.genre').forEach(x=>x.classList.toggle('on',x===b)); $('r-run').disabled=!RX.buf;};
+const rDrop=$('r-drop'), rFile=$('r-file');
+rDrop.onclick=()=>rFile.click();
+rDrop.ondragover=e=>{e.preventDefault();rDrop.classList.add('over')}; rDrop.ondragleave=()=>rDrop.classList.remove('over');
+rDrop.ondrop=e=>{e.preventDefault();rDrop.classList.remove('over');if(e.dataTransfer.files[0])rLoad(e.dataTransfer.files[0]);};
+rFile.onchange=()=>{if(rFile.files[0])rLoad(rFile.files[0]);rFile.value='';};
+$('r-other').onclick=()=>{rStop();Object.assign(RX,{buf:null,out:null,stems:null,parts:null});$('r-edit').classList.add('hidden');rDrop.classList.remove('hidden');$('r-daw').classList.add('hidden');};
+
+// beat phase: where the first beat falls (seconds)
+function beatPhase(buf,bpm){
+  const d=buf.getChannelData(0),hop=256,n=Math.floor(d.length/hop),env=new Float32Array(n),sr=buf.sampleRate; let prev=0;
+  for(let f=0;f<n;f++){let e=0;for(let i=f*hop;i<(f+1)*hop;i++)e+=d[i]*d[i];e=Math.sqrt(e);env[f]=Math.max(0,e-prev);prev=e;}
+  const per=60/bpm*sr/hop; let best=-1,bp=0;
+  for(let ph=0;ph<per;ph+=0.5){let s=0;for(let t=ph;t<n;t+=per)s+=env[Math.round(t)]||0;if(s>best){best=s;bp=ph;}}
+  return bp*hop/sr;
+}
+// musical key (Krumhansl profiles) + Camelot code for DJs
+const NOTES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+function detectKey(buf){
+  const N=8192,fft=makeFFT(N),d=buf.getChannelData(0),sr=buf.sampleRate,chroma=new Float64Array(12),re=new Float64Array(N),im=new Float64Array(N);
+  const frames=Math.min(300,Math.floor(d.length/N)),step=Math.floor((d.length-N)/Math.max(1,frames));
+  for(let f=0;f<frames;f++){const o=f*step;for(let i=0;i<N;i++){re[i]=d[o+i]*(0.5-0.5*Math.cos(2*Math.PI*i/N));im[i]=0;}fft(re,im);
+    for(let k=Math.ceil(55*N/sr);k<Math.floor(2000*N/sr);k++){const fr=k*sr/N,m=Math.hypot(re[k],im[k]),pc=((Math.round(12*Math.log2(fr/440))+9)%12+12)%12;chroma[pc]+=m;}}
+  const MAJ=[6.35,2.23,3.48,2.33,4.38,4.09,2.52,5.19,2.39,3.66,2.29,2.88],MIN=[6.33,2.68,3.52,5.38,2.6,3.53,2.54,4.75,3.98,2.69,3.34,3.17];
+  const corr=(p,r)=>{let mx=0,mp=0;for(let i=0;i<12;i++){mx+=chroma[i];mp+=p[i];}mx/=12;mp/=12;let a=0,b=0,c=0;for(let i=0;i<12;i++){const x=chroma[(i+r)%12]-mx,y=p[i]-mp;a+=x*y;b+=x*x;c+=y*y;}return a/Math.sqrt(b*c);};
+  let best={c:-2};for(let r=0;r<12;r++){for(const [p,mode] of [[MAJ,'major'],[MIN,'minor']]){const c=corr(p,r);if(c>best.c)best={c,tonic:r,mode};}}
+  const CAM_MAJ=[8,3,10,5,12,7,2,9,4,11,6,1],CAM_MIN=[5,12,7,2,9,4,11,6,1,8,3,10];
+  best.name=NOTES[best.tonic]+(best.mode==='minor'?'m':''); best.camelot=(best.mode==='minor'?CAM_MIN[best.tonic]+'A':CAM_MAJ[best.tonic]+'B');
+  return best;
+}
+// time-stretch without changing pitch (WSOLA)
+function wsola(chs,factor){
+  if(Math.abs(factor-1)<0.003) return chs.map(c=>c.slice());
+  const N=2048,Hs=1024,Ha=Hs*factor,D=128,n=chs[0].length,outLen=Math.floor(n/factor);
+  const w=new Float32Array(N).map((_,i)=>0.5-0.5*Math.cos(2*Math.PI*i/N));
+  const mono=new Float32Array(Math.ceil(n/4)); for(let i=0;i<mono.length;i++){let s=0;for(const c of chs)s+=c[i*4]||0;mono[i]=s;}
+  const out=chs.map(()=>new Float32Array(outLen+N)), norm=new Float32Array(outLen+N);
+  let prev=0;
+  for(let k=0;k*Hs<outLen;k++){
+    const nom=Math.round(k*Ha); let pos=nom;
+    if(k>0){ const tgt=(prev+Hs)/4|0, base=nom/4|0; let best=-1e9,bd=0;
+      for(let dd=-D/4;dd<=D/4;dd++){const p=base+dd; if(p<0||p+256>=mono.length) continue; let s=0; for(let i=0;i<256;i++) s+=mono[p+i]*(mono[tgt+i]||0); if(s>best){best=s;bd=dd;}}
+      pos=Math.max(0,nom+bd*4); }
+    if(pos+N>=n) break;
+    const o=k*Hs; for(let c=0;c<chs.length;c++){const src=chs[c],dst=out[c];for(let i=0;i<N;i++)dst[o+i]+=src[pos+i]*w[i];}
+    for(let i=0;i<N;i++) norm[o+i]+=w[i];
+    prev=pos;
+  }
+  return out.map(d=>{const r=new Float32Array(outLen);for(let i=0;i<outLen;i++)r[i]=norm[i]>1e-3?d[i]/norm[i]:0;return r;});
+}
+function biquadRun(x,type,f,q,sr){
+  const w=2*Math.PI*f/sr,cs=Math.cos(w),al=Math.sin(w)/(2*q); let b0,b1,b2,a0=1+al,a1=-2*cs,a2=1-al;
+  if(type==='hp'){b0=(1+cs)/2;b1=-(1+cs);b2=(1+cs)/2;} else {b0=(1-cs)/2;b1=1-cs;b2=(1-cs)/2;}
+  const y=new Float32Array(x.length); let x1=0,x2=0,y1=0,y2=0;
+  for(let i=0;i<x.length;i++){const v=(b0*x[i]+b1*x1+b2*x2-a1*y1-a2*y2)/a0;x2=x1;x1=x[i];y2=y1;y1=v;y[i]=v;} return y;
+}
+// drum & bass sounds, synthesized
+function synthKit(sr,g){
+  const len=s=>new Float32Array(Math.round(s*sr)), rnd=()=>Math.random()*2-1;
+  const kick=(()=>{const x=len(.45);let ph=0;for(let i=0;i<x.length;i++){const t=i/sr,f=48+(g.hard?160:120)*Math.exp(-t*28);ph+=2*Math.PI*f/sr;x[i]=Math.sin(ph)*Math.exp(-t*(g.soft?9:7))+(i<sr*.004?rnd()*.3:0);}return x;})();
+  const noise=(d,hp,dec)=>{let x=len(d);for(let i=0;i<x.length;i++)x[i]=rnd()*Math.exp(-i/sr*dec);return biquadRun(x,'hp',hp,.7,sr);};
+  const clap=(()=>{const x=len(.3);for(const off of [0,.011,.022])for(let i=Math.round(off*sr);i<x.length;i++){const t=i/sr-off;x[i]+=rnd()*Math.exp(-t*(off<.02?60:18))*.6;}return biquadRun(biquadRun(x,'hp',900,.8,sr),'lp',4500,.7,sr);})();
+  const snare=(()=>{const n=noise(.25,1200,22),x=len(.25);let ph=0;for(let i=0;i<x.length;i++){ph+=2*Math.PI*190/sr;x[i]=n[i]*.8+Math.sin(ph)*Math.exp(-i/sr*30)*.6;}return x;})();
+  const tone=(f0,f1,d,dec)=>{const x=len(d);let ph=0;for(let i=0;i<x.length;i++){const t=i/sr;ph+=2*Math.PI*(f1+(f0-f1)*Math.exp(-t*40))/sr;x[i]=Math.sin(ph)*Math.exp(-t*dec);}return x;};
+  return {kick,clap,snare,chh:noise(.06,7000,70),ohh:noise(.25,6500,12),shk:noise(.05,5000,60),rim:tone(1700,1600,.03,120),
+    perc:tone(260,210,.18,22),perc2:tone(380,330,.14,26),rum:biquadRun(noise(.2,40,14),'lp',140,.7,sr)};
+}
+function bassNote(sr,freq,dur,saw,is808){
+  const x=new Float32Array(Math.round(dur*sr));let ph=0;
+  for(let i=0;i<x.length;i++){const t=i/sr,f=is808?freq*(1+0.6*Math.exp(-t*25)):freq;ph+=2*Math.PI*f/sr;
+    let v=saw?((ph/(2*Math.PI))%1)*2-1:Math.sin(ph); if(is808) v=Math.tanh(1.8*v);
+    const env=Math.min(1,t/0.004)*Math.exp(-t*(is808?2.2:6)); x[i]=v*env;}
+  return saw?biquadRun(x,'lp',300,.9,sr):x;
+}
+function rLoadInfo(){
+  const b=detectBpm(RX.buf)||120, k=detectKey(RX.buf); RX.info={bpm:b,key:k,phase:beatPhase(RX.buf,b)};
+  $('r-bpm').textContent=b; $('r-key').textContent=k.name+' · '+k.camelot;
+}
+async function rLoad(file){
+  busy(true); $('r-msg').className='msg';
+  try{
+    const track=await readTrack(file);
+    const buf=await new OfflineAudioContext(2,1,SR_OUT).decodeAudioData(track.bytes.buffer.slice(0));
+    Object.assign(RX,{buf,track,out:null,stems:null,parts:null,from:0});
+    $('r-name').textContent=cleanName(file.name); $('r-dur').textContent=fmt(buf.duration);
+    rDrop.classList.add('hidden'); $('r-edit').classList.remove('hidden'); $('r-daw').classList.add('hidden');
+    await tick(); rLoadInfo(); $('r-run').disabled=!RX.genre; rUi();
+  }catch(e){ alert('مقدرتش أقرا الأغنية: '+e.message); }
+  busy(false);
+}
+$('r-run').onclick=async()=>{
+  const g=RX.genre; if(!RX.buf||!g) return; rStop(); busy(true); $('r-run').disabled=true; const prog=$('r-prog'); prog.classList.add('show');
+  const P=(p,t)=>{prog.firstElementChild.style.width=(p*100)+'%';$('r-msg').className='msg show ok';$('r-msg').textContent=t;};
+  try{
+    const sr=RX.buf.sampleRate, L0=RX.buf.getChannelData(0), R0=RX.buf.numberOfChannels>1?RX.buf.getChannelData(1):L0;
+    // 1) vocals / music
+    let voc=null, mus=[L0,R0];
+    if(APP&&APP.separateFull){
+      if(!RX.stems){ P(.05,'الذكاء الاصطناعي بيفصل صوت المطرب عن المزيكا… (ممكن ياخد دقيقة)'); const r=await APP.separateFull(L0,R0);
+        RX.stems={voc:[new Float32Array(r.vL),new Float32Array(r.vR)],mus:[new Float32Array(r.mL),new Float32Array(r.mR)]}; }
+      voc=RX.stems.voc; mus=RX.stems.mus;
+    }
+    // 2) tempo
+    const b0=RX.info.bpm; let cand=b0, target=$('r-keep').checked?b0:g.bpm;
+    if(!$('r-keep').checked){ for(const c of [b0/2,b0,b0*2]) if(Math.abs(Math.log(target/c))<Math.abs(Math.log(target/cand))) cand=c; }
+    const factor=target/cand; P(.45,`بيظبط السرعة من ${b0} لـ ${Math.round(target)} BPM…`); await tick();
+    const vS=voc?wsola(voc,factor):null; const mS=$('r-acap').checked&&voc?null:wsola(mus,factor);
+    // 3) arrangement
+    P(.7,'بيعمل الإيقاع والباص…'); await tick();
+    const beat=60/target, bar=4*beat, intro=$('r-dj').checked?8*bar:0, outro=$('r-dj').checked?8*bar:2*bar;
+    const ph=(RX.info.phase%(60/cand))/factor;
+    const songOff=Math.max(0,intro-ph)+(intro===0?0:0), songLen=(vS||mS)[0].length/sr;
+    const bodyEnd=intro+Math.ceil((songLen-ph)/bar)*bar, total=bodyEnd+outro, N=Math.ceil(total*sr)+sr;
+    const D=[new Float32Array(N),new Float32Array(N)], B=new Float32Array(N), kit=synthKit(sr,g);
+    const hit=(snd,t,vel,pan=0)=>{const o=Math.round(t*sr);for(let i=0;i<snd.length&&o+i<N;i++){const v=snd[i]*vel;D[0][o+i]+=v*(1-pan);D[1][o+i]+=v*(1+pan);}};
+    const root=(()=>{let m=28;while(((m%12)+12)%12!==RX.info.key.tonic)m++;return 440*Math.pow(2,(m-69)/12);})();
+    const nBars=Math.round(total/bar), step=bar/16;
+    for(let b=0;b<nBars;b++){
+      const t0=b*bar, inIntro=t0<intro-1e-6, inOutro=t0>=bodyEnd-1e-6, k=inIntro?b:inOutro?Math.round((t0-bodyEnd)/bar):-1;
+      const layer=name=>{ if(k<0) return true; const edge=inIntro?k:7-k; if(name==='kick'||name==='chh'||name==='shk') return true; if(name==='bass'||name==='b808'||name==='rum') return edge>=2; return edge>=4; };
+      for(const [name,snd,gain,pan] of [['kick',kit.kick,1,0],['clap',kit.clap,.55,0],['snare',kit.snare,.6,0],['rim',kit.rim,.35,.2],['chh',kit.chh,.22,.25],['ohh',kit.ohh,.25,-.25],['shk',kit.shk,.18,.35],['perc',kit.perc,.4,-.3],['perc2',kit.perc2,.32,.3],['rum',kit.rum,.35,0]]){
+        const pat=g[name]; if(!pat||!layer(name)) continue;
+        for(let s=0;s<16;s++){const c=pat[s]; if(c==='.') continue; const sw=(g.swing&&s%2===1)?g.swing*step:0; hit(snd,t0+s*step+sw,(c==='x'?1:.55)*gain,pan);}
+      }
+      const bp=g.bass||g.b808; if(bp&&layer(g.bass?'bass':'b808')){
+        for(let s=0;s<16;s++){ if(bp[s]==='.') continue; let len=1; while(s+len<16&&bp[s+len]==='.'&&len<(g.b808?8:3)) len++;
+          const note=bassNote(sr,(g.id==='tech'&&s%4===2)?root*2:root,len*step*(g.b808?1.2:.9),g.saw,!!g.b808);
+          const o=Math.round((t0+s*step)*sr); for(let i=0;i<note.length&&o+i<N;i++) B[o+i]+=note[i]*(g.b808?.7:.55); }
+      }
+    }
+    // 4) mix: vocals + music without its own low end + new beat + bass
+    const O=Math.round(songOff*sr), mixL=new Float32Array(N), mixR=new Float32Array(N);
+    const musHP=mS?mS.map(c=>biquadRun(c,'hp',170,.7,sr)):null;
+    for(let i=0;i<N;i++){ mixL[i]=D[0][i]*.8+B[i]; mixR[i]=D[1][i]*.8+B[i]; }
+    const endS=Math.round(bodyEnd*sr), fadeS=Math.round(bar*sr);
+    for(let i=0;i<(vS||mS)[0].length;i++){ const j=O+i; if(j>=N) break; const fo=j>endS-fadeS?Math.max(0,(endS-j)/fadeS):1;
+      if(vS){mixL[j]+=vS[0][i]*fo;mixR[j]+=vS[1][i]*fo;} if(musHP){mixL[j]+=musHP[0][i]*.75*fo;mixR[j]+=musHP[1][i]*.75*fo;} }
+    // 5) master: loud and clean (-9 LUFS, no clipping)
+    P(.9,'بيظبط الصوت النهائي…'); await tick();
+    const out=new AudioBuffer({length:N,numberOfChannels:2,sampleRate:sr}); out.copyToChannel(mixL,0); out.copyToChannel(mixR,1);
+    let gain=Math.pow(10,(-9-await lufs(out))/20);
+    { const tmp=[mixL.slice(),mixR.slice()]; limit(tmp,sr,gain); const tb=new AudioBuffer({length:N,numberOfChannels:2,sampleRate:sr}); tb.copyToChannel(tmp[0],0); tb.copyToChannel(tmp[1],1);
+      const diff=-9-await lufs(tb); if(diff>0.3) gain*=Math.pow(10,Math.min(4,diff)/20); }   // the limiter takes some loudness away: correct once
+    const chs=[mixL,mixR]; limit(chs,sr,gain); out.copyToChannel(chs[0],0); out.copyToChannel(chs[1],1);
+    RX.out=out; RX.parts={vocals:vS?vS:null,music:mS,drums:D,bass:B,offset:O,bpm:Math.round(target),key:RX.info.key,genre:g};
+    msg('r-msg',`خلص ✓ ريمكس ${g.name} على ${Math.round(target)} BPM · ${RX.info.key.name} (${RX.info.key.camelot}) · ${fmt(out.duration)}. اسمع "الأصلية" و"الريمكس" وبعدين احفظ.`+(voc?'':' (فصل الصوت عن المزيكا شغّال في البرنامج المتسطّب بس)'),true);
+    RX.which='b'; rUi(); $('r-daw').classList.remove('hidden');
+  }catch(e){ msg('r-msg','حصلت مشكلة: '+e.message,false); }
+  prog.classList.remove('show'); $('r-run').disabled=false; busy(false);
+};
+/* playback (original / remix) */
+function rHead(){ return RX.playing?Math.min(rLenFor(),RX.from+(RX.ctx.currentTime-RX.t0)):RX.from; }
+function rLenFor(){ return RX.which==='b'&&RX.out?RX.out.duration:RX.buf.duration; }
+function rStop(){ RX.srcs.forEach(s=>{try{s.onended=null;s.stop();}catch(e){}}); RX.srcs=[]; if(RX.playing) RX.from=rHead(); RX.playing=false; cancelAnimationFrame(RX.raf); $('r-play').textContent='▶ تشغيل'; }
+function rPlay(from){
+  rStop(); const ctx=RX.ctx||(RX.ctx=new AudioContext()); ctx.resume();
+  const b=RX.which==='b'&&RX.out?RX.out:RX.buf, s=ctx.createBufferSource(); s.buffer=b; s.connect(ctx.destination);
+  const t=ctx.currentTime+0.05; s.start(t,Math.max(0,Math.min(from,b.duration-0.1))); RX.srcs=[s]; s.onended=()=>{rStop();RX.from=0;};
+  Object.assign(RX,{t0:t,from:Math.max(0,from),playing:true}); $('r-play').textContent='⏸ إيقاف';
+  const loop=()=>{const h=rHead();$('r-pos').value=h/rLenFor()*1000;$('r-time').textContent=fmt(h);if(RX.playing)RX.raf=requestAnimationFrame(loop);};loop();
+}
+function rUi(){ const has=!!RX.out; $('r-play').disabled=!RX.buf; $('r-a').disabled=$('r-b').disabled=!has; $('r-save').disabled=!has; $('r-pos').disabled=!RX.buf;
+  $('r-a').classList.toggle('on',RX.which==='a'||!has); $('r-b').classList.toggle('on',RX.which==='b'&&has); }
+$('r-play').onclick=()=>{ RX.playing?rStop():rPlay(RX.from); };
+$('r-a').onclick=()=>{const w=RX.playing;rStop();RX.which='a';RX.from=Math.min(RX.from,RX.buf.duration-1);rUi();if(w)rPlay(RX.from);};
+$('r-b').onclick=()=>{const w=RX.playing;rStop();RX.which='b';rUi();if(w)rPlay(RX.from);};
+$('r-pos').oninput=e=>{const t=e.target.value/1000*rLenFor();$('r-time').textContent=fmt(t);if(RX.playing)rPlay(t);else RX.from=t;};
+$('r-save').onclick=async()=>{
+  rStop(); busy(true); const prog=$('r-prog'); prog.classList.add('show'); $('r-save').disabled=true;
+  try{
+    const isWav=$('r-fmt').value==='wav', g=RX.parts.genre;
+    const base=safeFile(cleanName(RX.track.file.name))+` (DJ ISLAM AYMAN ${g.id==='mahr'?'Mahraganat':g.name} Remix)`;
+    let blob; if(isWav) blob=wav16(RX.out);
+    else { const mp3=await encodeMp3(RX.out,p=>{prog.firstElementChild.style.width=(p*100)+'%';$('r-msg').className='msg show ok';$('r-msg').textContent='بيحفظ… '+Math.round(p*100)+'%';});
+      const t=RX.track, title=(t.title||cleanName(t.file.name))+` (DJ ISLAM AYMAN ${g.name} Remix)`;
+      const frames=[textFrame('TIT2',title),textFrame('TPE1',t.artist||''),textFrame('TBPM',String(RX.parts.bpm)),textFrame('TKEY',RX.parts.key.name),apicFrame(await coverJpeg(title))];
+      const tag=[new Uint8Array(10),...frames,new Uint8Array(1024)], fl=frames.reduce((a,b)=>a+b.length,0); tag[0].set([73,68,51,4,0,0],0); tag[0].set(ssBytes(fl+1024),6);
+      blob=new Blob([...tag,...mp3],{type:'audio/mpeg'}); }
+    const r=await saveOut(blob,base+(isWav?'.wav':'.mp3'));
+    if(r){ savedMsg('r-msg',r); logEdit('اعمل ريمكس',RX.track.file.name,`${g.name} · ${RX.parts.bpm} BPM · ${RX.parts.key.camelot} → ${r.name}`); } else $('r-msg').className='msg';
+  }catch(e){ msg('r-msg','حصلت مشكلة: '+e.message,false); }
+  prog.classList.remove('show'); $('r-save').disabled=false; busy(false);
+};
+/* export stems + open in a production app */
+const DAWS=[['ableton','Ableton Live'],['fl','FL Studio'],['logic','Logic Pro'],['cubase','Cubase'],['studioone','Studio One'],['bitwig','Bitwig'],['garageband','GarageBand']];
+$('r-dawbtns').innerHTML=DAWS.map(([id,n])=>`<button class="btn logo-btn" data-daw="${id}">${logo(n,18)}افتح ${n}</button>`).join('');
+document.querySelector('[data-ai=suno]').insertAdjacentHTML('afterbegin',logo('Suno',18));
+let stemDir=null;
+function stereoBuf(chs,offset,len,sr){ const b=new AudioBuffer({length:len,numberOfChannels:2,sampleRate:sr});
+  for(let c=0;c<2;c++){const d=new Float32Array(len);const src=chs[Math.min(c,chs.length-1)];for(let i=0;i<src.length&&offset+i<len;i++)d[offset+i]=src[i];b.copyToChannel(d,c);} return b; }
+$('r-stems').onclick=async()=>{
+  if(!RX.parts) return; busy(true);
+  try{
+    const sr=RX.out.sampleRate,len=RX.out.length,P=RX.parts,base=safeFile(cleanName(RX.track.file.name));
+    const files=[[`${base} - Remix.wav`,RX.out],[`${base} - Drums.wav`,stereoBuf(P.drums,0,len,sr)],[`${base} - Bass.wav`,stereoBuf([P.bass],0,len,sr)]];
+    if(P.vocals) files.push([`${base} - Vocals.wav`,stereoBuf(P.vocals,P.offset,len,sr)]);
+    if(P.music) files.push([`${base} - Music.wav`,stereoBuf(P.music,P.offset,len,sr)]);
+    const info=`${base}\nGenre: ${P.genre.name}\nBPM: ${P.bpm}\nKey: ${P.key.name} (Camelot ${P.key.camelot})\nAll stems start at 0:00 and line up.\nMade with Islam Ayman Studio`;
+    if(APP&&APP.pickFolder){
+      const dir=await APP.pickFolder('تحفظ الأجزاء فين؟'); if(!dir){busy(false);return;}
+      for(const [n,b] of files) await APP.writeFile(dir,n,new Uint8Array(await wav16(b).arrayBuffer()));
+      await APP.writeFile(dir,`${base} - Info.txt`,new TextEncoder().encode(info));
+      stemDir=dir; msg('r-msg',`تمام ✓ ${files.length} أجزاء اتحفظوا في: ${dir}. دلوقتي افتح البرنامج اللي بتشتغل عليه واسحبهم فيه.`,true);
+    } else { for(const [n,b] of files){ download(wav16(b),n); await new Promise(r=>setTimeout(r,500)); } msg('r-msg','تمام ✓ الأجزاء اتنزلت',true); }
+    logEdit('صدّر أجزاء الريمكس',RX.track.file.name,files.length+' أجزاء');
+  }catch(e){ msg('r-msg','حصلت مشكلة: '+e.message,false); }
+  busy(false);
+};
+$('r-daw').onclick=async e=>{
+  const d=e.target.closest('[data-daw]'), ai=e.target.closest('[data-ai]');
+  if(d){ if(!APP||!APP.openDaw) return msg('r-msg','فتح البرامج شغّال في البرنامج المتسطّب بس',false);
+    if(!stemDir) return msg('r-msg','دوس "صدّر الأجزاء (Stems)" الأول، وبعدين افتح البرنامج',false);
+    const ok=await APP.openDaw(d.dataset.daw,stemDir); const n=DAWS.find(x=>x[0]===d.dataset.daw)[1];
+    msg('r-msg',ok?`بيفتح ${n}، وفولدر الأجزاء اتفتح جنبه. اسحب الملفات جوه البرنامج، وظبّط السرعة على ${RX.parts.bpm} BPM.`:`مش لاقي ${n} متسطّب على جهازك.`,ok); }
+  if(ai){ const P=RX.parts; const prompt=`${P.genre.name} remix, ${P.bpm} BPM, key of ${P.key.name}, club-ready, punchy drums, deep bass, DJ intro and outro`;
+    try{ await navigator.clipboard.writeText(prompt); }catch(e){}
+    const url=ai.dataset.ai==='suno'?'https://suno.com/create':'https://www.udio.com/create'; const a=document.createElement('a'); a.href=url; a.target='_blank'; document.body.appendChild(a); a.click(); a.remove();
+    msg('r-msg','اتفتح الموقع، ووصف الستايل اتنسخ: "'+prompt+'". الصقه هناك وارفع ملف الـ Vocals.',true); }
 };
 
 /* ================= Data & history screen ================= */
@@ -1614,13 +2059,15 @@ const SITES=[
   ['Bandcamp','#629AA9','شرا وتنزيل',q=>'https://bandcamp.com/search?q='+encodeURIComponent(q)],
   ['iTunes / Apple','#FA57C1','شرا',q=>'https://music.apple.com/search?term='+encodeURIComponent(q)],
   ['Anghami','#A13CFF','استمع',q=>'https://play.anghami.com/search/'+encodeURIComponent(q)],
+  ['YouTube Music','#FF0033','استمع',q=>'https://music.youtube.com/search?q='+encodeURIComponent(q)],
+  ['Deezer','#A238FF','استمع',q=>'https://www.deezer.com/search/'+encodeURIComponent(q)],
   ['SoundCloud','#FF5500','ريمكسات',q=>'https://soundcloud.com/search?q='+encodeURIComponent(q)],
 ];
 function renderLinks(){
   const q=$('q').value.trim(); const box=$('links');
   if(!q){box.innerHTML='';return;}
   const f=toFranco(q);
-  box.innerHTML=SITES.map(([n,c,sub,u])=>`<a href="${u(q)}" target="_blank" rel="noopener"><span class="dot" style="background:${c}"></span><span>${n}<small>${sub}</small></span></a>`).join('')
+  box.innerHTML=SITES.map(([n,c,sub,u])=>`<a href="${u(q)}" target="_blank" rel="noopener">${logo(n==='iTunes / Apple'?'Apple Music':n,26)||`<span class="dot" style="background:${c}"></span>`}<span>${n}<small>${sub}</small></span></a>`).join('')
     + (f!==q?`<div style="grid-column:1/-1;color:var(--muted);font-size:13px">بالفرانكو: <b class="latin" style="color:var(--text)">${esc(f)}</b></div>`:'');
 }
 $('q').addEventListener('input',renderLinks);

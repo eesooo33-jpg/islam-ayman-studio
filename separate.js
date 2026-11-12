@@ -68,3 +68,20 @@ async function separate(modelDir, L, R) {
   return res;
 }
 module.exports = { separate };
+
+// Whole song: separate in 30 s pieces with overlap (keeps memory low), blend the joins.
+async function separateLong(modelDir, L, R) {
+  const SR = 44100, CH = 30 * SR, OV = 2 * SR, n = L.length;
+  const out = { mL: new Float32Array(n), mR: new Float32Array(n), vL: new Float32Array(n), vR: new Float32Array(n) };
+  for (let s = 0; s < n; s += CH) {
+    const a = Math.max(0, s - OV), b = Math.min(n, s + CH + OV);
+    const r = await separate(modelDir, L.subarray(a, b), R.subarray(a, b));
+    const src = [r.music[0], r.music[1], r.vocals[0], r.vocals[1]], dst = [out.mL, out.mR, out.vL, out.vR];
+    for (let c = 0; c < 4; c++) for (let i = a; i < b; i++) {
+      const v = src[c][i - a];
+      if (s > 0 && i < s + OV) { const w = (i - (s - OV)) / (2 * OV); dst[c][i] = dst[c][i] * (1 - w) + v * w; } else dst[c][i] = v;
+    }
+  }
+  return out;
+}
+module.exports.separateLong = separateLong;
