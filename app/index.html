@@ -648,7 +648,7 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
       <div class="note" style="margin-top:0">موقع شازام بيفتح في شباك جوه البرنامج. أي أغنية تفتحها أو تتعرّف عليها هناك، هيظهرلك تحت الشاشة زراير <b>"افتح في Spotify"</b> و<b>"افتح في أنغامي"</b> و YouTube و Apple Music، وزرار <b>"ضيفه لقايمة التراكات"</b> اللي هنا.</div>
       <div class="row" style="margin-top:14px">
         <button class="btn primary logo-btn" id="z-open">افتح شازام</button>
-        <input type="text" id="z-link" class="latin" placeholder="أو الصق لينك أغنية من شازام: https://www.shazam.com/song/…" style="flex:1;min-width:240px">
+        <input type="text" id="z-link" class="latin" placeholder="الصق لينك أغنية من شازام أو لينك يوتيوب" style="flex:1;min-width:240px">
         <button class="btn" id="z-go">افتح اللينك</button>
       </div>
       <div id="z-card" class="daw hidden"></div>
@@ -2406,7 +2406,9 @@ function showSongCard(song,shazamUrl){
   $('z-addcard').onclick=()=>{ const h={...song,src:'shz',start:null}; if(![...M.hits,...M.extra].some(x=>keyOf(x)===keyOf(h))) M.extra.push(h); renderMix(); msg('z-msg','اتضاف ✓ '+song.title,true); logEdit('شازام',song.title,'اتضاف لقايمة التراكات'); };
 }
 let lastWeb='';
-$('z-go').onclick=()=>{ const u=$('z-link').value.trim(); if(!/^https?:\/\/(www\.)?shazam\.com\//i.test(u)) return msg('z-msg','حط لينك من موقع shazam.com',false);
+$('z-go').onclick=()=>{ const u=$('z-link').value.trim();
+  if(/^https?:\/\/(www\.|m\.|music\.)?(youtube\.com|youtu\.be)\//i.test(u)){ go('full'); document.querySelector('#f-tabs [data-t=link]').click(); $('f-link').value=u; if(!M.running) $('f-open').click(); return; }   // YouTube link → listen to it
+  if(!/^https?:\/\/(www\.)?shazam\.com\//i.test(u)) return msg('z-msg','حط لينك أغنية من shazam.com أو لينك يوتيوب',false);
   const song=songFromShazamUrl(u); if(song) showSongCard(song,u); lastWeb=u; openWeb(u,false); };
 $('z-open').addEventListener('click',()=>{ lastWeb='https://www.shazam.com/'; });
 if(APP&&APP.onWebError) APP.onWebError(d=>{
