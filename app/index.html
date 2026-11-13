@@ -186,6 +186,8 @@ img.gear{width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 10px 14p
 .open-btn.an{background:rgba(161,60,255,.14);border:1px solid rgba(161,60,255,.45);color:#d9b8ff!important}
 .apps .more{display:inline-flex;gap:8px;align-items:center;margin-inline-start:4px}.apps .more a{opacity:.85}.apps .more a:hover{opacity:1}
 @media(min-width:900px){#v-home .grid{grid-template-columns:repeat(3,1fr)}}
+.gear-logo{display:inline-grid;place-items:center;width:64px;height:64px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))}
+.gear-logo.big{width:150px;height:150px;margin:-14px auto 4px;display:grid}
 footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding:20px;direction:ltr}
 </style>
 </head>
@@ -319,6 +321,12 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
       <div class="module" onclick="go('remix')"><span class="led"></span>
         <img class="gear" src="icons/keys.png" alt="">
         <h3>اعمل ريمكس</h3><p>حط أغنية واختار House أو Techno أو Afro أو مهرجانات… والبرنامج يعمل الريمكس، ويصدّره لـ Ableton و FL و Logic.</p></div>
+      <div class="module" onclick="go('shz')"><span class="led"></span>
+        <span class="gear-logo big" id="home-shz"></span>
+        <h3>شازام</h3><p>افتح شازام جوه البرنامج، وأي أغنية يعرفها تفتحها في Spotify أو أنغامي بدوسة.</p></div>
+      <div class="module" onclick="go('full')"><span class="led"></span>
+        <img class="gear" src="icons/speaker.png" alt="">
+        <h3>اسمع السيت كامل</h3><p>حط لينك أو ملف السيت، والبرنامج يسمعه كله ويكتبلك كل تراك مرة واحدة.</p></div>
       <div class="module" onclick="go('mash')"><span class="led"></span>
         <img class="gear" src="icons/controller.png" alt="">
         <h3>اعمل ماشاب</h3><p>حط مجموعة أغاني، والبرنامج يعمل ميجامكس بانتقالات دي جي، أو يحط صوت أغنية على مزيكا أغنية تانية.</p></div>
@@ -419,7 +427,7 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
         <div class="row" style="margin-top:12px">
           <button class="btn primary" id="m-open">شغّل واسمع</button>
           <button class="btn primary hidden" id="m-listen">ابدأ الاستماع</button>
-          <span class="live" id="m-live"><b></b><span>مش بيسمع</span></span>
+          <span class="live live-ind" id="m-live"><b></b><span>مش بيسمع</span></span>
         </div>
       </div>
 
@@ -471,8 +479,8 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
 
       <div class="progress" id="m-prog"><i></i></div>
       <div class="msg" id="m-msg"></div>
-      <div id="m-res" class="hidden">
-        <div class="tbl-wrap"><table class="tl"><thead><tr><th>الوقت</th><th>التراك</th><th>المصدر</th><th>هات التراك</th></tr></thead><tbody id="m-body"></tbody></table></div>
+      <div id="m-res" class="hidden trk-res">
+        <div class="tbl-wrap"><table class="tl"><thead><tr><th>الوقت</th><th>التراك</th><th>المصدر</th><th>هات التراك</th></tr></thead><tbody id="m-body" class="trk-body"></tbody></table></div>
         <div class="row" style="margin-top:14px"><button class="btn" id="m-copy">انسخ التراك ليست</button></div>
       </div>
     </div>
@@ -558,6 +566,7 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
         <div class="genres" id="r-genres"></div>
         <div class="enh-grid" style="margin-top:14px">
           <label class="knob"><input type="checkbox" id="r-keep" data-keep><span><b>خلّي سرعة الأغنية زي ما هي</b><small>من غير ما يغيّرها لسرعة النوع</small></span></label>
+          <label class="knob"><input type="checkbox" id="r-force" data-keep><span><b>سرّعها لسرعة النوع حتى لو بعيدة</b><small>البرنامج عادةً مش بيغيّر السرعة أكتر من 16% عشان الصوت ما يبوظش</small></span></label>
           <label class="knob"><input type="checkbox" id="r-acap" data-keep><span><b>صوت المطرب بس على الإيقاع الجديد</b><small>يشيل المزيكا الأصلية خالص (أكابيلا)</small></span></label>
           <label class="knob"><input type="checkbox" id="r-dj" data-keep checked><span><b>Intro و Outro للدي جي</b><small>8 مازورة إيقاع في الأول والآخر عشان تمكس بسهولة</small></span></label>
         </div>
@@ -628,6 +637,59 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
         <div class="msg" id="x-msg"></div>
         <div id="x-tl" class="note"></div>
       </div>
+    </div>
+  </section>
+
+  <!-- SHAZAM -->
+  <section id="v-shz" class="hidden">
+    <div class="panel">
+      <div class="ptitle"><span class="gear-logo" id="z-logo"></span><div><h2>شازام</h2></div>
+        <button class="btn back" onclick="go('home')">رجوع</button></div>
+      <div class="note" style="margin-top:0">موقع شازام بيفتح في شباك جوه البرنامج. أي أغنية تفتحها أو تتعرّف عليها هناك، هيظهرلك تحت الشاشة زراير <b>"افتح في Spotify"</b> و<b>"افتح في أنغامي"</b> و YouTube و Apple Music، وزرار <b>"ضيفه لقايمة التراكات"</b> اللي هنا.</div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn primary logo-btn" id="z-open">افتح شازام</button>
+        <input type="text" id="z-link" class="latin" placeholder="أو الصق لينك أغنية من شازام: https://www.shazam.com/song/…" style="flex:1;min-width:240px">
+        <button class="btn" id="z-go">افتح اللينك</button>
+      </div>
+      <div class="note">لو موقع شازام ما سمعش الأغنية من الكمبيوتر، استخدم "وضع شازام" مع موبايلك من أيقونة "اعرف أسامي التراكات"، أو أيقونة "اسمع السيت كامل".</div>
+      <div class="msg" id="z-msg"></div>
+      <div class="trk-res hidden"><h3 style="margin:18px 0 6px;font-size:16px">التراكات</h3>
+        <div class="tbl-wrap"><table class="tl"><thead><tr><th>الوقت</th><th>التراك</th><th>المصدر</th><th>افتحه في</th></tr></thead><tbody class="trk-body"></tbody></table></div>
+        <div class="row" style="margin-top:12px"><button class="btn trk-copy">انسخ التراك ليست</button></div></div>
+    </div>
+  </section>
+
+  <!-- LISTEN TO THE WHOLE SET -->
+  <section id="v-full" class="hidden">
+    <div class="panel">
+      <div class="ptitle"><img class="gear" src="icons/speaker.png" alt=""><div><h2>اسمع السيت كامل</h2></div>
+        <button class="btn back" onclick="go('home')">رجوع</button></div>
+      <div class="tabs" id="f-tabs"><span class="tab on" data-t="link">لينك (يوتيوب أو أي موقع)</span><span class="tab" data-t="file">ملف من جهازك</span></div>
+      <div id="f-link-box">
+        <div class="note" style="margin-top:0">الصق لينك السيت من يوتيوب أو SoundCloud أو Mixcloud أو أي موقع. السيت هيشتغل في شباك جوه البرنامج، والبرنامج هيسمعه كله من أوله لآخره ويكتب كل تراك مرة واحدة.</div>
+        <input type="text" id="f-link" class="latin" placeholder="https://…" style="margin-top:10px">
+        <div class="row" style="margin-top:12px"><button class="btn primary" id="f-open">افتح واسمع</button><span class="live live-ind"><b></b><span>مش بيسمع</span></span></div>
+      </div>
+      <div id="f-file-box" class="hidden">
+        <div class="drop" id="f-drop"><img class="gear" src="icons/speaker.png" alt="">
+          <div style="font-size:17px;margin-top:8px">اسحب السيت هنا أو دوس للاختيار</div><div style="font-size:13px;margin-top:4px">MP3 · WAV · M4A</div>
+          <input type="file" id="f-file" accept="audio/*,.mp3,.wav,.m4a" hidden></div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn hidden" id="f-stop">وقّف الاستماع</button>
+          <select id="f-mode" data-keep><option value="play">اسمعه كله وهو شغّال (بالمدة الكاملة)</option><option value="fast">بسرعة من غير تشغيل (دقايق)</option></select>
+          <span class="live live-ind"><b></b><span>مش بيسمع</span></span>
+        </div>
+        <audio id="f-audio" controls class="hidden" style="width:100%;margin-top:12px"></audio>
+      </div>
+      <div class="enh-grid" style="margin-top:14px">
+        <label class="knob"><span><b>يتعرّف أونلاين كل قد إيه</b><small>مفتاح AudD من "اعرف أسامي التراكات" ← الإعدادات</small></span>
+          <select id="f-every" data-keep><option value="30">كل 30 ثانية (أدق)</option><option value="60" selected>كل دقيقة</option><option value="120">كل دقيقتين (أوفر)</option></select></label>
+        <div class="knob"><span><b>بيدوّر في</b><small id="f-sources"></small></span></div>
+      </div>
+      <div class="progress" id="f-prog"><i></i></div>
+      <div class="msg" id="f-msg"></div>
+      <div class="trk-res hidden"><div class="tbl-wrap" style="margin-top:14px"><table class="tl"><thead><tr><th>الوقت</th><th>التراك</th><th>المصدر</th><th>افتحه في</th></tr></thead><tbody class="trk-body"></tbody></table></div>
+        <div class="row" style="margin-top:12px"><button class="btn trk-copy">انسخ التراك ليست</button></div></div>
     </div>
   </section>
 
@@ -751,6 +813,7 @@ function msg(id,text,ok){const m=document.getElementById(id);m.textContent=text;
 
 /* ================= Franco engine ================= */
 const DICT = {
+  'محمد منير':'Mohamed Mounir','هاني':'Hany','شاكر':'Shaker','مدحت':'Medhat','صالح':'Saleh','محمد فؤاد':'Mohamed Fouad','فؤاد':'Fouad','مصطفى قمر':'Mostafa Amar','إيهاب':'Ehab','ايهاب':'Ehab','توفيق':'Tawfik','هشام':'Hesham','عباس':'Abbas','حميد':'Hamid','الشاعري':'El Shaeri','أحمد شيبة':'Ahmed Sheba','شيبة':'Sheba','سميرة':'Samira','سعيد':'Said','لطيفة':'Latifa','ذكرى':'Zekra','نوال':'Nawal','الكويتية':'El Kuwaitia','عبادي':'Abady','الجوهر':'El Johar','راشد':'Rashed','الماجد':'El Majed','رابح':'Rabeh','صقر':'Saqr','عمر كمال':'Omar Kamal','كمال':'Kamal','عصام صاصا':'Essam Sasa','مسلم':'Muslim','ويجز':'Wegz','شهاب':'Shehab','لايوس':'Lious','زياد':'Ziad','ظاظا':'Zaza','مروان بابلو':'Marwan Pablo','عفروتو':'Afroto','أبيوسف':'Abyusif','ابو':'Abo','أبو':'Abo','الليل':'El Leil','حسن':'Hassan','شاكوش':'Shakosh','فيلو':'Felo','تووليت':'Toolet','حودة':'Hoda','بندق':'Bondo2','مودي':'Mody','أمير':'Amir','امير':'Amir','عيد':'Eid','ديدو':'Dedo','وزة':'Wezza','منتصر':'Montaser','عنبة':'Enaba','كزبرة':'Kozbara','أوكا':'Oka','أورتيجا':'Ortega','شحتة':'Sha7ta','كاريكا':'Karika','رضا':'Reda','البحراوي':'El Ba7rawy','عبد الباسط':'Abdel Basset','حمودة':'7amouda','أحمد عدوية':'Ahmed Adaweya','أصالة':'Assala','يارا':'Yara','دنيا':'Donia','سمير':'Samir','ميريام':'Myriam','فارس':'Fares','نجوى':'Najwa','كرم':'Karam','جورج':'George','وسوف':'Wassouf','ملحم':'Melhem','زين':'Zein','رحمة':'Ra7ma','قلب':'2alb','عين':'3ein','عيني':'3eny','عيوني':'3oyouny','روح':'Ro7','حياة':'7ayah','دنيتي':'Donyety','حبي':'7oby','حبك':'7obak','حبيب':'7abib','حبايب':'7abayeb','بحبك':'Ba7ebak','بحبها':'Ba7ebaha','بحبه':'Ba7ebo','حبيته':'7abeito','حبيتك':'7abeitak','نسيتك':'Neseitak','نسيت':'Neseit','وحشني':'Wa7ashny','وحشتيني':'Wa7ashteeny','واحشني':'Wa7ashny','مشتاق':'Meshta2','مستني':'Mestanny','مستنياك':'Mestaneyak','راجع':'Rage3','رجعت':'Rege3t','ارجع':'Erga3','ارجعلي':'Erga3ly','تعالى':'Ta3ala','تعالي':'Ta3aly','خليك':'Khalik','خليني':'Khalini','سيبني':'Sibni','سيبك':'Sibak','بلاش':'Balash','ياريت':'Yareit','يارب':'Yarab','الله':'Allah','والله':'Wallah','ماشي':'Mashy','مش':'Mesh','ماليش':'Maleesh','معلش':'Ma3lesh','كفاية':'Kefaya','خلاص':'Khalas','لسه':'Lessa','دايما':'Dayman','ابدا':'Abadan','أبدا':'Abadan','هنا':'Hena','هناك':'Henak','جنبي':'Ganby','جنبك':'Ganbak','بعيد':'Be3id','قريب':'2orayeb','عليا':'3alaya','عليه':'3aleh','عليها':'3aleha','ليا':'Leya','ليك':'Leek','ليكي':'Leeky','عندي':'3andy','عندك':'3andak','معاه':'Ma3ah','معاها':'Ma3aha','معانا':'Ma3ana','بينا':'Benna','بينك':'Beinak','وياك':'Wayak','وياكي':'Wayaky','انسى':'Ensa','انساك':'Ansak','فاكر':'Faker','فاكرة':'Fakra','ذكريات':'Zekrayat','حكاية':'7ekaya','قصة':'2essa','سنين':'Sneen','سنة':'Sana','عمر':'3omr','عمري':'3omry','العمر':'El 3omr','زمن':'Zaman','الزمن':'El Zaman','ليلة':'Leila','الليلة':'El Leila','نهار':'Nahar','صباح':'Saba7','شمس':'Shams','قمر':'2amar','نجوم':'Ngoum','سما':'Sama','بحر':'Ba7r','البحر':'El Ba7r','ورد':'Ward','وردة':'Warda','فرح':'Fara7','فرحة':'Far7a','حزن':'7ozn','دموع':'Domou3','جرح':'Gar7','وجع':'Waga3','نار':'Nar','غيرة':'Gheira','غالي':'Ghaly','غالية':'Ghalya','حلوة':'7elwa','حلو':'7elw','جميلة':'Gamila','جميل':'Gamil','عسل':'3asal','سكر':'Sokkar','ملاك':'Malak','بنت':'Bent','ولد':'Walad','الدنيا':'El Donia','الناس':'El Nas','ناس':'Nas','صحاب':'S7ab','صاحبي':'Sa7by','اخويا':'Akhoya','حبيبي':'7abibi','يا حبيبي':'Ya 7abibi','حبيبتي':'7abibty','روحي':'Ro7y','قلبي':'2alby','قلبك':'2albak','عينيا':'3enaya','عينيه':'3eneih','سهرانين':'Sahraneen','سهرة':'Sahra','رقص':'Ra2s','ارقص':'Or2os','هيصة':'Heisa','مهرجان':'Mahragan','مهرجانات':'Mahraganat','ريمكس':'Remix','توزيع':'Tawzee3','جديد':'Gedid','جديدة':'Gedida','قديم':'2adim','بتاعي':'Beta3y','بتاعك':'Beta3ak','حتة':'7eta','شوية':'Shwaya','كتير':'Kteer','اوي':'Awy','قوي':'2awy','زي':'Zay','زيك':'Zayak','كده':'Keda','ازاي':'Ezay','ليه':'Leh','فين':'Fein','امتى':'Emta','مين':'Meen','ايه':'Eh','يلا':'Yalla','هيه':'Heya','هوه':'Howa','انا':'Ana','احنا':'E7na','انتو':'Ento','هما':'Homma','دول':'Dol','ده':'Da','دي':'Di','اللي':'Elly','عشان':'3ashan','علشان':'3alashan','لو':'Law','لما':'Lamma','بس':'Bas','كل':'Kol','كله':'Kollo','حاجة':'7aga','حاجات':'7agat','يوم':'Yom','الأيام':'El Ayam','الايام':'El Ayam','أيام':'Ayam','ايام':'Ayam','ساعة':'Sa3a','دقيقة':'De2i2a','لحظة':'La7za','مرة':'Marra','تاني':'Tany','تانية':'Tanya','الأول':'El Awel','الاول':'El Awel','آخر':'Akher','اخر':'Akher','بداية':'Bedaya','نهاية':'Nehaya','طريق':'Taree2','بيت':'Beit','مصر':'Masr','القاهرة':'El Qahera','اسكندرية':'Eskendereya','شارع':'Share3','حارة':'7ara','عالم':'3alam','العالم':'El 3alam',
   'الله':'Allah','محمد':'Mohamed','احمد':'Ahmed','أحمد':'Ahmed','عمرو':'Amr','دياب':'Diab','تامر':'Tamer','حسني':'Hosny',
   'عمر':'Omar','ويجز':'Wegz','مروان':'Marwan','بابلو':'Pablo','موسى':'Moussa','حماقي':'Hamaki','شيرين':'Sherine',
   'اليسا':'Elissa','إليسا':'Elissa','نانسي':'Nancy','عجرم':'Ajram','كاظم':'Kazem','الساهر':'El Saher','منير':'Mounir',
@@ -798,6 +861,16 @@ function francoWord(w){
   }
   // "و" + known word  (و حبيبي → W 7abibi)
   if(clean[0]==='و' && clean.length>3 && DICT[clean.slice(1)]) return 'W ' + DICT[clean.slice(1)];
+  const known=x=>USERDICT.word[x]||DICT[x]||null, low=x=>x.charAt(0).toLowerCase()+x.slice(1);
+  // ب / ف / ل + known word  (بقلبي → Be2alby)
+  for(const [px,f] of [['ب','Be'],['ف','Fe'],['ل','Le']]) if(clean.startsWith(px)&&clean.length>3&&known(clean.slice(1))) return f+low(known(clean.slice(1)));
+  // known word + ending  (عيونك → 3oyounak, حياتك → 7ayatak, قلبها → 2albaha)
+  for(const [sx,afterC,afterV] of [['هم','ohom','hom'],['كم','okom','kom'],['ها','aha','ha'],['نا','na','na'],['ني','ny','ny'],['ك','ak','k'],['ه','o','h'],['ي','y','y']]){
+    if(!clean.endsWith(sx)||clean.length-sx.length<2) continue;
+    const r=clean.slice(0,-sx.length); let k=known(r), viaTa=false;
+    if(!k&&r.endsWith('ت')){ k=known(r.slice(0,-1)+'ة'); viaTa=!!k; }
+    if(k&&!/\s/.test(k)){ if(viaTa) k=k.replace(/h$/,'')+'t'; return /[aeiouy]$/i.test(k)?k+afterV:k+afterC; }
+  }
   const hasHarakat = /[ً-ْ]/.test(w);
   const chars=[...w.replace(/ـ/g,'')];
   let out='';
@@ -855,8 +928,11 @@ function cleanName(s){
      .replace(/^[\s\-–—|•:]+|[\s\-–—|•:]+$/g,'')            // separators at the ends
      .replace(/\s+/g,' ').trim()
      .replace(/(\S)\s+[(\[]?(19|20)\d{2}[)\]]?$/,'$1');      // trailing year "… 2024"
+  if(x&&!AR.test(x)&&/[a-z]/i.test(x)&&(x===x.toLowerCase()||x===x.toUpperCase())) x=titleCaseEn(x);
   return x || (s||'').replace(/\.[^.]+$/,'').trim();
 }
+function titleCaseEn(x){ const KEEP=/^(dj|mc|edm|uk|usa|ii|iii|iv|vip|ep|lp|tv|nyc|la)$/i, SMALL=/^(ft\.?|feat\.?|x|vs\.?|and|of|the|a|in|on|to)$/i;
+  return x.toLowerCase().split(/(\s+|[-(\[])/).map((w,i)=>KEEP.test(w)?w.toUpperCase():(i>0&&SMALL.test(w))?w:w.charAt(0).toUpperCase()+w.slice(1)).join(''); }
 function splitName(fname){
   const base = cleanName(fname);
   const m = base.split(/\s+[-–—|]\s+/);
@@ -940,7 +1016,7 @@ async function readTrack(file){
   const album = parsed.tags.TALB || '';
   const apic = parsed.frames.find(f=>f.id==='APIC');
   return {file,bytes,parsed,isMp3,ext:(file.name.match(/\.[^.]+$/)||['.mp3'])[0].toLowerCase(),
-    keepName: !AR.test(file.name), hasCover: !!apic, coverImg: apic ? apicImage(apic.data) : null,
+    keepName: !AR.test(file.name) && !(parsed.tags.TIT2&&parsed.tags.TPE1), hasCover: !!apic, coverImg: apic ? apicImage(apic.data) : null,
     oTitle:title,oArtist:artist,oAlbum:album,title:toFranco(title),artist:toFranco(artist),album:AR.test(album)?toFranco(album):''};
 }
 const JUNK_ARTIST=/^\s*$|unknown|مجهول|غير معروف|various|www\.|\.(com|net|org)\b|mp3|download|تحميل/i;
@@ -1290,8 +1366,8 @@ function wavBlob(pcm,sr){const n=pcm.length,b=new ArrayBuffer(44+n*2),v=new Data
 let lastOnline=-1e9;
 async function identify(pcm,t,raw){
   let h=matchLocal(pcm);
-  if(!h && $('m-token').value.trim() && t-lastOnline>=60){ lastOnline=t;     // online at most once a minute of mix
-    try{ h=raw?await recognize(raw.blob,raw.name):await recognize(wavBlob(pcm.subarray(0,FP.SR*12),FP.SR),'snip.wav'); }catch(e){ msg('m-msg','AudD: '+e.message,false); }
+  if(!h && $('m-token').value.trim() && t-lastOnline>=ONLINE_EVERY){ lastOnline=t;     // online at most once every ONLINE_EVERY seconds of mix
+    try{ h=raw?await recognize(raw.blob,raw.name):await recognize(wavBlob(pcm.subarray(0,FP.SR*12),FP.SR),'snip.wav'); }catch(e){ msg(MSGID,'AudD: '+e.message,false); }
   }
   if(h) addHit(t,h);
 }
@@ -1299,6 +1375,7 @@ async function identify(pcm,t,raw){
 /* ---------- results ---------- */
 const keyOf=h=>normAr(h.artist)+'|'+normAr(h.title);
 const STAMPED=new Set(['desc','chap','cmt']);
+let MSGID='m-msg', PROGID='m-prog', ONLINE_EVERY=60;
 const heard=()=>M.hits.filter(h=>h.src==='lib'||h.src==='ear');
 function addHit(t,h){
   const same=M.hits.find(x=>keyOf(x)===keyOf(h));
@@ -1338,9 +1415,10 @@ function merged(){
   const timed=[...ear,...st].sort((a,b)=>a.start-b.start);
   // songs YouTube identified in the video (no times): add the ones we don't have yet
   const ytm=((M.yt&&M.yt.music)||[]).filter(m=>m.title&&!timed.some(h=>normAr(h.title)===normAr(m.title))).map(m=>({...m,start:null,src:'ytm'}));
-  return [...timed,...ytm];
+  const ex=(M.extra||[]).filter(m=>![...timed,...ytm].some(h=>keyOf(h)===keyOf(m)));
+  return [...timed,...ytm,...ex];
 }
-const SRC={lib:['ear','سمعها (مكتبتك)'],ear:['ear','سمعها (أونلاين)'],ytm:['ear','يوتيوب سمعها'],chap:['desc','فصول الفيديو'],desc:['desc','الوصف'],cmt:['desc','التعليقات']};
+const SRC={shz:['ear','من شازام'],lib:['ear','سمعها (مكتبتك)'],ear:['ear','سمعها (أونلاين)'],ytm:['ear','يوتيوب سمعها'],chap:['desc','فصول الفيديو'],desc:['desc','الوصف'],cmt:['desc','التعليقات']};
 // every music app, one tap each
 const APPS=[['Spotify','#1DB954',(q,h)=>h.spotify||'https://open.spotify.com/search/'+q],['Anghami','#A13CFF',q=>'https://play.anghami.com/search/'+q],
   ['Apple Music','#FA57C1',(q,h)=>h.apple||'https://music.apple.com/search?term='+q],['YouTube Music','#FF0033',q=>'https://music.youtube.com/search?q='+q],
@@ -1349,8 +1427,8 @@ const APPS=[['Spotify','#1DB954',(q,h)=>h.spotify||'https://open.spotify.com/sea
   ['Shazam','#0088FF',q=>'https://www.shazam.com/search?term='+q]];
 function renderMix(){
   const list=merged();
-  $('m-res').classList.toggle('hidden',!list.length);
-  $('m-body').innerHTML=list.map(h=>{
+  document.querySelectorAll('.trk-res').forEach(el=>el.classList.toggle('hidden',!list.length));
+  const html=list.map(h=>{
     const q=encodeURIComponent((h.artist?h.artist+' ':'')+h.title);
     const name=(h.artist?esc(h.artist)+' - ':'')+esc(h.title);
     return `<tr><td class="tm">${h.start==null?'—':fmt(h.start)}</td><td class="latin" style="text-align:right">${name}</td>
@@ -1359,8 +1437,10 @@ function renderMix(){
         <a class="open-btn an" href="https://play.anghami.com/search/${q}" target="_blank">${logo('Anghami',16)}افتح في أنغامي</a>
         <span class="more">${APPS.filter(a=>a[0]!=='Spotify'&&a[0]!=='Anghami').map(([n,c,u])=>`<a href="${u(q,h)}" target="_blank" title="افتح في ${n}">${logo(n,18)||`<i style="background:${c}"></i>`}</a>`).join('')}</span></td></tr>`;
   }).join('');
+  document.querySelectorAll('.trk-body').forEach(el=>el.innerHTML=html);
 }
 $('m-desc').addEventListener('input',renderMix);
+document.addEventListener('click',e=>{ if(e.target.closest('.trk-copy')) $('m-copy').click(); });
 $('m-copy').onclick=()=>{
   const txt=merged().map(h=>(h.start==null?'':fmt(h.start)+' ')+(h.artist?h.artist+' - ':'')+h.title).join('\n');
   navigator.clipboard.writeText(txt).then(()=>msg('m-msg','اتنسخت ✓',true),()=>prompt('انسخ من هنا:',txt));
@@ -1369,9 +1449,9 @@ function startCheck(){ return true; }   // works without a library: YouTube info
 function doneMsg(){
   const list=merged(), n=list.length, by=s=>list.filter(h=>h.src===s).length;
   logEdit('اعرف أسامي التراكات',$('m-link').value.trim()||'ملف ميكس',n+' تراك');
-  if(!n){ msg('m-msg','ملقاش أسامي تراكات. جرّب تضيف أغانيك في "مكتبتي"، أو تحط مفتاح AudD في الإعدادات، أو تلصق الوصف لو فيه تراك ليست.',false); return; }
+  if(!n){ msg(MSGID,'ملقاش أسامي تراكات. جرّب تضيف أغانيك في "مكتبتي"، أو تحط مفتاح AudD في الإعدادات، أو تلصق الوصف لو فيه تراك ليست.',false); return; }
   const parts=[['lib','من مكتبتك'],['ear','أونلاين'],['ytm','يوتيوب سمعها'],['chap','فصول الفيديو'],['desc','الوصف'],['cmt','التعليقات']].filter(([k])=>by(k)).map(([k,t])=>by(k)+' '+t);
-  msg('m-msg',`خلص ✓ لقى ${n} تراك (${parts.join(' · ')})`,true);
+  msg(MSGID,`خلص ✓ لقى ${n} تراك مختلف (${parts.join(' · ')})`,true);
 }
 
 /* ---------- live listening (YouTube) ---------- */
@@ -1386,9 +1466,10 @@ function liveFeed(chunk,mediaTime){
   setLive(true,'بيسمع… '+fmt(mediaTime)+' · عرف '+heard().length+' تراك');
   if(LV.fill>=B.length && LV.since>=FP.SR*HOPW){ LV.since=0; identify(B.slice(0),Math.max(0,mediaTime-WIN)); }
 }
-function setLive(on,text){$('m-live').classList.toggle('on',on);$('m-live').lastElementChild.textContent=text;busy(on);
+function setLive(on,text){document.querySelectorAll('.live-ind').forEach(el=>{el.classList.toggle('on',on);el.lastElementChild.textContent=text;});busy(on);
+  $('f-open').textContent=on?'وقّف الاستماع':'افتح واسمع';
   if(APP) $('m-open').textContent=on?'وقّف الاستماع':'شغّل واسمع'; else $('m-listen').textContent=on?'وقّف الاستماع':'ابدأ الاستماع';}
-function startLive(){ M.running=true; M.hits=[]; M.yt=null; lastOnline=-1e9; liveReset(); renderMix(); $('m-msg').className='msg'; setLive(true,'مستني الفيديو يشتغل…'); }
+function startLive(){ if(MSGID!=='f-msg'&&!document.getElementById('v-full').classList.contains('hidden')) MSGID='f-msg'; M.running=true; M.hits=[]; M.yt=null; lastOnline=-1e9; liveReset(); renderMix(); $('m-msg').className='msg'; setLive(true,'مستني الفيديو يشتغل…'); }
 function stopLive(){ if(!M.running) return; M.running=false; setLive(false,'وقف'); doneMsg(); }
 const ytOk=u=>/^https?:\/\/(www\.|m\.|music\.)?(youtube\.com|youtu\.be)\//i.test(u);
 
@@ -1398,6 +1479,7 @@ if(APP){
   APP.onYtClosed(()=>stopLive());
   $('m-open').onclick=()=>{
     if(M.running){ APP.closeYouTube(); stopLive(); return; }
+    MSGID='m-msg'; PROGID='m-prog'; ONLINE_EVERY=60;
     const u=$('m-link').value.trim(); if(!ytOk(u)) return msg('m-msg','حط لينك يوتيوب صحيح',false);
     if(!startCheck()) return; startLive(); APP.openYouTube(u);
   };
@@ -1476,11 +1558,12 @@ function fileDuration(file){return new Promise((res,rej)=>{const a=new Audio();a
   a.onloadedmetadata=()=>{URL.revokeObjectURL(a.src);res(a.duration)};a.onerror=()=>rej(new Error('مقدرتش أقرا مدة الملف'));});}
 async function scanMixFile(file){
   if(M.running) return;
+  if(PROGID!=='f-prog'){ MSGID='m-msg'; PROGID='m-prog'; ONLINE_EVERY=60; }
   const isWav=/\.wav$/i.test(file.name);
   if(!isWav && !/\.mp3$/i.test(file.name)) return msg('m-msg','الملف لازم يكون MP3 أو WAV',false);
   if(!startCheck()) return;
-  M.running=true; M.hits=[]; lastOnline=-1e9; renderMix(); busy(true); $('m-msg').className='msg';
-  const prog=$('m-prog'); prog.classList.add('show'); prog.firstElementChild.style.width='0';
+  M.running=true; M.hits=[]; lastOnline=-1e9; renderMix(); busy(true); $(MSGID).className='msg';
+  const prog=$(PROGID); prog.classList.add('show'); prog.firstElementChild.style.width='0';
   try{
     const dur=await fileDuration(file);
     let head=0, wavHdr=null, bps, align=1;
@@ -1497,11 +1580,11 @@ async function scanMixFile(file){
       else buf=await file.slice(from,to).arrayBuffer();
       try{ const raw={blob:new Blob([buf.slice(0)],{type:isWav?'audio/wav':'audio/mpeg'}),name:isWav?'snip.wav':'snip.mp3'}; const pcm=await decodeMono(buf); if(pcm.length>FP.SR*3) await identify(pcm,t,raw); }catch(e){}
       prog.firstElementChild.style.width=((i+1)/times.length*100)+'%';
-      $('m-live').lastElementChild.textContent=`بيسمع ${fmt(t)} من ${fmt(dur)} · عرف ${heard().length} تراك`;
+      document.querySelectorAll('.live-ind').forEach(el=>el.lastElementChild.textContent=`بيسمع ${fmt(t)} من ${fmt(dur)} · عرف ${heard().length} تراك`);
     }
     doneMsg();
-  }catch(e){ msg('m-msg',e.message,false); }
-  M.running=false; busy(false); $('m-live').lastElementChild.textContent='مش بيسمع';
+  }catch(e){ msg(MSGID,e.message,false); }
+  M.running=false; busy(false); document.querySelectorAll('.live-ind').forEach(el=>el.lastElementChild.textContent='مش بيسمع'); PROGID='m-prog';
 }
 
 /* ================= Tag remover (voice drops / watermarks) ================= */
@@ -1937,24 +2020,73 @@ function biquadRun(x,type,f,q,sr){
   const y=new Float32Array(x.length); let x1=0,x2=0,y1=0,y2=0;
   for(let i=0;i<x.length;i++){const v=(b0*x[i]+b1*x1+b2*x2-a1*y1-a2*y2)/a0;x2=x1;x1=x[i];y2=y1;y1=v;y[i]=v;} return y;
 }
-// drum & bass sounds, synthesized
+// ---------- sound design: drums & bass, synthesized ----------
+function schroeder(x,sr,decay=.45,mix=.35){   // small room/plate reverb
+  const out=new Float32Array(x.length+Math.round(sr*.6)); out.set(x);
+  const combs=[1557,1617,1491,1422].map(d=>Math.round(d*sr/44100)), wet=new Float32Array(out.length);
+  for(const d of combs){const buf=new Float32Array(d);let k=0;for(let i=0;i<out.length;i++){const y=buf[k];buf[k]=(i<x.length?x[i]:0)+y*decay;k=(k+1)%d;wet[i]+=y/combs.length;}}
+  for(const d of [225,556].map(d=>Math.round(d*sr/44100))){const buf=new Float32Array(d);let k=0;for(let i=0;i<wet.length;i++){const b=buf[k],y=-wet[i]+b;buf[k]=wet[i]+b*.5;wet[i]=y;k=(k+1)%d;}}
+  for(let i=0;i<out.length;i++) out[i]=(out[i]||0)*(1-mix)+wet[i]*mix*2.2; return out;
+}
 function synthKit(sr,g){
   const len=s=>new Float32Array(Math.round(s*sr)), rnd=()=>Math.random()*2-1;
-  const kick=(()=>{const x=len(.45);let ph=0;for(let i=0;i<x.length;i++){const t=i/sr,f=48+(g.hard?160:120)*Math.exp(-t*28);ph+=2*Math.PI*f/sr;x[i]=Math.sin(ph)*Math.exp(-t*(g.soft?9:7))+(i<sr*.004?rnd()*.3:0);}return x;})();
+  const kick=(()=>{const x=len(.5);let ph=0;for(let i=0;i<x.length;i++){const t=i/sr,f=46+(g.hard?190:140)*Math.exp(-t*30)+30*Math.exp(-t*120);ph+=2*Math.PI*f/sr;
+    const body=Math.sin(ph)*Math.exp(-t*(g.soft?8:6)), click=(i<sr*.003?rnd()*.5*(1-i/(sr*.003)):0); x[i]=Math.tanh((body+click)*(g.hard?2.6:1.8))*.9;}return x;})();
   const noise=(d,hp,dec)=>{let x=len(d);for(let i=0;i<x.length;i++)x[i]=rnd()*Math.exp(-i/sr*dec);return biquadRun(x,'hp',hp,.7,sr);};
-  const clap=(()=>{const x=len(.3);for(const off of [0,.011,.022])for(let i=Math.round(off*sr);i<x.length;i++){const t=i/sr-off;x[i]+=rnd()*Math.exp(-t*(off<.02?60:18))*.6;}return biquadRun(biquadRun(x,'hp',900,.8,sr),'lp',4500,.7,sr);})();
-  const snare=(()=>{const n=noise(.25,1200,22),x=len(.25);let ph=0;for(let i=0;i<x.length;i++){ph+=2*Math.PI*190/sr;x[i]=n[i]*.8+Math.sin(ph)*Math.exp(-i/sr*30)*.6;}return x;})();
+  const metal=(d,dec)=>{const x=len(d),fr=[205.3,304.4,369.6,522.7,540,800].map(f=>f*1.7);   // 808-style metallic hats
+    for(let i=0;i<x.length;i++){const t=i/sr;let v=0;for(const f of fr)v+=((t*f)%1<.5?1:-1);x[i]=v/6*Math.exp(-t*dec);} return biquadRun(biquadRun(x,'hp',7000,.7,sr),'hp',7000,.7,sr);};
+  const clapDry=(()=>{const x=len(.35);for(const off of [0,.009,.019,.028])for(let i=Math.round(off*sr);i<x.length;i++){const t=i/sr-off;x[i]+=rnd()*Math.exp(-t*(off<.025?70:16))*.6;}
+    return biquadRun(biquadRun(x,'hp',1100,.9,sr),'lp',5200,.7,sr);})();
+  const snare=(()=>{const n=noise(.3,1500,20),x=len(.3);let ph=0;for(let i=0;i<x.length;i++){ph+=2*Math.PI*(185+40*Math.exp(-i/sr*60))/sr;x[i]=n[i]*.75+Math.sin(ph)*Math.exp(-i/sr*28)*.55;}return schroeder(x,sr,.35,.22);})();
   const tone=(f0,f1,d,dec)=>{const x=len(d);let ph=0;for(let i=0;i<x.length;i++){const t=i/sr;ph+=2*Math.PI*(f1+(f0-f1)*Math.exp(-t*40))/sr;x[i]=Math.sin(ph)*Math.exp(-t*dec);}return x;};
-  return {kick,clap,snare,chh:noise(.06,7000,70),ohh:noise(.25,6500,12),shk:noise(.05,5000,60),rim:tone(1700,1600,.03,120),
-    perc:tone(260,210,.18,22),perc2:tone(380,330,.14,26),rum:biquadRun(noise(.2,40,14),'lp',140,.7,sr)};
+  return {kick,clap:schroeder(clapDry,sr,.5,.3),snare,chh:metal(.07,55),ohh:metal(.32,9),shk:noise(.06,6000,55),rim:tone(1750,1650,.03,120),
+    perc:tone(250,205,.2,20),perc2:tone(370,330,.15,24),rum:biquadRun(schroeder(kick.slice(0,Math.round(.2*sr)),sr,.7,.9),'lp',150,.7,sr)};
 }
 function bassNote(sr,freq,dur,saw,is808){
-  const x=new Float32Array(Math.round(dur*sr));let ph=0;
-  for(let i=0;i<x.length;i++){const t=i/sr,f=is808?freq*(1+0.6*Math.exp(-t*25)):freq;ph+=2*Math.PI*f/sr;
-    let v=saw?((ph/(2*Math.PI))%1)*2-1:Math.sin(ph); if(is808) v=Math.tanh(1.8*v);
-    const env=Math.min(1,t/0.004)*Math.exp(-t*(is808?2.2:6)); x[i]=v*env;}
-  return saw?biquadRun(x,'lp',300,.9,sr):x;
+  const x=new Float32Array(Math.round(dur*sr));let ph=0,ph2=0;
+  for(let i=0;i<x.length;i++){const t=i/sr,f=is808?freq*(1+0.5*Math.exp(-t*25)):freq;ph+=2*Math.PI*f/sr;ph2+=2*Math.PI*f*2/sr;
+    let v=saw?((ph/(2*Math.PI))%1)*2-1:Math.sin(ph)+.18*Math.sin(ph2); v=Math.tanh(v*(is808?2:1.3));
+    const env=Math.min(1,t/0.005)*Math.min(1,(x.length-i)/(sr*.01))*(is808?Math.exp(-t*1.8):Math.exp(-t*3)); x[i]=v*env;}
+  return saw?biquadRun(x,'lp',380,1.1,sr):x;
 }
+// remove the song's own drums: harmonic/percussive separation (median filtering on the spectrogram)
+async function harmonicOnly(chs,sr,onP){
+  const N=2048,H=512,fft=makeFFT(N),B=N/2+1,w=new Float64Array(N).map((_,i)=>0.5-0.5*Math.cos(2*Math.PI*i/N));
+  const n=chs[0].length,nF=Math.floor((n-N)/H)+1, mid=new Float32Array(n); for(let i=0;i<n;i++)mid[i]=(chs[0][i]+chs[1][i])/2;
+  const mag=new Float32Array(nF*B), re=new Float64Array(N), im=new Float64Array(N);
+  for(let f=0;f<nF;f++){for(let i=0;i<N;i++){re[i]=mid[f*H+i]*w[i];im[i]=0;}fft(re,im);for(let k=0;k<B;k++)mag[f*B+k]=Math.hypot(re[k],im[k]); if(f%600===0){onP(f/nF*.4);await tick();}}
+  const K=8, tmp=new Float32Array(2*K+1), med=a=>{tmp.set(a);tmp.sort();return tmp[K];};
+  const mask=new Float32Array(nF*B), win=new Float32Array(2*K+1);
+  for(let f=0;f<nF;f++){
+    for(let k=0;k<B;k++){
+      for(let j=-K;j<=K;j++){const ff=Math.min(nF-1,Math.max(0,f+j));win[j+K]=mag[ff*B+k];} const Hm=med(win);
+      for(let j=-K;j<=K;j++){const kk=Math.min(B-1,Math.max(0,k+j));win[j+K]=mag[f*B+kk];} const Pm=med(win);
+      mask[f*B+k]=(Hm*Hm)/(Hm*Hm+Pm*Pm+1e-12);
+    }
+    if(f%300===0){onP(.4+f/nF*.4);await tick();}
+  }
+  const out=chs.map(()=>new Float64Array(n)), norm=new Float64Array(n);
+  for(let c=0;c<2;c++){ const x=chs[c];
+    for(let f=0;f<nF;f++){for(let i=0;i<N;i++){re[i]=x[f*H+i]*w[i];im[i]=0;}fft(re,im);
+      for(let k=0;k<B;k++){const m=mask[f*B+k];re[k]*=m;im[k]*=m;} for(let k=1;k<N/2;k++){re[N-k]=re[k];im[N-k]=-im[k];} fft(re,im,true);
+      for(let i=0;i<N;i++){out[c][f*H+i]+=re[i]/N*w[i]; if(c===0)norm[f*H+i]+=w[i]*w[i];}
+      if(f%800===0){onP(.8+(c+f/nF)/2*.2);await tick();}}
+  }
+  return out.map(d=>{const y=new Float32Array(n);for(let i=0;i<n;i++)y[i]=norm[i]>1e-3?d[i]/norm[i]:0;return y;});
+}
+// chord root of each bar (from the harmony), kept inside the song's key
+function barRoots(chs,sr,barLen,offset,nBars,key){
+  const N=8192,fft=makeFFT(N),re=new Float64Array(N),im=new Float64Array(N),x=chs[0],roots=[];
+  const scale=(key.mode==='minor'?[0,2,3,5,7,8,10]:[0,2,4,5,7,9,11]).map(s=>(s+key.tonic)%12);
+  for(let b=0;b<nBars;b++){ const a=Math.round(offset+b*barLen*sr); const c=new Float64Array(12);
+    for(let s=0;s<2;s++){ const o=a+Math.round(s*barLen*sr/2); if(o<0||o+N>x.length) continue;
+      for(let i=0;i<N;i++){re[i]=(x[o+i]+chs[1][o+i])*(0.5-0.5*Math.cos(2*Math.PI*i/N));im[i]=0;} fft(re,im);
+      for(let k=Math.ceil(60*N/sr);k<Math.floor(700*N/sr);k++){const pc=((Math.round(12*Math.log2(k*sr/N/440))+9)%12+12)%12;c[pc]+=Math.hypot(re[k],im[k])/(1+k*sr/N/200);} }
+    let best=key.tonic,bv=-1; for(const r of scale){const v=c[r]+.5*c[(r+7)%12]+.3*c[(r+(key.mode==='minor'?3:4))%12]; if(v>bv){bv=v;best=r;}}
+    roots.push(bv>0?best:key.tonic); }
+  return roots;
+}
+const hz=pc=>{let m=28;while(((m%12)+12)%12!==pc)m++;return 440*Math.pow(2,(m-69)/12);};
 function rLoadInfo(){
   const b=detectBpm(RX.buf)||120, k=detectKey(RX.buf); RX.info={bpm:b,key:k,phase:beatPhase(RX.buf,b)};
   $('r-bpm').textContent=b; $('r-key').textContent=k.name+' · '+k.camelot;
@@ -1964,7 +2096,7 @@ async function rLoad(file){
   try{
     const track=await readTrack(file);
     const buf=await new OfflineAudioContext(2,1,SR_OUT).decodeAudioData(track.bytes.buffer.slice(0));
-    Object.assign(RX,{buf,track,out:null,stems:null,parts:null,from:0});
+    Object.assign(RX,{buf,track,out:null,stems:null,parts:null,harm:null,from:0});
     $('r-name').textContent=cleanName(file.name); $('r-dur').textContent=fmt(buf.duration);
     rDrop.classList.add('hidden'); $('r-edit').classList.remove('hidden'); $('r-daw').classList.add('hidden');
     await tick(); rLoadInfo(); $('r-run').disabled=!RX.genre; rUi();
@@ -1976,57 +2108,69 @@ $('r-run').onclick=async()=>{
   const P=(p,t)=>{prog.firstElementChild.style.width=(p*100)+'%';$('r-msg').className='msg show ok';$('r-msg').textContent=t;};
   try{
     const sr=RX.buf.sampleRate, L0=RX.buf.getChannelData(0), R0=RX.buf.numberOfChannels>1?RX.buf.getChannelData(1):L0;
-    // 1) vocals / music
+    // 1) AI: vocals / music
     let voc=null, mus=[L0,R0];
     if(APP&&APP.separateFull){
-      if(!RX.stems){ P(.05,'الذكاء الاصطناعي بيفصل صوت المطرب عن المزيكا… (ممكن ياخد دقيقة)'); const r=await APP.separateFull(L0,R0);
+      if(!RX.stems){ P(.03,'الذكاء الاصطناعي بيفصل صوت المطرب عن المزيكا… (ممكن ياخد دقيقة)'); const r=await APP.separateFull(L0,R0);
         RX.stems={voc:[new Float32Array(r.vL),new Float32Array(r.vR)],mus:[new Float32Array(r.mL),new Float32Array(r.mR)]}; }
       voc=RX.stems.voc; mus=RX.stems.mus;
     }
-    // 2) tempo
-    const b0=RX.info.bpm; let cand=b0, target=$('r-keep').checked?b0:g.bpm;
-    if(!$('r-keep').checked){ for(const c of [b0/2,b0,b0*2]) if(Math.abs(Math.log(target/c))<Math.abs(Math.log(target/cand))) cand=c; }
-    const factor=target/cand; P(.45,`بيظبط السرعة من ${b0} لـ ${Math.round(target)} BPM…`); await tick();
-    const vS=voc?wsola(voc,factor):null; const mS=$('r-acap').checked&&voc?null:wsola(mus,factor);
-    // 3) arrangement
-    P(.7,'بيعمل الإيقاع والباص…'); await tick();
-    const beat=60/target, bar=4*beat, intro=$('r-dj').checked?8*bar:0, outro=$('r-dj').checked?8*bar:2*bar;
-    const ph=(RX.info.phase%(60/cand))/factor;
-    const songOff=Math.max(0,intro-ph)+(intro===0?0:0), songLen=(vS||mS)[0].length/sr;
-    const bodyEnd=intro+Math.ceil((songLen-ph)/bar)*bar, total=bodyEnd+outro, N=Math.ceil(total*sr)+sr;
-    const D=[new Float32Array(N),new Float32Array(N)], B=new Float32Array(N), kit=synthKit(sr,g);
+    // 2) take the original drums out of the music, keep the chords & melodies
+    if(!RX.harm&&!$('r-acap').checked){ RX.harm=await harmonicOnly(mus,sr,p=>P(.15+p*.25,'بيشيل درامز الأغنية الأصلية ويسيب اللحن…')); }
+    // 3) tempo: only stretch when it's close enough to sound natural
+    const b0=RX.info.bpm; let cand=b0, target=g.bpm;
+    for(const c of [b0/2,b0,b0*2]) if(Math.abs(Math.log(target/c))<Math.abs(Math.log(target/cand))) cand=c;
+    let keptTempo=false; if($('r-keep').checked||(!$('r-force').checked&&Math.abs(Math.log(target/cand))>Math.log(1.16))){ target=cand; keptTempo=!$('r-keep').checked; }
+    const factor=target/cand; P(.45,`بيظبط السرعة على ${Math.round(target)} BPM…`); await tick();
+    const vS=voc?wsola(voc,factor):null; const hS=$('r-acap').checked?null:wsola(RX.harm||mus,factor);
+    // 4) arrangement: intro → riser → drop → breakdown → riser → drop → outro
+    P(.65,'بيبني الإيقاع والباص على كوردات الأغنية…'); await tick();
+    const beat=60/target, bar=4*beat, dj=$('r-dj').checked, intro=dj?8*bar:4*bar, outro=dj?8*bar:2*bar;
+    const ph=(RX.info.phase%(60/cand))/factor, songLen=(vS||hS)[0].length/sr;
+    const songOff=intro-ph, bodyBars=Math.ceil((songLen-ph)/bar), bodyEnd=intro+bodyBars*bar, total=bodyEnd+outro, N=Math.ceil(total*sr)+sr;
+    const nBars=Math.round(total/bar), introBars=Math.round(intro/bar), bodyEndBar=introBars+bodyBars;
+    const brkStart=introBars+Math.max(8,Math.round(bodyBars/2/8)*8), brkLen=bodyBars>=40?8:0;   // 8-bar breakdown in the middle of longer songs
+    const D=[new Float32Array(N),new Float32Array(N)], B=new Float32Array(N), FX=new Float32Array(N), kit=synthKit(sr,g), kicks=[];
     const hit=(snd,t,vel,pan=0)=>{const o=Math.round(t*sr);for(let i=0;i<snd.length&&o+i<N;i++){const v=snd[i]*vel;D[0][o+i]+=v*(1-pan);D[1][o+i]+=v*(1+pan);}};
-    const root=(()=>{let m=28;while(((m%12)+12)%12!==RX.info.key.tonic)m++;return 440*Math.pow(2,(m-69)/12);})();
-    const nBars=Math.round(total/bar), step=bar/16;
+    const roots=hS?barRoots(hS,sr,bar,Math.round(songOff*sr),nBars,RX.info.key):null;
+    const rootAt=b=>{ if(!roots) return RX.info.key.tonic; const sb=Math.min(roots.length-1,Math.max(0,b-introBars)); return roots[sb]; };
+    const step=bar/16;
     for(let b=0;b<nBars;b++){
-      const t0=b*bar, inIntro=t0<intro-1e-6, inOutro=t0>=bodyEnd-1e-6, k=inIntro?b:inOutro?Math.round((t0-bodyEnd)/bar):-1;
-      const layer=name=>{ if(k<0) return true; const edge=inIntro?k:7-k; if(name==='kick'||name==='chh'||name==='shk') return true; if(name==='bass'||name==='b808'||name==='rum') return edge>=2; return edge>=4; };
-      for(const [name,snd,gain,pan] of [['kick',kit.kick,1,0],['clap',kit.clap,.55,0],['snare',kit.snare,.6,0],['rim',kit.rim,.35,.2],['chh',kit.chh,.22,.25],['ohh',kit.ohh,.25,-.25],['shk',kit.shk,.18,.35],['perc',kit.perc,.4,-.3],['perc2',kit.perc2,.32,.3],['rum',kit.rum,.35,0]]){
-        const pat=g[name]; if(!pat||!layer(name)) continue;
-        for(let s=0;s<16;s++){const c=pat[s]; if(c==='.') continue; const sw=(g.swing&&s%2===1)?g.swing*step:0; hit(snd,t0+s*step+sw,(c==='x'?1:.55)*gain,pan);}
+      const t0=b*bar, inIntro=b<introBars, inOutro=b>=bodyEndBar, inBrk=brkLen&&b>=brkStart&&b<brkStart+brkLen;
+      const k=inIntro?b:inOutro?b-bodyEndBar:-1, edge=inIntro?k*8/introBars:inOutro?(7-k*8/Math.max(1,Math.round(outro/bar))):8;
+      const on=name=>{ if(inBrk) return name==='chh'||name==='shk'||name==='perc'||name==='perc2';
+        if(name==='kick'||name==='chh'||name==='shk') return true; if(['bass','b808','rum'].includes(name)) return edge>=2; return edge>=4; };
+      for(const [name,snd,gain,pan] of [['kick',kit.kick,1,0],['clap',kit.clap,.5,0],['snare',kit.snare,.55,0],['rim',kit.rim,.3,.2],['chh',kit.chh,.2,.22],['ohh',kit.ohh,.22,-.22],['shk',kit.shk,.16,.35],['perc',kit.perc,.36,-.3],['perc2',kit.perc2,.3,.3],['rum',kit.rum,.35,0]]){
+        const pat=g[name]; if(!pat||!on(name)) continue;
+        for(let s=0;s<16;s++){const c=pat[s]; if(c==='.') continue; const sw=(g.swing&&s%2===1)?g.swing*step:0; const tt=t0+s*step+sw;
+          hit(snd,tt,(c==='x'?1:.55)*gain,pan); if(name==='kick') kicks.push(tt);}
       }
-      const bp=g.bass||g.b808; if(bp&&layer(g.bass?'bass':'b808')){
-        for(let s=0;s<16;s++){ if(bp[s]==='.') continue; let len=1; while(s+len<16&&bp[s+len]==='.'&&len<(g.b808?8:3)) len++;
-          const note=bassNote(sr,(g.id==='tech'&&s%4===2)?root*2:root,len*step*(g.b808?1.2:.9),g.saw,!!g.b808);
-          const o=Math.round((t0+s*step)*sr); for(let i=0;i<note.length&&o+i<N;i++) B[o+i]+=note[i]*(g.b808?.7:.55); }
-      }
+      const bp=g.bass||g.b808; if(bp&&on(g.bass?'bass':'b808')){ const f=hz(rootAt(b));
+        for(let s=0;s<16;s++){ if(bp[s]==='.') continue; let ln=1; while(s+ln<16&&bp[s+ln]==='.'&&ln<(g.b808?8:3)) ln++;
+          const note=bassNote(sr,(g.id==='tech'&&s%4===2)?f*2:f,ln*step*(g.b808?1.15:.85),g.saw,!!g.b808);
+          const o=Math.round((t0+s*step)*sr); for(let i=0;i<note.length&&o+i<N;i++) B[o+i]+=note[i]*(g.b808?.6:.5); } }
+      // risers: noise sweep into each drop
+      if(b===introBars-4||(brkLen&&b===brkStart+brkLen-4)){ const L=Math.round(4*bar*sr),o=Math.round(t0*sr); let lp=0,hp1=0,prev=0;
+        for(let i=0;i<L&&o+i<N;i++){const p=i/L,fc=300+9000*p*p,a=Math.exp(-2*Math.PI*fc/sr),v=Math.random()*2-1; lp=lp*a+v*(1-a); hp1=lp-prev; prev=lp; FX[o+i]+=(lp*.6+hp1*.4)*p*p*.35;} }
     }
-    // 4) mix: vocals + music without its own low end + new beat + bass
+    // sidechain: music & bass duck under every kick (the house "pump")
+    const duck=new Float32Array(N).fill(1), dl=Math.round(.18*sr), depth=g.soft?.35:.55;
+    for(const kt of kicks){const o=Math.round(kt*sr);for(let i=0;i<dl&&o+i<N;i++){const v=1-depth*Math.pow(1-i/dl,2);if(v<duck[o+i])duck[o+i]=v;}}
+    // 5) mix
     const O=Math.round(songOff*sr), mixL=new Float32Array(N), mixR=new Float32Array(N);
-    const musHP=mS?mS.map(c=>biquadRun(c,'hp',170,.7,sr)):null;
-    for(let i=0;i<N;i++){ mixL[i]=D[0][i]*.8+B[i]; mixR[i]=D[1][i]*.8+B[i]; }
-    const endS=Math.round(bodyEnd*sr), fadeS=Math.round(bar*sr);
-    for(let i=0;i<(vS||mS)[0].length;i++){ const j=O+i; if(j>=N) break; const fo=j>endS-fadeS?Math.max(0,(endS-j)/fadeS):1;
-      if(vS){mixL[j]+=vS[0][i]*fo;mixR[j]+=vS[1][i]*fo;} if(musHP){mixL[j]+=musHP[0][i]*.75*fo;mixR[j]+=musHP[1][i]*.75*fo;} }
-    // 5) master: loud and clean (-9 LUFS, no clipping)
+    const hHP=hS?hS.map(c=>biquadRun(c,'hp',140,.7,sr)):null, vHP=vS?vS.map(c=>biquadRun(c,'hp',90,.7,sr)):null;
+    for(let i=0;i<N;i++){ const d=duck[i]; mixL[i]=D[0][i]*.75+B[i]*d+FX[i]; mixR[i]=D[1][i]*.75+B[i]*d+FX[i]; }
+    const endS=Math.round(bodyEnd*sr), fadeS=Math.round(bar*sr), bS=Math.round(brkStart*bar*sr), bE=Math.round((brkStart+brkLen)*bar*sr);
+    for(let i=0;i<(vS||hS)[0].length;i++){ const j=O+i; if(j<0) continue; if(j>=N) break; const fo=j>endS-fadeS?Math.max(0,(endS-j)/fadeS):1, d=duck[j];
+      const inB=brkLen&&j>=bS&&j<bE;
+      if(vHP){mixL[j]+=vHP[0][i]*fo*1.05;mixR[j]+=vHP[1][i]*fo*1.05;}
+      if(hHP){const hg=(inB?1:.7)*fo*(inB?1:d);mixL[j]+=hHP[0][i]*hg;mixR[j]+=hHP[1][i]*hg;} }
+    // 6) master
     P(.9,'بيظبط الصوت النهائي…'); await tick();
-    const out=new AudioBuffer({length:N,numberOfChannels:2,sampleRate:sr}); out.copyToChannel(mixL,0); out.copyToChannel(mixR,1);
-    let gain=Math.pow(10,(-9-await lufs(out))/20);
-    { const tmp=[mixL.slice(),mixR.slice()]; limit(tmp,sr,gain); const tb=new AudioBuffer({length:N,numberOfChannels:2,sampleRate:sr}); tb.copyToChannel(tmp[0],0); tb.copyToChannel(tmp[1],1);
-      const diff=-9-await lufs(tb); if(diff>0.3) gain*=Math.pow(10,Math.min(4,diff)/20); }   // the limiter takes some loudness away: correct once
-    const chs=[mixL,mixR]; limit(chs,sr,gain); out.copyToChannel(chs[0],0); out.copyToChannel(chs[1],1);
-    RX.out=out; RX.parts={vocals:vS?vS:null,music:mS,drums:D,bass:B,offset:O,bpm:Math.round(target),key:RX.info.key,genre:g};
-    msg('r-msg',`خلص ✓ ريمكس ${g.name} على ${Math.round(target)} BPM · ${RX.info.key.name} (${RX.info.key.camelot}) · ${fmt(out.duration)}. اسمع "الأصلية" و"الريمكس" وبعدين احفظ.`+(voc?'':' (فصل الصوت عن المزيكا شغّال في البرنامج المتسطّب بس)'),true);
+    const out=await masterTo(mixL,mixR,sr,-9);
+    RX.out=out; RX.parts={vocals:vS?vS:null,music:hS,drums:D,bass:B,offset:O,bpm:Math.round(target),key:RX.info.key,genre:g};
+    msg('r-msg',`خلص ✓ ريمكس ${g.name} على ${Math.round(target)} BPM · ${RX.info.key.name} (${RX.info.key.camelot}) · ${fmt(out.duration)}`+
+      (keptTempo?` · خلّيت سرعة الأغنية زي ما هي لأن سرعة ${g.name} (${g.bpm}) بعيدة عنها. لو عايزها على سرعة النوع، علّم على "سرّعها لسرعة النوع حتى لو بعيدة"`:'')+(voc?'':' (فصل الصوت شغّال في البرنامج المتسطّب بس)'),true);
     RX.which='b'; rUi(); $('r-daw').classList.remove('hidden');
   }catch(e){ msg('r-msg','حصلت مشكلة: '+e.message,false); }
   prog.classList.remove('show'); $('r-run').disabled=false; busy(false);
@@ -2240,6 +2384,53 @@ $('x-save').onclick=async()=>{
   }catch(e){ msg('x-msg','حصلت مشكلة: '+e.message,false); }
   prog.classList.remove('show'); $('x-save').disabled=false; busy(false);
 };
+
+/* ================= Shazam window + listen to a whole set ================= */
+$('home-shz').innerHTML=logo('Shazam',120);
+$('z-logo').innerHTML=logo('Shazam',60); $('z-open').insertAdjacentHTML('afterbegin',logo('Shazam',18));
+M.extra=[];
+function openWeb(url,live){ if(!APP){ window.open(url,'_blank'); return; } if(live){ startLive(); } APP.openYouTube(url); }
+$('z-open').onclick=()=>openWeb('https://www.shazam.com/',false);
+$('z-go').onclick=()=>{ const u=$('z-link').value.trim(); if(!/^https?:\/\/(www\.)?shazam\.com\//i.test(u)) return msg('z-msg','حط لينك من موقع shazam.com',false); openWeb(u,false); };
+if(APP&&APP.onWebTrack) APP.onWebTrack(d=>{
+  const h={artist:d.artist||'',title:d.title||'',spotify:d.spotify||'',apple:d.apple||'',src:'shz',start:null};
+  if(!h.title) return;
+  if(![...M.hits,...M.extra].some(x=>keyOf(x)===keyOf(h))) M.extra.push(h);
+  renderMix(); msg('z-msg','اتضاف ✓ '+(h.artist?h.artist+' - ':'')+h.title,true); logEdit('شازام',(h.artist?h.artist+' - ':'')+h.title,'اتضاف لقايمة التراكات');
+});
+// whole set
+document.querySelectorAll('#f-tabs .tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('#f-tabs .tab').forEach(x=>x.classList.toggle('on',x===t));
+  $('f-link-box').classList.toggle('hidden',t.dataset.t!=='link'); $('f-file-box').classList.toggle('hidden',t.dataset.t!=='file');});
+function fSources(){ $('f-sources').textContent=[LIB.tracks.length?`مكتبتك (${LIB.tracks.length} أغنية)`:null,$('m-token').value.trim()?'AudD أونلاين':'AudD (حط المفتاح الأول)','معلومات يوتيوب'].filter(Boolean).join(' · '); }
+function fBegin(){ MSGID='f-msg'; PROGID='f-prog'; ONLINE_EVERY=+$('f-every').value; fSources(); }
+$('f-open').onclick=()=>{
+  if(M.running){ if(APP) APP.closeYouTube(); stopLive(); return; }
+  const u=$('f-link').value.trim(); if(!/^https?:\/\//i.test(u)) return msg('f-msg','حط لينك صحيح',false);
+  if(!APP) return msg('f-msg','الاستماع للينكات شغّال في البرنامج المتسطّب بس',false);
+  fBegin(); openWeb(u,true);
+};
+const fDrop=$('f-drop'), fFile=$('f-file');
+fDrop.onclick=()=>fFile.click();
+fDrop.ondragover=e=>{e.preventDefault();fDrop.classList.add('over')}; fDrop.ondragleave=()=>fDrop.classList.remove('over');
+fDrop.ondrop=e=>{e.preventDefault();fDrop.classList.remove('over');if(e.dataTransfer.files[0])fRun(e.dataTransfer.files[0]);};
+fFile.onchange=()=>{const f=fFile.files[0];fFile.value='';if(f)fRun(f);};
+let fTap=null;
+$('f-stop').onclick=()=>{ const au=$('f-audio'); au.pause(); stopLive(); $('f-stop').classList.add('hidden'); };
+async function fRun(file){
+  if(M.running) return; fBegin();
+  if($('f-mode').value==='fast'){ if(!/\.(mp3|wav)$/i.test(file.name)) return msg('f-msg','الطريقة السريعة محتاجة MP3 أو WAV. للأنواع التانية اختار "اسمعه كله وهو شغّال"',false);
+    return scanMixFile(file); }
+  // play the whole set; listen to what's playing (you can skip around with the player)
+  const au=$('f-audio'); au.classList.remove('hidden'); if(au.src) URL.revokeObjectURL(au.src); au.src=URL.createObjectURL(file);
+  if(!fTap){ const ctx=new AudioContext(), src=ctx.createMediaElementSource(au), sp=ctx.createScriptProcessor(4096,1,1), mute=ctx.createGain(); mute.gain.value=0;
+    src.connect(ctx.destination); src.connect(sp); sp.connect(mute); mute.connect(ctx.destination);
+    const ratio=ctx.sampleRate/FP.SR; let pos=0, carry=new Float32Array(0);
+    sp.onaudioprocess=e=>{ if(au.paused||au.seeking||!M.running) return; const inp=e.inputBuffer.getChannelData(0), x=new Float32Array(carry.length+inp.length); x.set(carry); x.set(inp,carry.length);
+      const w=Math.max(1,Math.round(ratio)), out=[]; while(pos+w<x.length){let s=0;const i=Math.floor(pos);for(let k=0;k<w;k++)s+=x[i+k];out.push(s/w);pos+=ratio;}
+      const used=Math.floor(pos); carry=x.slice(used); pos-=used; if(out.length) liveFeed(Float32Array.from(out),au.currentTime); };
+    au.addEventListener('seeking',liveReset); au.addEventListener('ended',()=>stopLive()); fTap={ctx}; }
+  await fTap.ctx.resume(); startLive(); au.play(); $('f-stop').classList.remove('hidden');
+}
 
 /* ================= Data & history screen ================= */
 async function renderData(){

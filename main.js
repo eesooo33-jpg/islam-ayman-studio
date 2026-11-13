@@ -154,7 +154,7 @@ function createMain() {
 function openYouTube(url) {
   if (yt) { yt.loadURL(url); yt.focus(); return; }
   yt = new BrowserWindow({
-    width: 1000, height: 620, title: 'YouTube · Islam Ayman Studio', autoHideMenuBar: true, backgroundColor: '#000',
+    width: 1100, height: 760, title: 'Islam Ayman Studio', autoHideMenuBar: true, backgroundColor: '#000',
     icon: path.join(__dirname, 'build', 'icon.png'),
     webPreferences: { preload: path.join(__dirname, 'yt-preload.js'), contextIsolation: true, nodeIntegration: false }
   });
@@ -163,10 +163,11 @@ function openYouTube(url) {
   yt.on('closed', () => { yt = null; if (win) win.webContents.send('yt-closed'); });
   yt.loadURL(url);
 }
-ipcMain.on('yt-open', (e, url) => { if (typeof url === 'string' && YT_RE.test(url)) openYouTube(url); });
+ipcMain.on('yt-open', (e, url) => { if (typeof url === 'string' && /^https?:\/\//i.test(url)) openYouTube(url); });   // YouTube, Shazam, SoundCloud, any site
 ipcMain.on('yt-close', () => { if (yt) yt.close(); });
 ipcMain.on('yt-audio', (e, d) => { if (win && yt && e.sender === yt.webContents) win.webContents.send('yt-audio', d); });
 ipcMain.on('yt-info', (e, d) => { if (win && yt && e.sender === yt.webContents) win.webContents.send('yt-info', d); });
+ipcMain.on('web-track', (e, d) => { if (win && yt && e.sender === yt.webContents) { win.webContents.send('web-track', d); win.focus(); } });
 if (process.env.DJ_TEST_YT) ipcMain.on('yt-open-test', (e, url) => openYouTube(url));  // automated tests only
 
 app.whenReady().then(() => { migrateOldData(); createMain(); });

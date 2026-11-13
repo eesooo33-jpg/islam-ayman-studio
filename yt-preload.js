@@ -81,3 +81,42 @@ let lastInfo = '';
 function sendInfo() { try { const i = ytInfo(), s = JSON.stringify(i); if (s !== lastInfo) { lastInfo = s; ipcRenderer.send('yt-info', i); } } catch (e) {} }
 window.addEventListener('DOMContentLoaded', () => setTimeout(sendInfo, 1500));
 setInterval(sendInfo, 5000);
+
+/* ---- song bar: on Shazam (or any site showing a song), offer Spotify / Anghami / … and "add to my track list" ---- */
+function songOnPage() {
+  const host = location.hostname;
+  if (/shazam\.com$/.test(host) && /\/(song|track)\//.test(location.pathname)) {
+    const og = (document.querySelector('meta[property="og:title"]') || {}).content || document.title || '';
+    const t = og.split(/[:|]/)[0].trim(); const m = t.split(/\s+[-–—]\s+/);
+    const apple = [...document.querySelectorAll('a[href*="music.apple.com"]')].map(a => a.href)[0] || '';
+    const spotify = [...document.querySelectorAll('a[href*="open.spotify.com"]')].map(a => a.href)[0] || '';
+    if (m.length > 1) return { title: m[0].trim(), artist: m.slice(1).join(' - ').trim(), apple, spotify };
+    if (t) return { title: t, artist: '', apple, spotify };
+  }
+  return null;
+}
+const APPS_BAR = [
+  ['Spotify', '#1DB954', (q, s) => s.spotify || 'https://open.spotify.com/search/' + q], ['أنغامي', '#A13CFF', q => 'https://play.anghami.com/search/' + q],
+  ['YouTube', '#FF0000', q => 'https://www.youtube.com/results?search_query=' + q], ['Apple Music', '#FA243C', (q, s) => s.apple || 'https://music.apple.com/search?term=' + q],
+  ['Deezer', '#A238FF', q => 'https://www.deezer.com/search/' + q], ['SoundCloud', '#FF5500', q => 'https://soundcloud.com/search?q=' + q], ['Beatport', '#01FF95', q => 'https://www.beatport.com/search?q=' + q]];
+let barKey = '';
+function songBar() {
+  const s = songOnPage(), key = s ? s.artist + '|' + s.title : '';
+  let bar = document.getElementById('__ia_bar');
+  if (!s) { if (bar) bar.remove(); barKey = ''; return; }
+  if (key === barKey && bar) return; barKey = key;
+  if (!bar) { bar = document.createElement('div'); bar.id = '__ia_bar'; document.documentElement.appendChild(bar); }
+  bar.setAttribute('style', 'position:fixed;left:0;right:0;bottom:0;z-index:2147483647;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 14px;' +
+    'background:rgba(12,10,14,.96);border-top:2px solid #c94a6a;box-shadow:0 -8px 24px rgba(0,0,0,.5);font:600 13px "Segoe UI",Tahoma,sans-serif;color:#f4eef1;direction:rtl');
+  const q = encodeURIComponent((s.artist ? s.artist + ' ' : '') + s.title);
+  bar.innerHTML = '';
+  const label = document.createElement('span'); label.textContent = (s.artist ? s.artist + ' - ' : '') + s.title; label.style.cssText = 'margin-inline-end:8px;direction:ltr';
+  bar.appendChild(label);
+  for (const [n, c, u] of APPS_BAR) { const a = document.createElement('a'); a.href = u(q, s); a.target = '_blank'; a.textContent = 'افتح في ' + n;
+    a.style.cssText = `color:#fff;text-decoration:none;padding:6px 11px;border-radius:999px;border:1px solid ${c};background:${c}33`; bar.appendChild(a); }
+  const add = document.createElement('button'); add.textContent = '+ ضيفه لقايمة التراكات في البرنامج';
+  add.style.cssText = 'margin-inline-start:auto;color:#fff;border:1px solid #a3203f;background:linear-gradient(180deg,#a3203f,#7a1530);padding:7px 13px;border-radius:10px;cursor:pointer;font:inherit';
+  add.onclick = () => { ipcRenderer.send('web-track', { title: s.title, artist: s.artist, apple: s.apple, spotify: s.spotify }); add.textContent = '✓ اتضاف'; };
+  bar.appendChild(add);
+}
+setInterval(songBar, 1200);

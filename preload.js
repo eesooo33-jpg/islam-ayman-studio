@@ -7,6 +7,7 @@ contextBridge.exposeInMainWorld('djApp', {
   onAudio: (cb) => ipcRenderer.on('yt-audio', (e, d) => cb(d)),
   onYtClosed: (cb) => ipcRenderer.on('yt-closed', () => cb()),
   onYtInfo: (cb) => ipcRenderer.on('yt-info', (e, d) => cb(d)),
+  onWebTrack: (cb) => ipcRenderer.on('web-track', (e, d) => cb(d)),
   store: { get: (n) => ipcRenderer.invoke('store-get', n), set: (n, v) => ipcRenderer.invoke('store-set', n, v) },
   lib: { load: () => ipcRenderer.invoke('lib-load'), add: (recs) => ipcRenderer.invoke('lib-add', recs), clear: () => ipcRenderer.invoke('lib-clear') },
   dataDir: () => ipcRenderer.invoke('data-dir'),
