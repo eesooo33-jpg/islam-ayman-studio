@@ -463,12 +463,27 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
       </div>
 
       <div id="m-set" class="hidden">
-        <label class="f">مفتاح AudD: التعرّف على أي تراك أونلاين (نفس فكرة شازام)</label>
+        <label class="f">خدمة التعرّف على الأغاني (نفس تكنولوجيا شازام)</label>
+        <select id="m-prov" data-keep style="width:100%"><option value="acr">ACRCloud (الأقوى، بتستخدمها منصّات الموسيقى)</option><option value="audd">AudD (الأسهل في التسجيل)</option></select>
+        <div id="m-acr-box">
+          <label class="f">ACRCloud: Host</label><input type="text" id="m-acr-host" data-keep class="latin" placeholder="identify-eu-west-1.acrcloud.com">
+          <label class="f">ACRCloud: Access Key</label><input type="text" id="m-acr-key" data-keep class="latin">
+          <label class="f">ACRCloud: Access Secret</label><input type="password" id="m-acr-secret" data-keep class="latin">
+          <ol class="steps" style="margin-top:10px">
+            <li>اعمل حساب على <a href="https://console.acrcloud.com/signup" target="_blank" style="color:var(--wine3)">console.acrcloud.com</a>.</li>
+            <li>من <b>Audio & Video Recognition</b> اعمل <b>Project</b> جديد، واختار <b>Recorded Audio</b>، وعلّم على <b>ACRCloud Music</b>.</li>
+            <li>انسخ الـ <b>Host</b> والـ <b>Access Key</b> والـ <b>Access Secret</b> والصقهم هنا. البرنامج بيحفظهم.</li>
+          </ol>
+        </div>
+        <div id="m-audd-box" class="hidden">
+        <label class="f">AudD: API Token</label>
         <input type="text" id="m-token" data-keep class="latin" placeholder="الصق المفتاح هنا">
         <ol class="steps" style="margin-top:10px">
           <li>افتح <a href="https://dashboard.audd.io/" target="_blank" style="color:var(--wine3)">dashboard.audd.io</a> واعمل حساب.</li>
           <li>هتلاقي <b>API Token</b>، انسخه والصقه هنا. البرنامج بيحفظه ومش هتحتاج تحطه تاني.</li>
         </ol>
+        </div>
+        <div class="row" style="margin-top:12px"><button class="btn primary" id="m-test">جرّب الاتصال</button></div>
         <div class="note">مع المفتاح، البرنامج بيبعت مقطع من كل دقيقة في الميكس لـ AudD، ويكتبلك اسم كل تراك وجنبه زرار "افتح في Spotify" و"افتح في أنغامي". كل تراك بيظهر مرة واحدة حتى لو اتسمع كذا مرة. AudD فيه تجربة مجانية، وبعدها بفلوس قليلة حسب عدد المقاطع.</div>
       </div>
 
@@ -645,9 +660,10 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
     <div class="panel">
       <div class="ptitle"><span class="gear-logo" id="z-logo"></span><div><h2>شازام</h2></div>
         <button class="btn back" onclick="go('home')">رجوع</button></div>
-      <div class="note" style="margin-top:0">موقع شازام بيفتح في شباك جوه البرنامج. أي أغنية تفتحها أو تتعرّف عليها هناك، هيظهرلك تحت الشاشة زراير <b>"افتح في Spotify"</b> و<b>"افتح في أنغامي"</b> و YouTube و Apple Music، وزرار <b>"ضيفه لقايمة التراكات"</b> اللي هنا.</div>
+      <div class="note" style="margin-top:0">شازام بيفتح في Chrome على جهازك. لما يتعرّف على أغنية، انسخ لينكها (Share ← Copy link) والصقه هنا، وهيظهرلك زرار <b>"افتح في Spotify"</b> و<b>"افتح في أنغامي"</b> وتضيفها لقايمة التراكات.<br>وعشان البرنامج نفسه يسمع ويتعرّف على التراكات لوحده، شغّل خدمة <b>ACRCloud</b> أو <b>AudD</b> من "اعرف أسامي التراكات" ← الإعدادات، واستخدم "اسمع السيت كامل".</div>
       <div class="row" style="margin-top:14px">
-        <button class="btn primary logo-btn" id="z-open">افتح شازام</button>
+        <button class="btn primary logo-btn" id="z-open">افتح شازام في Chrome</button>
+        <button class="btn" id="z-open-in">جرّب جوه البرنامج</button>
         <input type="text" id="z-link" class="latin" placeholder="الصق لينك أغنية من شازام أو لينك يوتيوب" style="flex:1;min-width:240px">
         <button class="btn" id="z-go">افتح اللينك</button>
       </div>
@@ -1352,10 +1368,26 @@ function matchLocal(pcm){
 }
 
 /* ---------- AudD (optional, online) ---------- */
+function onlineCfg(){ const prov=$('m-prov').value;
+  if(prov==='acr'){ const c={host:$('m-acr-host').value.trim(),key:$('m-acr-key').value.trim(),secret:$('m-acr-secret').value.trim()}; return c.host&&c.key&&c.secret?{prov,cfg:c}:null; }
+  const t=$('m-token').value.trim(); return t?{prov:'audd',cfg:{token:t}}:null; }
+const hasOnline=()=>!!onlineCfg();
+function syncProv(){ const a=$('m-prov').value==='acr'; $('m-acr-box').classList.toggle('hidden',!a); $('m-audd-box').classList.toggle('hidden',a); }
+$('m-prov').addEventListener('change',syncProv); dataReady.then(syncProv);
 async function recognize(blob,name){
-  const tok=$('m-token').value.trim(); if(!tok) return null;
-  const fd=new FormData(); fd.append('file',blob,name); fd.append('return','spotify,apple_music,deezer'); fd.append('api_token',tok);
-  const r=await fetch('https://api.audd.io/',{method:'POST',body:fd}); const j=await r.json();
+  const o=onlineCfg(); if(!o) return null;
+  let j;
+  if(APP&&APP.recognize) j=await APP.recognize(o.prov,o.cfg,new Uint8Array(await blob.arrayBuffer()),name);
+  else if(o.prov==='audd'){ const fd=new FormData(); fd.append('file',blob,name); fd.append('return','spotify,apple_music,deezer'); fd.append('api_token',o.cfg.token);
+    j=await (await fetch('https://api.audd.io/',{method:'POST',body:fd})).json(); }
+  else throw new Error('ACRCloud شغّال في البرنامج المتسطّب بس');
+  if(o.prov==='acr'){
+    const code=j&&j.status&&j.status.code; if(code===1001) return null;                      // 1001 = no match
+    if(code!==0) throw new Error('ACRCloud: '+((j&&j.status&&j.status.msg)||'error'));
+    const m=j.metadata&&j.metadata.music&&j.metadata.music[0]; if(!m) return null; const ex=m.external_metadata||{};
+    const sp=ex.spotify&&ex.spotify.track&&ex.spotify.track.id, dz=ex.deezer&&ex.deezer.track&&ex.deezer.track.id;
+    return {artist:(m.artists||[]).map(a=>a.name).join(', '),title:m.title||'',spotify:sp?'https://open.spotify.com/track/'+sp:'',deezer:dz?'https://www.deezer.com/track/'+dz:'',apple:'',src:'ear'};
+  }
   if(j.status==='error') throw new Error((j.error&&j.error.error_message)||'AudD error');
   const x=j.result; if(!x||!x.title) return null;
   return {artist:x.artist||'',title:x.title,spotify:x.spotify?.external_urls?.spotify||'',apple:x.apple_music?.url||'',deezer:x.deezer?.link||'',src:'ear'};
@@ -1365,9 +1397,15 @@ function wavBlob(pcm,sr){const n=pcm.length,b=new ArrayBuffer(44+n*2),v=new Data
   v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*2,true);
   for(let i=0;i<n;i++)v.setInt16(44+i*2,Math.max(-1,Math.min(1,pcm[i]))*32767,true);return new Blob([b],{type:'audio/wav'});}
 let lastOnline=-1e9;
+$('m-test').onclick=async()=>{
+  if(!hasOnline()) return msg('m-msg','حط بيانات الخدمة الأول',false);
+  const sr=11025,n=sr*5,pcm=new Float32Array(n); for(let i=0;i<n;i++) pcm[i]=0.3*Math.sin(2*Math.PI*440*i/sr)*Math.sin(Math.PI*i/n);
+  try{ const h=await recognize(wavBlob(pcm,sr),'test.wav'); msg('m-msg','الاتصال شغّال ✓ '+(h?'(رد بأغنية)':'(الخدمة ردّت ومفيش أغنية في المقطع التجريبي، وده الطبيعي)'),true); }
+  catch(e){ msg('m-msg','الاتصال فشل: '+e.message,false); }
+};
 async function identify(pcm,t,raw){
   let h=matchLocal(pcm);
-  if(!h && $('m-token').value.trim() && t-lastOnline>=ONLINE_EVERY){ lastOnline=t;     // online at most once every ONLINE_EVERY seconds of mix
+  if(!h && hasOnline() && t-lastOnline>=ONLINE_EVERY){ lastOnline=t;     // online at most once every ONLINE_EVERY seconds of mix
     try{ h=raw?await recognize(raw.blob,raw.name):await recognize(wavBlob(pcm.subarray(0,FP.SR*12),FP.SR),'snip.wav'); }catch(e){ msg(MSGID,'AudD: '+e.message,false); }
   }
   if(h) addHit(t,h);
@@ -1526,7 +1564,7 @@ async function shazamReel(file){
       else buf=await file.slice(from,to).arrayBuffer();
       const rawBlob=new Blob([buf.slice(0)],{type:isWav?'audio/wav':'audio/mpeg'});
       let ab; try{ ab=await ctx.decodeAudioData(buf); }catch(e){ continue; }
-      if($('m-token').value.trim()){   // identify this piece online while it plays
+      if(hasOnline()){   // identify this piece online while it plays
         const ri=i, rt=t; recognize(rawBlob,isWav?'snip.wav':'snip.mp3').then(h=>{ const cell=$('shz-r'+ri).querySelector('.nm');
           if(!h){ cell.textContent='مش معروف'; return; }
           const dup=M.hits.some(x=>keyOf(x)===keyOf(h)); addHit(rt,h);
@@ -2391,7 +2429,8 @@ $('home-shz').innerHTML=logo('Shazam',120);
 $('z-logo').innerHTML=logo('Shazam',60); $('z-open').insertAdjacentHTML('afterbegin',logo('Shazam',18));
 M.extra=[];
 function openWeb(url,live){ if(!APP){ window.open(url,'_blank'); return; } if(live){ startLive(); } APP.openYouTube(url); }
-$('z-open').onclick=()=>openWeb('https://www.shazam.com/',false);
+$('z-open').onclick=()=>{ if(APP&&APP.openExternal) APP.openExternal('https://www.shazam.com/'); else window.open('https://www.shazam.com/','_blank'); };
+$('z-open-in').onclick=()=>{ lastWeb='https://www.shazam.com/'; openWeb('https://www.shazam.com/',false); };
 // a Shazam song link → show the song right here with "open in Spotify / Anghami …" (works even if the Shazam site won't open)
 function songFromShazamUrl(u){ const m=u.match(/shazam\.com\/(?:[a-z-]+\/)?(?:song|track)\/\d+\/([^/?#]+)/i); if(!m) return null;
   const t=decodeURIComponent(m[1]).replace(/-/g,' ').trim(); return t?{title:titleCaseEn(t),artist:''}:null; }
@@ -2427,7 +2466,7 @@ if(APP&&APP.onWebTrack) APP.onWebTrack(d=>{
 // whole set
 document.querySelectorAll('#f-tabs .tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('#f-tabs .tab').forEach(x=>x.classList.toggle('on',x===t));
   $('f-link-box').classList.toggle('hidden',t.dataset.t!=='link'); $('f-file-box').classList.toggle('hidden',t.dataset.t!=='file');});
-function fSources(){ $('f-sources').textContent=[LIB.tracks.length?`مكتبتك (${LIB.tracks.length} أغنية)`:null,$('m-token').value.trim()?'AudD أونلاين':'AudD (حط المفتاح الأول)','معلومات يوتيوب'].filter(Boolean).join(' · '); }
+function fSources(){ $('f-sources').textContent=[LIB.tracks.length?`مكتبتك (${LIB.tracks.length} أغنية)`:null,hasOnline()?($('m-prov').value==='acr'?'ACRCloud أونلاين':'AudD أونلاين'):'التعرّف أونلاين (حط المفتاح الأول في الإعدادات)','معلومات يوتيوب'].filter(Boolean).join(' · '); }
 function fBegin(){ MSGID='f-msg'; PROGID='f-prog'; ONLINE_EVERY=+$('f-every').value; fSources(); }
 $('f-open').onclick=()=>{
   if(M.running){ if(APP) APP.closeYouTube(); stopLive(); return; }

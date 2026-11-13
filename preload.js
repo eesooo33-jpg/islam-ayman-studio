@@ -10,6 +10,7 @@ contextBridge.exposeInMainWorld('djApp', {
   onWebTrack: (cb) => ipcRenderer.on('web-track', (e, d) => cb(d)),
   onWebError: (cb) => ipcRenderer.on('web-error', (e, d) => cb(d)),
   openExternal: (url) => ipcRenderer.send('open-external', url),
+  recognize: (prov, cfg, data, name) => ipcRenderer.invoke('recognize', prov, cfg, data, name),
   store: { get: (n) => ipcRenderer.invoke('store-get', n), set: (n, v) => ipcRenderer.invoke('store-set', n, v) },
   lib: { load: () => ipcRenderer.invoke('lib-load'), add: (recs) => ipcRenderer.invoke('lib-add', recs), clear: () => ipcRenderer.invoke('lib-clear') },
   dataDir: () => ipcRenderer.invoke('data-dir'),

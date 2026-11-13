@@ -103,6 +103,25 @@ ipcMain.handle('write-file', (e, dir, name, data) => {
 });
 ipcMain.handle('show-in-folder', (e, p) => { if (typeof p === 'string' && fs.existsSync(p)) shell.showItemInFolder(p); });
 
+/* ---------- song recognition (ACRCloud / AudD), called from the app itself, not a web page ---------- */
+const crypto = require('crypto');
+ipcMain.handle('recognize', async (e, prov, cfg, data, name) => {
+  const buf = Buffer.from(data);
+  if (prov === 'acr') {
+    const host = String(cfg.host || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '').trim();
+    if (!/^[a-z0-9.-]+\.acrcloud\.com$/i.test(host)) throw new Error('ACRCloud host مش مظبوط (لازم ينتهي بـ acrcloud.com)');
+    const ts = Math.floor(Date.now() / 1000).toString();
+    const sig = crypto.createHmac('sha1', String(cfg.secret)).update(['POST', '/v1/identify', cfg.key, 'audio', '1', ts].join('\n')).digest('base64');
+    const fd = new FormData();
+    fd.append('sample', new Blob([buf]), name); fd.append('sample_bytes', String(buf.length)); fd.append('access_key', cfg.key);
+    fd.append('data_type', 'audio'); fd.append('signature_version', '1'); fd.append('signature', sig); fd.append('timestamp', ts);
+    const r = await fetch(`https://${host}/v1/identify`, { method: 'POST', body: fd }); return await r.json();
+  }
+  const fd = new FormData();
+  fd.append('file', new Blob([buf]), name); fd.append('return', 'spotify,apple_music,deezer'); fd.append('api_token', cfg.token);
+  const r = await fetch('https://api.audd.io/', { method: 'POST', body: fd }); return await r.json();
+});
+
 /* ---------- AI: remove vocals from a part, keep the music ---------- */
 const MODELS = () => app.isPackaged ? path.join(process.resourcesPath, 'models') : path.join(__dirname, 'models');
 ipcMain.handle('separate-full', async (e, L, R) => {
