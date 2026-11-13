@@ -181,6 +181,11 @@ img.gear{width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 10px 14p
 @media (prefers-reduced-motion:reduce){#welcome,.w-deck,.w-small,.w-name,.w-sub,.w-bar i{animation-duration:.01s!important;animation-delay:0s!important}}
 .shz-now{margin-top:12px;padding:14px;border-radius:12px;background:#0d0b0f;border:1px solid var(--line);text-align:center;color:var(--muted)}
 .shz-now .big{font:900 40px/1 Consolas,monospace;color:#fff;margin-bottom:6px}
+.open-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:999px;font-weight:700;font-size:13px;text-decoration:none!important;white-space:nowrap}
+.open-btn.sp{background:rgba(30,215,96,.14);border:1px solid rgba(30,215,96,.45);color:#9ff0bf!important}
+.open-btn.an{background:rgba(161,60,255,.14);border:1px solid rgba(161,60,255,.45);color:#d9b8ff!important}
+.apps .more{display:inline-flex;gap:8px;align-items:center;margin-inline-start:4px}.apps .more a{opacity:.85}.apps .more a:hover{opacity:1}
+@media(min-width:900px){#v-home .grid{grid-template-columns:repeat(3,1fr)}}
 footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding:20px;direction:ltr}
 </style>
 </head>
@@ -314,6 +319,9 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
       <div class="module" onclick="go('remix')"><span class="led"></span>
         <img class="gear" src="icons/keys.png" alt="">
         <h3>اعمل ريمكس</h3><p>حط أغنية واختار House أو Techno أو Afro أو مهرجانات… والبرنامج يعمل الريمكس، ويصدّره لـ Ableton و FL و Logic.</p></div>
+      <div class="module" onclick="go('mash')"><span class="led"></span>
+        <img class="gear" src="icons/controller.png" alt="">
+        <h3>اعمل ماشاب</h3><p>حط مجموعة أغاني، والبرنامج يعمل ميجامكس بانتقالات دي جي، أو يحط صوت أغنية على مزيكا أغنية تانية.</p></div>
       <div class="module" onclick="go('tag')"><span class="led"></span>
         <img class="gear" src="icons/sampler.png" alt="">
         <h3>شيل بصمة الصوت</h3><p>شيل "DJ Sasso" أو "Here comes…" أو أي كلمة مش عاجباك، والمزيكا تفضل زي ما هي.</p></div>
@@ -432,7 +440,7 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
             <select id="shz-step" data-keep><option value="60">مقطع من كل دقيقة</option><option value="90">مقطع كل دقيقة ونص</option><option value="120">مقطع كل دقيقتين</option></select>
             <input type="file" id="shz-file" accept=".mp3,.wav,audio/mpeg,audio/wav" hidden></div>
           <div id="shz-now" class="shz-now hidden"></div>
-          <div class="tbl-wrap hidden" id="shz-wrap" style="max-height:220px"><table><thead><tr><th>المقطع</th><th>الوقت في الميكس</th><th></th></tr></thead><tbody id="shz-list"></tbody></table></div>
+          <div class="tbl-wrap hidden" id="shz-wrap" style="max-height:220px"><table><thead><tr><th>المقطع</th><th>الوقت في الميكس</th><th>التراك (لو مفتاح AudD موجود)</th><th></th></tr></thead><tbody id="shz-list"></tbody></table></div>
         </div>
       </div>
 
@@ -447,9 +455,13 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
       </div>
 
       <div id="m-set" class="hidden">
-        <label class="f">مفتاح AudD (اختياري): يدوّر أونلاين على التراكات اللي مش في مكتبتك</label>
-        <input type="text" id="m-token" data-keep class="latin" placeholder="من موقع dashboard.audd.io">
-        <div class="note">البرنامج شغّال من غير المفتاح ده، لأنه بيعتمد على مكتبتك. المفتاح بس لو عايز يدوّر أونلاين على التراكات اللي مش عندك، وده بفلوس بعد فترة التجربة.</div>
+        <label class="f">مفتاح AudD: التعرّف على أي تراك أونلاين (نفس فكرة شازام)</label>
+        <input type="text" id="m-token" data-keep class="latin" placeholder="الصق المفتاح هنا">
+        <ol class="steps" style="margin-top:10px">
+          <li>افتح <a href="https://dashboard.audd.io/" target="_blank" style="color:var(--wine3)">dashboard.audd.io</a> واعمل حساب.</li>
+          <li>هتلاقي <b>API Token</b>، انسخه والصقه هنا. البرنامج بيحفظه ومش هتحتاج تحطه تاني.</li>
+        </ol>
+        <div class="note">مع المفتاح، البرنامج بيبعت مقطع من كل دقيقة في الميكس لـ AudD، ويكتبلك اسم كل تراك وجنبه زرار "افتح في Spotify" و"افتح في أنغامي". كل تراك بيظهر مرة واحدة حتى لو اتسمع كذا مرة. AudD فيه تجربة مجانية، وبعدها بفلوس قليلة حسب عدد المقاطع.</div>
       </div>
 
       <details style="margin-top:18px"><summary style="cursor:pointer;color:var(--muted);font-size:14px">وصف الفيديو، آخر حاجة البرنامج يرجعلها (اختياري)</summary>
@@ -573,6 +585,48 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
           </div>
           <div class="note">Suno و Udio مواقع ذكاء اصطناعي. البرنامج بيفتحهولك وبينسخ وصف الستايل جاهز، وانت ترفع ملف الصوت (vocals) وتلصق الوصف. ملحوظة: المواقع دي ممكن ترفض أغاني ليها حقوق.</div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MASHUP -->
+  <section id="v-mash" class="hidden">
+    <div class="panel">
+      <div class="ptitle"><img class="gear" src="icons/controller.png" alt=""><div><h2>اعمل ماشاب</h2></div>
+        <button class="btn back" onclick="go('home')">رجوع</button></div>
+      <div class="row">
+        <button class="btn primary" id="x-add">ضيف أغاني</button>
+        <button class="btn" id="x-folder">اختار فولدر</button>
+        <input type="file" id="x-files" multiple accept="audio/*,.mp3,.m4a,.wav,.flac,.aac,.ogg" hidden>
+        <span id="x-count" style="color:var(--muted);font-size:14px">ضيف من 2 لحد 12 أغنية</span>
+      </div>
+      <div id="x-area" class="hidden">
+        <div class="tbl-wrap" style="max-height:300px"><table><thead><tr><th>#</th><th>الأغنية</th><th>BPM</th><th>المقام</th><th></th></tr></thead><tbody id="x-list"></tbody></table></div>
+        <div class="row" style="margin-top:10px"><button class="btn" id="x-sort">رتّبهم هارموني (Camelot)</button><span style="color:var(--muted);font-size:13px">بيرتّب الأغاني بحيث كل أغنية مقامها يركب على اللي قبلها، زي ما الدي جي بيعمل.</span></div>
+        <h3 style="margin:18px 0 8px;font-size:16px">نوع الماشاب</h3>
+        <div class="genres" id="x-modes" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+          <button class="genre on" data-m="mega"><b>ميجامكس</b><small>أقوى جزء من كل أغنية، ورا بعض، بانتقالات دي جي ناعمة</small></button>
+          <button class="genre" data-m="vox"><b>صوت على مزيكا</b><small>صوت مطرب الأغنية الأولى على مزيكا التانية</small></button>
+        </div>
+        <div class="enh-grid" style="margin-top:14px">
+          <label class="knob"><span><b>السرعة (BPM)</b><small>سيبها فاضية والبرنامج يختار متوسط الأغاني</small></span><input type="text" id="x-bpm" class="latin" placeholder="تلقائي" style="width:100%"></label>
+          <label class="knob" id="x-barsbox"><span><b>طول كل أغنية في الميجامكس</b><small>بالمازورة</small></span>
+            <select id="x-bars" data-keep><option value="16">16 مازورة (قصير)</option><option value="32" selected>32 مازورة (حوالي دقيقة)</option><option value="64">64 مازورة (طويل)</option></select></label>
+          <label class="knob"><input type="checkbox" id="x-key" data-keep checked><span><b>ظبّط المقامات</b><small>يغيّر طبقة الأغنية سنة أو اتنين بحد أقصى عشان تركب على اللي قبلها</small></span></label>
+        </div>
+        <div class="row" style="margin-top:16px">
+          <button class="btn primary" id="x-run" disabled>🎚 اعمل الماشاب</button>
+          <button class="btn" id="x-play" disabled>▶ تشغيل</button>
+          <input type="range" id="x-pos" min="0" max="1000" value="0" style="direction:ltr;flex:1;min-width:160px;accent-color:var(--wine2)" disabled>
+          <span id="x-time" class="latin" style="font-family:Consolas,monospace;color:var(--muted)">0:00</span>
+        </div>
+        <div class="row" style="margin-top:14px">
+          <select id="x-fmt" data-keep><option value="mp3">MP3 320</option><option value="wav">WAV</option></select>
+          <button class="btn primary" id="x-save" disabled>احفظ الماشاب</button>
+        </div>
+        <div class="progress" id="x-prog"><i></i></div>
+        <div class="msg" id="x-msg"></div>
+        <div id="x-tl" class="note"></div>
       </div>
     </div>
   </section>
@@ -1223,21 +1277,21 @@ function matchLocal(pcm){
 /* ---------- AudD (optional, online) ---------- */
 async function recognize(blob,name){
   const tok=$('m-token').value.trim(); if(!tok) return null;
-  const fd=new FormData(); fd.append('file',blob,name); fd.append('return','spotify,apple_music'); fd.append('api_token',tok);
+  const fd=new FormData(); fd.append('file',blob,name); fd.append('return','spotify,apple_music,deezer'); fd.append('api_token',tok);
   const r=await fetch('https://api.audd.io/',{method:'POST',body:fd}); const j=await r.json();
   if(j.status==='error') throw new Error((j.error&&j.error.error_message)||'AudD error');
   const x=j.result; if(!x||!x.title) return null;
-  return {artist:x.artist||'',title:x.title,spotify:x.spotify?.external_urls?.spotify||'',apple:x.apple_music?.url||'',src:'ear'};
+  return {artist:x.artist||'',title:x.title,spotify:x.spotify?.external_urls?.spotify||'',apple:x.apple_music?.url||'',deezer:x.deezer?.link||'',src:'ear'};
 }
 function wavBlob(pcm,sr){const n=pcm.length,b=new ArrayBuffer(44+n*2),v=new DataView(b);const w=(o,s)=>[...s].forEach((c,i)=>v.setUint8(o+i,c.charCodeAt(0)));
   w(0,'RIFF');v.setUint32(4,36+n*2,true);w(8,'WAVE');w(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);
   v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*2,true);
   for(let i=0;i<n;i++)v.setInt16(44+i*2,Math.max(-1,Math.min(1,pcm[i]))*32767,true);return new Blob([b],{type:'audio/wav'});}
 let lastOnline=-1e9;
-async function identify(pcm,t){
+async function identify(pcm,t,raw){
   let h=matchLocal(pcm);
   if(!h && $('m-token').value.trim() && t-lastOnline>=60){ lastOnline=t;     // online at most once a minute of mix
-    try{ h=await recognize(wavBlob(pcm.subarray(0,FP.SR*12),FP.SR),'snip.wav'); }catch(e){ msg('m-msg','AudD: '+e.message,false); }
+    try{ h=raw?await recognize(raw.blob,raw.name):await recognize(wavBlob(pcm.subarray(0,FP.SR*12),FP.SR),'snip.wav'); }catch(e){ msg('m-msg','AudD: '+e.message,false); }
   }
   if(h) addHit(t,h);
 }
@@ -1247,9 +1301,12 @@ const keyOf=h=>normAr(h.artist)+'|'+normAr(h.title);
 const STAMPED=new Set(['desc','chap','cmt']);
 const heard=()=>M.hits.filter(h=>h.src==='lib'||h.src==='ear');
 function addHit(t,h){
-  const near=M.hits.find(x=>keyOf(x)===keyOf(h) && t>=x.start-WIN && t<=x.end+3*HOPW);
-  if(near){ near.start=Math.min(near.start,t); near.end=Math.max(near.end,t); }
-  else M.hits.push({...h,start:t,end:t});
+  const same=M.hits.find(x=>keyOf(x)===keyOf(h));
+  if(same){   // already found: show it once only
+    if(t>=same.start-WIN && t<=same.end+3*HOPW){ same.start=Math.min(same.start,t); same.end=Math.max(same.end,t); }
+    same.seen=(same.seen||1)+1;
+    for(const k of ['spotify','apple','deezer']) if(!same[k]&&h[k]) same[k]=h[k];
+  } else M.hits.push({...h,start:t,end:t,seen:1});
   renderMix();
 }
 function splitAT(name){ const sp=name.split(/\s+[-–—]\s+/); return sp.length>1?{artist:sp[0].trim(),title:sp.slice(1).join(' - ').trim()}:{artist:'',title:name.trim()}; }
@@ -1287,7 +1344,7 @@ const SRC={lib:['ear','سمعها (مكتبتك)'],ear:['ear','سمعها (أو�
 // every music app, one tap each
 const APPS=[['Spotify','#1DB954',(q,h)=>h.spotify||'https://open.spotify.com/search/'+q],['Anghami','#A13CFF',q=>'https://play.anghami.com/search/'+q],
   ['Apple Music','#FA57C1',(q,h)=>h.apple||'https://music.apple.com/search?term='+q],['YouTube Music','#FF0033',q=>'https://music.youtube.com/search?q='+q],
-  ['YouTube','#FF0000',q=>'https://www.youtube.com/results?search_query='+q],['Deezer','#A238FF',q=>'https://www.deezer.com/search/'+q],
+  ['YouTube','#FF0000',q=>'https://www.youtube.com/results?search_query='+q],['Deezer','#A238FF',(q,h)=>h.deezer||'https://www.deezer.com/search/'+q],
   ['SoundCloud','#FF5500',q=>'https://soundcloud.com/search?q='+q],['Beatport','#A8E00F',q=>'https://www.beatport.com/search?q='+q],
   ['Shazam','#0088FF',q=>'https://www.shazam.com/search?term='+q]];
 function renderMix(){
@@ -1298,7 +1355,9 @@ function renderMix(){
     const name=(h.artist?esc(h.artist)+' - ':'')+esc(h.title);
     return `<tr><td class="tm">${h.start==null?'—':fmt(h.start)}</td><td class="latin" style="text-align:right">${name}</td>
       <td><span class="src ${SRC[h.src][0]}">${SRC[h.src][1]}</span></td>
-      <td class="apps">${APPS.map(([n,c,u])=>`<a href="${u(q,h)}" target="_blank" title="${n}">${logo(n,15)||`<i style="background:${c}"></i>`}${n}</a>`).join('')}</td></tr>`;
+      <td class="apps"><a class="open-btn sp" href="${h.spotify||'https://open.spotify.com/search/'+q}" target="_blank">${logo('Spotify',16)}افتح في Spotify</a>
+        <a class="open-btn an" href="https://play.anghami.com/search/${q}" target="_blank">${logo('Anghami',16)}افتح في أنغامي</a>
+        <span class="more">${APPS.filter(a=>a[0]!=='Spotify'&&a[0]!=='Anghami').map(([n,c,u])=>`<a href="${u(q,h)}" target="_blank" title="افتح في ${n}">${logo(n,18)||`<i style="background:${c}"></i>`}</a>`).join('')}</span></td></tr>`;
   }).join('');
 }
 $('m-desc').addEventListener('input',renderMix);
@@ -1375,13 +1434,21 @@ async function shazamReel(file){
     if(isWav){ wavHdr=new Uint8Array(await file.slice(0,44).arrayBuffer()); head=44; const dv=new DataView(wavHdr.buffer); bps=dv.getUint32(28,true); align=dv.getUint16(32,true); }
     else { const h=new Uint8Array(await file.slice(0,10).arrayBuffer()); if(h[0]===73&&h[1]===68&&h[2]===51) head=10+ss(h,6); bps=(file.size-head)/dur; }
     const times=[]; for(let t=Math.min(30,dur/3); t<dur-SNIP; t+=step) times.push(t);
-    list.innerHTML=times.map((t,i)=>`<tr id="shz-r${i}"><td>${i+1}</td><td class="latin">${fmt(t)}</td><td class="st"></td></tr>`).join('');
+    list.innerHTML=times.map((t,i)=>`<tr id="shz-r${i}"><td>${i+1}</td><td class="latin">${fmt(t)}</td><td class="nm latin" style="text-align:right"></td><td class="st"></td></tr>`).join('');
+    M.hits=[]; M.yt=null; renderMix();
     const ctx=SH.ctx||(SH.ctx=new AudioContext()); await ctx.resume();
     for(let i=0;i<times.length&&!SH.stop;i++){
       const t=times[i]; let from=head+Math.floor(t*bps); if(isWav) from-=(from-head)%align; const to=Math.min(file.size,from+Math.floor((SNIP+1)*bps));
       let buf; if(isWav){ const hdr=wavHdr.slice(),dv=new DataView(hdr.buffer); dv.setUint32(4,36+(to-from),true); dv.setUint32(40,to-from,true); buf=await new Blob([hdr,file.slice(from,to)]).arrayBuffer(); }
       else buf=await file.slice(from,to).arrayBuffer();
+      const rawBlob=new Blob([buf.slice(0)],{type:isWav?'audio/wav':'audio/mpeg'});
       let ab; try{ ab=await ctx.decodeAudioData(buf); }catch(e){ continue; }
+      if($('m-token').value.trim()){   // identify this piece online while it plays
+        const ri=i, rt=t; recognize(rawBlob,isWav?'snip.wav':'snip.mp3').then(h=>{ const cell=$('shz-r'+ri).querySelector('.nm');
+          if(!h){ cell.textContent='مش معروف'; return; }
+          const dup=M.hits.some(x=>keyOf(x)===keyOf(h)); addHit(rt,h);
+          cell.innerHTML=(dup?'<span style="color:var(--muted)">نفس التراك اللي فات: </span>':'')+esc((h.artist?h.artist+' - ':'')+h.title); }).catch(e=>{ $('shz-r'+ri).querySelector('.nm').textContent='AudD: '+e.message; });
+      }
       now.innerHTML=`<div class="big latin">${fmt(t)}</div><div>المقطع ${i+1} من ${times.length} · شازام بيسمع…</div>`;
       document.querySelectorAll('#shz-list tr').forEach(r=>r.classList.remove('done')); const row=$('shz-r'+i); row.classList.add('done'); row.querySelector('.st').textContent='▶'; row.scrollIntoView({block:'nearest'});
       const src=ctx.createBufferSource(); src.buffer=ab; const g=ctx.createGain(); src.connect(g); g.connect(ctx.destination);
@@ -1390,7 +1457,11 @@ async function shazamReel(file){
       row.querySelector('.st').textContent='✓';
       if(!SH.stop) await new Promise(r=>setTimeout(r,700));
     }
-    if(!SH.stop){ msg('m-msg',`خلص ✓ شغّل ${times.length} مقطع. افتح Library في شازام، هتلاقي التراكات بالترتيب، والجدول ده فيه وقت كل مقطع في الميكس.`,true); logEdit('وضع شازام',file.name,times.length+' مقطع'); }
+    if(!SH.stop){ await new Promise(r=>setTimeout(r,2500));
+      const n=heard().length;
+      msg('m-msg', n?`خلص ✓ لقى ${n} تراك مختلف (كل تراك مرة واحدة)، وقدام كل واحد زرار يفتحه في Spotify أو أنغامي.`
+        :`خلص ✓ شغّل ${times.length} مقطع. افتح Library في شازام على الموبايل، هتلاقي التراكات بالترتيب.`,true);
+      logEdit('وضع شازام',file.name,times.length+' مقطع'+(n?` · ${n} تراك`:'')); }
   }catch(e){ msg('m-msg','حصلت مشكلة: '+e.message,false); }
   SH.running=false; busy(false); go.lastChild.textContent=' اختار الميكس وشغّله لشازام'; now.classList.add('hidden');
 }
@@ -1424,7 +1495,7 @@ async function scanMixFile(file){
       if(isWav){ const hdr=wavHdr.slice(); const dv=new DataView(hdr.buffer); dv.setUint32(4,36+(to-from),true); dv.setUint32(40,to-from,true);
         buf=await new Blob([hdr,file.slice(from,to)]).arrayBuffer(); }
       else buf=await file.slice(from,to).arrayBuffer();
-      try{ const pcm=await decodeMono(buf); if(pcm.length>FP.SR*3) await identify(pcm,t); }catch(e){}
+      try{ const raw={blob:new Blob([buf.slice(0)],{type:isWav?'audio/wav':'audio/mpeg'}),name:isWav?'snip.wav':'snip.mp3'}; const pcm=await decodeMono(buf); if(pcm.length>FP.SR*3) await identify(pcm,t,raw); }catch(e){}
       prog.firstElementChild.style.width=((i+1)/times.length*100)+'%';
       $('m-live').lastElementChild.textContent=`بيسمع ${fmt(t)} من ${fmt(dur)} · عرف ${heard().length} تراك`;
     }
@@ -2028,6 +2099,146 @@ $('r-daw').onclick=async e=>{
     try{ await navigator.clipboard.writeText(prompt); }catch(e){}
     const url=ai.dataset.ai==='suno'?'https://suno.com/create':'https://www.udio.com/create'; const a=document.createElement('a'); a.href=url; a.target='_blank'; document.body.appendChild(a); a.click(); a.remove();
     msg('r-msg','اتفتح الموقع، ووصف الستايل اتنسخ: "'+prompt+'". الصقه هناك وارفع ملف الـ Vocals.',true); }
+};
+
+/* ================= Mashup (اعمل ماشاب) ================= */
+const MX={items:[],mode:'mega',out:null,ctx:null,src:null,t0:0,from:0,playing:false,raf:0,tl:[]};
+const camNum=c=>parseInt(c), camLet=c=>c.slice(-1);
+const camDist=(a,b)=>{const d=Math.abs(camNum(a)-camNum(b));return Math.min(d,12-d)+(camLet(a)===camLet(b)?0:1);};
+const camOk=(a,b)=>camDist(a,b)<=1;
+function keyShift(k,n){ const t=((k.tonic+n)%12+12)%12, minor=k.mode==='minor';
+  const CAM_MAJ=[8,3,10,5,12,7,2,9,4,11,6,1],CAM_MIN=[5,12,7,2,9,4,11,6,1,8,3,10];
+  return {tonic:t,mode:k.mode,name:NOTES[t]+(minor?'m':''),camelot:minor?CAM_MIN[t]+'A':CAM_MAJ[t]+'B'}; }
+function resampleLin(chs,r){ // read r× faster: pitch ×r, length ÷r
+  return chs.map(x=>{const n=Math.floor(x.length/r),y=new Float32Array(n);for(let i=0;i<n;i++){const p=i*r,a=p|0,f=p-a;y[i]=x[a]*(1-f)+(x[a+1]||0)*f;}return y;}); }
+function tempoPitch(chs,f,n){ const r=Math.pow(2,n/12); return Math.abs(r-1)<1e-6 ? wsola(chs,f) : resampleLin(wsola(chs,f/r),r); }
+async function decodeStereo(file){ const ab=await file.arrayBuffer(); const b=await new OfflineAudioContext(2,1,SR_OUT).decodeAudioData(ab);
+  const L=b.getChannelData(0), R=b.numberOfChannels>1?b.getChannelData(1):L; return {buf:b,chs:[new Float32Array(L),new Float32Array(R)]}; }
+async function mxAdd(files){
+  files=files.filter(f=>AUDIO.test(f.name)); if(!files.length) return;
+  busy(true); $('x-area').classList.remove('hidden');
+  for(let i=0;i<files.length&&MX.items.length<12;i++){
+    const f=files[i]; $('x-count').textContent=`بيحلل ${i+1} من ${files.length}: ${f.name}`; await tick();
+    try{ const {buf}=await decodeStereo(f); const bpm=detectBpm(buf)||120, key=detectKey(buf);
+      MX.items.push({file:f,name:cleanName(f.name),bpm,key,phase:beatPhase(buf,bpm),dur:buf.duration}); }
+    catch(e){ msg('x-msg','مقدرش يقرا: '+f.name,false); }
+  }
+  busy(false); mxRender();
+}
+function mxRender(){
+  $('x-count').textContent=MX.items.length?`${MX.items.length} أغنية`+(MX.items.length<2?' · ضيف أغنية كمان على الأقل':''):'ضيف من 2 لحد 12 أغنية';
+  $('x-list').innerHTML=MX.items.map((it,i)=>{const prev=MX.items[i-1], ok=!prev||camOk(prev.key.camelot,it.key.camelot);
+    return `<tr><td>${i+1}</td><td class="latin" style="text-align:right">${esc(it.name)}</td><td class="latin">${it.bpm}</td>
+    <td class="latin"><span class="src ${ok?'ear':'desc'}">${it.key.name} · ${it.key.camelot}</span></td>
+    <td style="white-space:nowrap"><button class="btn" style="padding:4px 9px" data-a="up" data-i="${i}">↑</button> <button class="btn" style="padding:4px 9px" data-a="dn" data-i="${i}">↓</button> <button class="btn" style="padding:4px 9px" data-a="rm" data-i="${i}">✕</button></td></tr>`;}).join('');
+  $('x-run').disabled=MX.items.length<2;
+}
+$('x-list').onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i,a=b.dataset.a,L=MX.items;
+  if(a==='rm')L.splice(i,1); if(a==='up'&&i>0)[L[i-1],L[i]]=[L[i],L[i-1]]; if(a==='dn'&&i<L.length-1)[L[i+1],L[i]]=[L[i],L[i+1]]; mxRender();};
+$('x-sort').onclick=()=>{ // harmonic order: each next song = closest key (then closest BPM)
+  const rest=MX.items.slice(1), out=[MX.items[0]];
+  while(rest.length){ const last=out[out.length-1]; rest.sort((a,b)=>camDist(last.key.camelot,a.key.camelot)-camDist(last.key.camelot,b.key.camelot)||Math.abs(a.bpm-last.bpm)-Math.abs(b.bpm-last.bpm)); out.push(rest.shift()); }
+  MX.items=out; mxRender(); };
+$('x-add').onclick=()=>$('x-files').click();
+$('x-files').onchange=()=>{const f=[...$('x-files').files];$('x-files').value='';mxAdd(f);};
+$('x-folder').onclick=async()=>{ if(APP&&APP.pickFolder){ const f=await pickAudioFolder('اختار فولدر الأغاني'); if(f) mxAdd(f); } else $('x-files').click(); };
+$('x-modes').onclick=e=>{const b=e.target.closest('.genre');if(!b)return;MX.mode=b.dataset.m;document.querySelectorAll('#x-modes .genre').forEach(x=>x.classList.toggle('on',x===b));
+  $('x-barsbox').classList.toggle('hidden',MX.mode!=='mega');};
+const nearCand=(bpm,target)=>[bpm/2,bpm,bpm*2].reduce((a,c)=>Math.abs(Math.log(target/c))<Math.abs(Math.log(target/a))?c:a,bpm);
+async function masterTo(chsL,chsR,sr,target){
+  const N=chsL.length, out=new AudioBuffer({length:N,numberOfChannels:2,sampleRate:sr}); out.copyToChannel(chsL,0); out.copyToChannel(chsR,1);
+  let gain=Math.pow(10,(target-await lufs(out))/20);
+  { const tmp=[chsL.slice(),chsR.slice()]; limit(tmp,sr,gain); const tb=new AudioBuffer({length:N,numberOfChannels:2,sampleRate:sr}); tb.copyToChannel(tmp[0],0); tb.copyToChannel(tmp[1],1);
+    const d=target-await lufs(tb); if(d>0.3) gain*=Math.pow(10,Math.min(4,d)/20); }
+  const chs=[chsL,chsR]; limit(chs,sr,gain); out.copyToChannel(chs[0],0); out.copyToChannel(chs[1],1); return out;
+}
+$('x-run').onclick=async()=>{
+  if(MX.items.length<2) return; mxStop(); busy(true); $('x-run').disabled=true; const prog=$('x-prog'); prog.classList.add('show'); $('x-tl').textContent='';
+  const P=(p,t)=>{prog.firstElementChild.style.width=(p*100)+'%';$('x-msg').className='msg show ok';$('x-msg').textContent=t;};
+  try{
+    const sr=SR_OUT, items=MX.items;
+    const bpms=items.map(i=>i.bpm).sort((a,b)=>a-b), auto=bpms[Math.floor(bpms.length/2)];
+    const target=parseFloat($('x-bpm').value)||auto, barT=4*60/target;
+    if(MX.mode==='mega'){
+      const bars=+$('x-bars').value, T=8, segLen=Math.round((bars+T)*barT*sr), stepLen=Math.round(bars*barT*sr), tLen=Math.round(T*barT*sr);
+      const total=stepLen*(items.length-1)+segLen, L=new Float32Array(total), R=new Float32Array(total);
+      let prevKey=null; MX.tl=[];
+      for(let k=0;k<items.length;k++){
+        const it=items[k]; P(k/items.length*0.85,`بيجهّز ${k+1} من ${items.length}: ${it.name}`); await tick();
+        const {chs}=await decodeStereo(it.file), cand=nearCand(it.bpm,target), bo=4*60/cand*sr;
+        // strongest part: the window of `bars` bars with the most energy (skipping the very start)
+        const st0=Math.round((it.phase%(60/cand))*sr), nb=Math.floor((chs[0].length-st0)/bo);
+        const e=[]; for(let b=0;b<nb;b++){let s=0;const a=st0+Math.round(b*bo);for(let i=a;i<a+bo;i+=64)s+=chs[0][i]*chs[0][i];e.push(s);}
+        const need=bars+T; let best=0,bs=Math.min(8,Math.max(0,nb-need));
+        for(let b=Math.min(8,Math.max(0,nb-need));b+need<=nb;b++){let s=0;for(let j=b;j<b+bars;j++)s+=e[j];if(s>best){best=s;bs=b;}}
+        const a=st0+Math.round(bs*bo), z=Math.min(chs[0].length,a+Math.round(need*bo)+sr);
+        const sec=[chs[0].slice(a,z),chs[1].slice(a,z)];
+        let n=0; if($('x-key').checked&&prevKey){ let bestN=0,bd=99; for(const c of [0,1,-1,2,-2]){const d=camDist(prevKey.camelot,keyShift(it.key,c).camelot);if(d<bd){bd=d;bestN=c;}} n=bd<=1?bestN:0; }
+        const y=tempoPitch(sec,target/cand,n), key2=keyShift(it.key,n); prevKey=key2;
+        const off=k*stepLen; MX.tl.push({t:off/sr,name:it.name,key:key2,n});
+        // place it: equal-power crossfade over the transition, bass swap in the middle
+        for(let c=0;c<2;c++){ const src=y[c], dst=c?R:L, hp=biquadRun(src.subarray(0,tLen),'hp',200,.7,sr);
+          for(let i=0;i<Math.min(segLen,src.length)&&off+i<total;i++){
+            let v=src[i];
+            if(k>0&&i<tLen){ const w=i/tLen; v=(w<0.5?hp[i]:src[i])*Math.sin(w*Math.PI/2); }
+            const tail=segLen-tLen;
+            if(k<items.length-1&&i>=tail){ const w=(i-tail)/tLen; v=(w<0.5?src[i]:hpTail(src,i,sr))*Math.cos(w*Math.PI/2); }   // outgoing: its bass leaves at the halfway point
+            if(k===items.length-1&&i>=segLen-tLen){ v*=1-(i-(segLen-tLen))/tLen; }
+            dst[off+i]+=v; } }
+      }
+      P(.9,'بيظبط الصوت النهائي…'); await tick();
+      MX.out=await masterTo(L,R,sr,-9);
+      $('x-tl').innerHTML='<b>ترتيب الماشاب:</b><br>'+MX.tl.map((x,i)=>`<span class="latin">${fmt(x.t)}</span> ${esc(x.name)} <span class="latin" style="color:var(--muted)">(${x.key.camelot}${x.n?`, ${x.n>0?'+':''}${x.n}`:''})</span>`).join('<br>');
+      msg('x-msg',`خلص ✓ ميجامكس ${items.length} أغاني على ${Math.round(target)} BPM · ${fmt(MX.out.duration)}`,true);
+    } else {
+      if(!(APP&&APP.separateFull)) throw new Error('"صوت على مزيكا" محتاج فصل الصوت بالذكاء الاصطناعي، وده شغّال في البرنامج المتسطّب بس');
+      const A=items[0], B=items[1];
+      P(.05,'الذكاء الاصطناعي بيفصل صوت الأغنية الأولى…'); const da=await decodeStereo(A.file); const sa=await APP.separateFull(da.chs[0],da.chs[1]);
+      P(.4,'وبيفصل مزيكا الأغنية التانية…'); const db=await decodeStereo(B.file); const sb=await APP.separateFull(db.chs[0],db.chs[1]);
+      const tB=parseFloat($('x-bpm').value)||B.bpm, candA=nearCand(A.bpm,tB);
+      // key: move A's vocal to B's key (relative major/minor counts as the same key)
+      let tgt=B.key.tonic; if(A.key.mode!==B.key.mode) tgt=A.key.mode==='minor'?(B.key.tonic+9)%12:(B.key.tonic+3)%12;
+      let n=((tgt-A.key.tonic)%12+12)%12; if(n>6) n-=12; if(!$('x-key').checked) n=0;
+      P(.75,'بيظبط سرعة ومقام الصوت…'); await tick();
+      const fB=tB/nearCand(B.bpm,tB);
+      const voc=tempoPitch([new Float32Array(sa.vL),new Float32Array(sa.vR)],tB/candA,n);
+      const mus=Math.abs(fB-1)>0.003?wsola([new Float32Array(sb.mL),new Float32Array(sb.mR)],fB):[new Float32Array(sb.mL),new Float32Array(sb.mR)];
+      const barB=4*60/tB*sr, phB=(B.phase%(60/nearCand(B.bpm,tB)))/fB*sr, phA=(A.phase%(60/candA))*candA/tB*sr;
+      const startBars=Math.min(8,Math.floor((mus[0].length/barB)/4));
+      const off=Math.max(0,Math.round(phB+startBars*barB-phA)), N=mus[0].length, L=mus[0].slice(), R=mus[1].slice(), fade=Math.round(2*sr);
+      for(let i=0;i<voc[0].length&&off+i<N;i++){ const g=Math.min(1,(N-(off+i))/fade); L[off+i]+=voc[0][i]*1.1*g; R[off+i]+=voc[1][i]*1.1*g; }
+      P(.9,'بيظبط الصوت النهائي…'); await tick();
+      MX.out=await masterTo(L,R,sr,-9); MX.tl=[];
+      $('x-tl').innerHTML=`<b>صوت:</b> ${esc(A.name)} <span class="latin">(${A.key.name}${n?` → ${keyShift(A.key,n).name}, ${n>0?'+':''}${n}`:''})</span><br><b>مزيكا:</b> ${esc(B.name)} <span class="latin">(${B.key.name}, ${Math.round(tB)} BPM)</span>`;
+      msg('x-msg',`خلص ✓ ماشاب صوت "${A.name}" على مزيكا "${B.name}" · ${fmt(MX.out.duration)}`,true);
+    }
+    mxUi();
+  }catch(e){ msg('x-msg','حصلت مشكلة: '+e.message,false); }
+  prog.classList.remove('show'); $('x-run').disabled=false; busy(false);
+};
+const _hpCache=new WeakMap();
+function hpTail(src,i,sr){ let h=_hpCache.get(src); if(!h){ h=biquadRun(src,'hp',200,.7,sr); _hpCache.set(src,h); } return h[i]; }
+function mxHead(){ return MX.playing?Math.min(MX.out.duration,MX.from+(MX.ctx.currentTime-MX.t0)):MX.from; }
+function mxStop(){ if(MX.src){try{MX.src.onended=null;MX.src.stop();}catch(e){}} MX.src=null; if(MX.playing) MX.from=mxHead(); MX.playing=false; cancelAnimationFrame(MX.raf); $('x-play').textContent='▶ تشغيل'; }
+function mxPlay(from){ mxStop(); const ctx=MX.ctx||(MX.ctx=new AudioContext()); ctx.resume(); const s=ctx.createBufferSource(); s.buffer=MX.out; s.connect(ctx.destination);
+  const t=ctx.currentTime+0.05; s.start(t,Math.max(0,Math.min(from,MX.out.duration-0.1))); s.onended=()=>{mxStop();MX.from=0;}; Object.assign(MX,{src:s,t0:t,from:Math.max(0,from),playing:true}); $('x-play').textContent='⏸ إيقاف';
+  const loop=()=>{const h=mxHead();$('x-pos').value=h/MX.out.duration*1000;$('x-time').textContent=fmt(h);if(MX.playing)MX.raf=requestAnimationFrame(loop);};loop(); }
+function mxUi(){ const has=!!MX.out; $('x-play').disabled=$('x-save').disabled=$('x-pos').disabled=!has; }
+$('x-play').onclick=()=>{ MX.playing?mxStop():mxPlay(MX.from); };
+$('x-pos').oninput=e=>{ if(!MX.out) return; const t=e.target.value/1000*MX.out.duration; $('x-time').textContent=fmt(t); if(MX.playing) mxPlay(t); else MX.from=t; };
+$('x-save').onclick=async()=>{
+  mxStop(); busy(true); const prog=$('x-prog'); prog.classList.add('show'); $('x-save').disabled=true;
+  try{
+    const isWav=$('x-fmt').value==='wav', title=(MX.mode==='mega'?'Megamix':'Mashup')+' - DJ ISLAM AYMAN', base=safeFile(title+' ('+MX.items.slice(0,3).map(i=>i.name).join(', ')+(MX.items.length>3?'…':'')+')');
+    let blob; if(isWav) blob=wav16(MX.out);
+    else { const mp3=await encodeMp3(MX.out,p=>{prog.firstElementChild.style.width=(p*100)+'%';$('x-msg').className='msg show ok';$('x-msg').textContent='بيحفظ… '+Math.round(p*100)+'%';});
+      const frames=[textFrame('TIT2',title),textFrame('TPE1','DJ ISLAM AYMAN'),apicFrame(await coverJpeg(MX.mode==='mega'?'MEGAMIX':'MASHUP'))];
+      const head=new Uint8Array(10),fl=frames.reduce((a,b)=>a+b.length,0); head.set([73,68,51,4,0,0],0); head.set(ssBytes(fl+1024),6);
+      blob=new Blob([head,...frames,new Uint8Array(1024),...mp3],{type:'audio/mpeg'}); }
+    const r=await saveOut(blob,base+(isWav?'.wav':'.mp3'));
+    if(r){ savedMsg('x-msg',r); logEdit('اعمل ماشاب',MX.items.map(i=>i.name).join(' + '),'→ '+r.name); } else $('x-msg').className='msg';
+  }catch(e){ msg('x-msg','حصلت مشكلة: '+e.message,false); }
+  prog.classList.remove('show'); $('x-save').disabled=false; busy(false);
 };
 
 /* ================= Data & history screen ================= */
