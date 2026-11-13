@@ -181,7 +181,8 @@ img.gear{width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 10px 14p
 @media (prefers-reduced-motion:reduce){#welcome,.w-deck,.w-small,.w-name,.w-sub,.w-bar i{animation-duration:.01s!important;animation-delay:0s!important}}
 .shz-now{margin-top:12px;padding:14px;border-radius:12px;background:#0d0b0f;border:1px solid var(--line);text-align:center;color:var(--muted)}
 .shz-now .big{font:900 40px/1 Consolas,monospace;color:#fff;margin-bottom:6px}
-.open-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:999px;font-weight:700;font-size:13px;text-decoration:none!important;white-space:nowrap}
+.open-btn{color:var(--text);display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:999px;font-weight:700;font-size:13px;text-decoration:none!important;white-space:nowrap}
+.open-btn:hover{border-color:var(--wine3)!important}
 .open-btn.sp{background:rgba(30,215,96,.14);border:1px solid rgba(30,215,96,.45);color:#9ff0bf!important}
 .open-btn.an{background:rgba(161,60,255,.14);border:1px solid rgba(161,60,255,.45);color:#d9b8ff!important}
 .apps .more{display:inline-flex;gap:8px;align-items:center;margin-inline-start:4px}.apps .more a{opacity:.85}.apps .more a:hover{opacity:1}
@@ -189,6 +190,13 @@ img.gear{width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 10px 14p
 .gear-logo{display:inline-grid;place-items:center;width:64px;height:64px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))}
 .gear-logo.big{width:150px;height:150px;margin:-14px auto 4px;display:grid}
 .sp-out{margin-top:10px}.sp-out ul{padding-inline-start:20px;line-height:1.9}.sp-out a{color:var(--wine3)}
+.n-list{display:grid;gap:8px;margin-top:12px}
+.n-item{display:flex;align-items:center;gap:12px;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:#120f14;flex-wrap:wrap}
+.n-item img,.n-ph{width:48px;height:48px;border-radius:8px;object-fit:cover;flex:none;background:#221c25}
+.n-rank{width:26px;text-align:center;color:var(--muted);font-weight:800;font-variant-numeric:tabular-nums}
+.n-txt{flex:1;min-width:180px;display:grid;gap:2px}.n-txt small{color:var(--muted)}
+.n-chk input{accent-color:var(--wine2);width:17px;height:17px}
+#n-src .tab{display:inline-flex;align-items:center;gap:6px}
 footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding:20px;direction:ltr}
 </style>
 </head>
@@ -322,6 +330,9 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
       <div class="module" onclick="go('remix')"><span class="led"></span>
         <img class="gear" src="icons/keys.png" alt="">
         <h3>اعمل ريمكس</h3><p>حط أغنية واختار House أو Techno أو Afro أو مهرجانات… والبرنامج يعمل الريمكس، ويصدّره لـ Ableton و FL و Logic.</p></div>
+      <div class="module" onclick="go('new')"><span class="led"></span>
+        <img class="gear" src="icons/charts.png" alt="">
+        <h3>الجديد والترند</h3><p>إصدارات جديدة لكل نوع مزيكا (House، Afro، Latin، Reggaeton، R&amp;B…) وترند النهاردة من Spotify و YouTube و Beatport.</p></div>
       <div class="module" onclick="go('shz')"><span class="led"></span>
         <span class="gear-logo big" id="home-shz"></span>
         <h3>شازام</h3><p>افتح شازام جوه البرنامج، وأي أغنية يعرفها تفتحها في Spotify أو أنغامي بدوسة.</p></div>
@@ -723,6 +734,47 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
     </div>
   </section>
 
+  <!-- NEW RELEASES & TRENDING -->
+  <section id="v-new" class="hidden">
+    <div class="panel">
+      <div class="ptitle"><img class="gear" src="icons/charts.png" alt=""><div><h2>الجديد والترند</h2></div>
+        <button class="btn back" onclick="go('home')">رجوع</button></div>
+      <div class="tabs" id="n-tabs"><span class="tab on" data-t="new">إصدارات جديدة</span><span class="tab" data-t="trend">ترند النهاردة</span><span class="tab" data-t="set">الإعدادات</span></div>
+
+      <div id="n-new">
+        <div class="genres" id="n-genres"></div>
+        <div class="row" style="margin-top:14px" id="n-src">
+          <span class="tab on" data-s="sp"></span><span class="tab" data-s="yt"></span><span class="tab" data-s="bp"></span>
+          <select id="n-market" data-keep style="margin-inline-start:auto"></select>
+        </div>
+      </div>
+
+      <div id="n-trend" class="hidden">
+        <div class="row"><select id="n-region" data-keep></select>
+          <button class="btn primary" id="n-trend-go">هات الترند</button></div>
+        <div class="row" style="margin-top:12px" id="n-trend-links"></div>
+      </div>
+
+      <div id="n-set" class="hidden">
+        <h3 style="margin:0 0 6px;font-size:16px" class="logo-btn" id="n-yt-h">YouTube API Key</h3>
+        <input type="text" id="n-yt-key" data-keep class="latin" placeholder="الصق الـ API Key هنا">
+        <ol class="steps" style="margin-top:10px">
+          <li>افتح <a href="https://console.cloud.google.com/apis/library/youtube.googleapis.com" target="_blank" style="color:var(--wine3)">YouTube Data API v3</a> وادخل بحساب جوجل، واعمل Project جديد لو طلب.</li>
+          <li>دوس <b>Enable</b>.</li>
+          <li>من <b>Credentials</b> دوس <b>Create credentials</b> ← <b>API key</b>، وانسخه والصقه هنا. مجاني لحد عدد كبير من الطلبات في اليوم.</li>
+        </ol>
+        <div class="note">سبوتيفاي بيستخدم نفس الحساب اللي ربطته في "اعرف أسامي التراكات" ← الإعدادات.</div>
+      </div>
+
+      <div class="msg" id="n-msg"></div>
+      <div id="n-bar" class="row hidden" style="margin-top:12px">
+        <span id="n-count" style="color:var(--muted);font-size:14px"></span>
+        <button class="btn primary logo-btn" id="n-pl" style="margin-inline-start:auto">اعمل بلاي ليست على Spotify من اللي اخترته</button>
+      </div>
+      <div class="n-list" id="n-list"></div>
+    </div>
+  </section>
+
   <!-- TAG REMOVER -->
   <section id="v-tag" class="hidden">
     <div class="panel">
@@ -834,6 +886,7 @@ function go(v){
   document.getElementById('v-'+v).classList.remove('hidden');
   if(v==='search') setTimeout(()=>document.getElementById('q').focus(),50);
   if(v==='data') renderData();
+  if(v==='new'&&!NW.items.length) nLoad();
 }
 function busy(on){
   document.getElementById('vu').classList.toggle('off',!on);
@@ -2545,6 +2598,112 @@ async function fRun(file){
     au.addEventListener('seeking',liveReset); au.addEventListener('ended',()=>stopLive()); fTap={ctx}; }
   await fTap.ctx.resume(); startLive(); au.play(); $('f-stop').classList.remove('hidden');
 }
+
+/* ================= New releases & trending today ================= */
+const NG=[ // name, Spotify genre, YouTube search, Beatport [slug,id]
+ ['House','house','house music',['house',5]],['Afro House','afro house','afro house',['afro-house',89]],['Tech House','tech house','tech house',['tech-house',11]],
+ ['Deep House','deep house','deep house',['deep-house',12]],['Melodic Techno','melodic techno','melodic techno',['melodic-house-techno',90]],
+ ['Techno','techno','techno',['techno-peak-time-driving',6]],['Progressive','progressive house','progressive house',['progressive-house',15]],
+ ['Organic House','organic house','organic house',['organic-house-downtempo',93]],['Indie Dance','indie dance','indie dance',['indie-dance',37]],
+ ['Amapiano','amapiano','amapiano',null],['Latin','latin','latin music',null],['Reggaeton','reggaeton','reggaeton',null],['Merengue','merengue','merengue',null],
+ ['Bachata','bachata','bachata',null],['Dembow','dembow','dembow',null],['R&B','r&b','r&b',null],['Hip Hop','hip hop','hip hop',null],['Pop','pop','pop music',null],
+ ['Dance Pop','dance pop','dance pop',null],['Drum & Bass','drum and bass','drum and bass',['drum-bass',1]],['Trance','trance','trance',['trance-main-floor',7]],
+ ['عربي','arabic pop','اغاني عربي جديدة',null],['مهرجانات','mahraganat','مهرجانات جديدة',null]];
+const REGIONS=[['US','عالمي (أمريكا)'],['GB','بريطانيا'],['EG','مصر'],['SA','السعودية'],['AE','الإمارات'],['FR','فرنسا'],['DE','ألمانيا'],['ES','إسبانيا'],['BR','البرازيل'],['MX','المكسيك'],['NG','نيجيريا'],['ZA','جنوب أفريقيا']];
+const NW={genre:0,src:'sp',items:[]};
+$('n-genres').innerHTML=NG.map((g,i)=>`<button class="genre${i?'':' on'}" data-g="${i}"><b>${esc(g[0])}</b></button>`).join('');
+$('n-market').innerHTML=REGIONS.map(([c,n])=>`<option value="${c}">${n}</option>`).join(''); $('n-region').innerHTML=$('n-market').innerHTML;
+const srcBtn={sp:logo('Spotify',16)+' Spotify',yt:logo('YouTube',16)+' YouTube',bp:logo('Beatport',16)+' Beatport'};
+document.querySelectorAll('#n-src [data-s]').forEach(t=>t.innerHTML=srcBtn[t.dataset.s]);
+$('n-yt-h').insertAdjacentHTML('afterbegin',logo('YouTube',20)); $('n-pl').insertAdjacentHTML('afterbegin',logo('Spotify',16));
+$('n-trend-links').innerHTML=[['Spotify Top 50 Global','Spotify','https://open.spotify.com/playlist/37i9dQZEVXbMDoHDwVN2tF'],['Spotify Charts','Spotify','https://charts.spotify.com/charts/view/regional-global-daily/latest'],
+  ['Beatport Top 100','Beatport','https://www.beatport.com/top-100'],['YouTube Charts','YouTube','https://charts.youtube.com/charts/TopSongs/global/weekly'],['Shazam Global Top 200','Shazam','https://www.shazam.com/charts/top-200/world']]
+  .map(([n,l,u])=>`<a class="open-btn" style="border:1px solid var(--line)" href="${u}" target="_blank">${logo(l,16)}${n}</a>`).join('');
+document.querySelectorAll('#n-tabs .tab').forEach(t=>t.onclick=()=>{ document.querySelectorAll('#n-tabs .tab').forEach(x=>x.classList.toggle('on',x===t));
+  ['new','trend','set'].forEach(k=>$('n-'+k).classList.toggle('hidden',k!==t.dataset.t)); if(t.dataset.t==='new') nLoad(); });
+$('n-genres').onclick=e=>{const b=e.target.closest('.genre'); if(!b) return; NW.genre=+b.dataset.g; document.querySelectorAll('#n-genres .genre').forEach(x=>x.classList.toggle('on',x===b)); nLoad();};
+$('n-src').onclick=e=>{const t=e.target.closest('[data-s]'); if(!t) return; NW.src=t.dataset.s; document.querySelectorAll('#n-src [data-s]').forEach(x=>x.classList.toggle('on',x===t)); nLoad();};
+$('n-market').onchange=()=>nLoad();
+const spId=()=>$('sp-client').value.trim(), ytKey=()=>$('n-yt-key').value.trim();
+async function spGet(p){ if(!APP||!APP.spotifyGet) throw new Error('سبوتيفاي شغّال في البرنامج المتسطّب بس'); if(!spId()) throw new Error('NEED_SP'); return APP.spotifyGet(spId(),p); }
+async function ytGet(p){ if(!ytKey()) throw new Error('NEED_YT'); if(APP&&APP.ytApi) return APP.ytApi(p,ytKey());
+  const r=await fetch('https://www.googleapis.com/youtube/v3'+p+'&key='+encodeURIComponent(ytKey())); const j=await r.json(); if(!r.ok) throw new Error((j.error&&j.error.message)||'YouTube'); return j; }
+const fmtViews=n=>n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?Math.round(n/1e3)+'K':String(n||'');
+function nItemsFromSpotifyTracks(tracks){ return tracks.map(t=>({kind:'sp',title:t.name,artist:(t.artists||[]).map(a=>a.name).join(', '),date:t.album&&t.album.release_date||'',
+  img:t.album&&t.album.images&&(t.album.images[2]||t.album.images[0]||{}).url||'',url:t.external_urls&&t.external_urls.spotify||'',spotify:t.external_urls&&t.external_urls.spotify||'',pop:t.popularity||0})); }
+async function nYouTubeItems(j){ const ids=(j.items||[]).map(v=>v.id&&(v.id.videoId||v.id)).filter(Boolean);
+  let stats={}; if(ids.length&&!(j.items[0].statistics)){ const s=await ytGet('/videos?part=statistics&id='+ids.join(',')); for(const v of s.items||[]) stats[v.id]=v.statistics; }
+  return (j.items||[]).map(v=>{ const id=v.id.videoId||v.id, sn=v.snippet||{}, st=v.statistics||stats[id]||{}, name=cleanName(sn.title||''), at=splitAT(name);
+    return {kind:'yt',title:at.title,artist:at.artist||sn.channelTitle||'',date:(sn.publishedAt||'').slice(0,10),img:sn.thumbnails&&(sn.thumbnails.default||{}).url||'',
+      url:'https://www.youtube.com/watch?v='+id,views:+st.viewCount||0}; }); }
+function nRender(items,title){
+  NW.items=items; $('n-msg').className='msg';
+  $('n-bar').classList.toggle('hidden',!items.length); $('n-count').textContent=title+' · '+items.length;
+  $('n-list').innerHTML=items.map((it,i)=>{ const q=encodeURIComponent((it.artist?it.artist+' ':'')+it.title);
+    return `<div class="n-item"><label class="n-chk"><input type="checkbox" data-i="${i}"></label><span class="n-rank">${i+1}</span>${it.img?`<img src="${esc(it.img)}" alt="" loading="lazy">`:'<span class="n-ph"></span>'}
+      <div class="n-txt"><b class="latin">${esc(it.title)}</b><small class="latin">${esc(it.artist)}${it.date?' · '+esc(it.date):''}${it.views?' · '+fmtViews(it.views)+' مشاهدة':''}</small></div>
+      <div class="apps"><a class="open-btn sp" href="${it.spotify||'https://open.spotify.com/search/'+q}" target="_blank">${logo('Spotify',15)}Spotify</a>
+        <a class="open-btn an" href="https://play.anghami.com/search/${q}" target="_blank">${logo('Anghami',15)}أنغامي</a>
+        <span class="more">${it.kind==='yt'?`<a href="${it.url}" target="_blank" title="افتح في YouTube">${logo('YouTube',18)}</a>`:`<a href="https://www.youtube.com/results?search_query=${q}" target="_blank" title="YouTube">${logo('YouTube',18)}</a>`}
+        <a href="https://www.beatport.com/search?q=${q}" target="_blank" title="Beatport">${logo('Beatport',18)}</a><a href="https://soundcloud.com/search?q=${q}" target="_blank" title="SoundCloud">${logo('SoundCloud',18)}</a></span></div></div>`;}).join('');
+}
+function nError(e){
+  const m=String(e.message||e);
+  if(m==='NEED_SP'||m==='login') return msg('n-msg','اربط حساب Spotify الأول: "اعرف أسامي التراكات" ← الإعدادات ← Spotify',false);
+  if(m==='NEED_YT') return msg('n-msg','حط YouTube API Key الأول من تاب "الإعدادات" هنا',false);
+  msg('n-msg','حصلت مشكلة: '+m.replace('SPOTIFY_REFUSED: ','سبوتيفاي رفض: '),false);
+}
+let nSeq=0;
+async function nLoad(){
+  const g=NG[NW.genre], seq=++nSeq, Y=new Date().getFullYear(), mk=$('n-market').value;
+  $('n-list').innerHTML=''; $('n-bar').classList.add('hidden');
+  if(NW.src==='bp'){ $('n-msg').className='msg';
+    $('n-list').innerHTML=g[3]?`<div class="daw"><div style="font-size:16px;font-weight:800;margin-bottom:10px">${esc(g[0])} على Beatport</div><div class="apps" style="gap:8px">
+      <a class="open-btn" style="border:1px solid var(--line)" href="https://www.beatport.com/genre/${g[3][0]}/${g[3][1]}/top-100" target="_blank">${logo('Beatport',16)}Top 100</a>
+      <a class="open-btn" style="border:1px solid var(--line)" href="https://www.beatport.com/genre/${g[3][0]}/${g[3][1]}" target="_blank">${logo('Beatport',16)}الإصدارات الجديدة</a>
+      <a class="open-btn" style="border:1px solid var(--line)" href="https://www.beatport.com/genre/${g[3][0]}/${g[3][1]}/hype-100" target="_blank">${logo('Beatport',16)}Hype 100</a></div>
+      <div class="note">بيتبورت مالوش طريقة رسمية تخلّي البرامج تقرا قوايمه، فالزراير دي بتفتح صفحاته الرسمية.</div></div>`
+      :`<div class="note">النوع ده مش موجود كقسم لوحده على Beatport. جرّب Spotify أو YouTube.</div>`; return; }
+  busy(true); $('n-msg').className='msg show ok'; $('n-msg').textContent='بيجيب الجديد…';
+  try{
+    if(NW.src==='sp'){
+      const j=await spGet(`/search?type=track&limit=50&market=${mk}&q=`+encodeURIComponent(`genre:"${g[1]}" year:${Y-1}-${Y}`));
+      let items=nItemsFromSpotifyTracks((j.tracks&&j.tracks.items)||[]);
+      items.sort((a,b)=>(b.date||'').localeCompare(a.date||'')||b.pop-a.pop);
+      if(seq===nSeq) nRender(items,`جديد ${g[0]} على Spotify`);
+    } else {
+      const after=new Date(Date.now()-14*864e5).toISOString();
+      const j=await ytGet(`/search?part=snippet&type=video&videoCategoryId=10&order=viewCount&maxResults=30&regionCode=${mk}&publishedAfter=${after}&q=`+encodeURIComponent(g[2]));
+      const items=await nYouTubeItems(j); if(seq===nSeq) nRender(items,`أكتر ${g[0]} جديد اتشاف على YouTube آخر أسبوعين`);
+    }
+  }catch(e){ if(seq===nSeq) nError(e); }
+  busy(false);
+}
+$('n-trend-go').onclick=async()=>{
+  const rg=$('n-region').value; busy(true); $('n-list').innerHTML=''; $('n-msg').className='msg show ok'; $('n-msg').textContent='بيجيب الترند…';
+  const parts=[], errs=[];
+  try{ const j=await ytGet(`/videos?part=snippet,statistics&chart=mostPopular&videoCategoryId=10&maxResults=50&regionCode=${rg}`); parts.push(...await nYouTubeItems(j)); }catch(e){ errs.push(e); }
+  try{ const j=await spGet(`/search?type=track&limit=50&market=${rg}&q=`+encodeURIComponent(`year:${new Date().getFullYear()}`));
+    const sp=nItemsFromSpotifyTracks((j.tracks&&j.tracks.items)||[]).sort((a,b)=>b.pop-a.pop);
+    for(const it of sp) if(!parts.some(x=>normAr(x.title)===normAr(it.title))) parts.push(it); }catch(e){ errs.push(e); }
+  busy(false);
+  if(parts.length) nRender(parts,`ترند النهاردة (${REGIONS.find(r=>r[0]===rg)[1]}): يوتيوب + الأكثر شعبية على Spotify`);
+  else if(errs.length) nError(errs[0]);
+  if(parts.length&&errs.length) msg('n-msg','جبت اللي قدرت عليه. '+(String(errs[0].message).includes('NEED_YT')?'حط YouTube API Key عشان ترند يوتيوب.':String(errs[0].message).includes('NEED_SP')?'اربط Spotify عشان ترند سبوتيفاي.':''),true);
+};
+$('n-pl').onclick=async()=>{
+  const pick=[...document.querySelectorAll('#n-list input[type=checkbox]:checked')].map(c=>NW.items[+c.dataset.i]);
+  if(!pick.length) return msg('n-msg','علّم على التراكات اللي عايزها الأول',false);
+  if(!APP||!APP.spotifyPlaylist||!spId()) return nError(new Error('NEED_SP'));
+  busy(true);
+  try{ const name='DJ ISLAM AYMAN · '+($('n-count').textContent.split(' · ')[0]).slice(0,60)+' · '+new Date().toLocaleDateString('en-GB');
+    const r=await APP.spotifyPlaylist(spId(),name,pick.map(h=>({artist:h.artist,title:h.title,spotify:h.spotify||''})));
+    $('n-msg').className='msg show '+(r.url?'ok':'err');
+    $('n-msg').innerHTML=r.url?`تمام ✓ اتعملت بلاي ليست فيها ${r.added} تراك. <a class="open-btn sp" href="${r.url}" target="_blank">${logo('Spotify',16)}افتح البلاي ليست</a>`+(r.missing.length?` · ${r.missing.length} مش موجودين على Spotify`:''):'ملقاش التراكات دي على Spotify';
+    logEdit('بلاي ليست Spotify',name,`${r.added}/${pick.length} تراك`); }
+  catch(e){ nError(e); }
+  busy(false);
+};
 
 /* ================= Data & history screen ================= */
 async function renderData(){

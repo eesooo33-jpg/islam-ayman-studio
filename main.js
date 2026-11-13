@@ -187,6 +187,19 @@ ipcMain.handle('spotify-playlist', async (e, clientId, name, tracks) => {
   return { url: pl.external_urls && pl.external_urls.spotify, added: uris.length, missing };
 });
 
+/* ---------- New releases & trends: read-only calls to the official Spotify / YouTube APIs ---------- */
+ipcMain.handle('spotify-get', async (e, clientId, p) => {
+  if (typeof p !== 'string' || !/^\/(search|browse\/new-releases)\?/.test(p)) throw new Error('not allowed');
+  const tok = await spToken(clientId); if (!tok) throw new Error('login');
+  const r = await fetch('https://api.spotify.com/v1' + p, { headers: { Authorization: 'Bearer ' + tok } });
+  const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error('SPOTIFY_REFUSED: ' + ((j.error && j.error.message) || r.status)); return j;
+});
+ipcMain.handle('yt-api', async (e, p, key) => {
+  if (typeof p !== 'string' || !/^\/(search|videos)\?/.test(p)) throw new Error('not allowed');
+  const r = await fetch('https://www.googleapis.com/youtube/v3' + p + '&key=' + encodeURIComponent(key || ''));
+  const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error((j.error && j.error.message) || ('YouTube ' + r.status)); return j;
+});
+
 /* ---------- AI: remove vocals from a part, keep the music ---------- */
 const MODELS = () => app.isPackaged ? path.join(process.resourcesPath, 'models') : path.join(__dirname, 'models');
 ipcMain.handle('separate-full', async (e, L, R) => {

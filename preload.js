@@ -14,6 +14,8 @@ contextBridge.exposeInMainWorld('djApp', {
   spotifyStatus: (id) => ipcRenderer.invoke('spotify-status', id),
   spotifyLogin: (id) => ipcRenderer.invoke('spotify-login', id),
   spotifyPlaylist: (id, name, tracks) => ipcRenderer.invoke('spotify-playlist', id, name, tracks),
+  spotifyGet: (id, path) => ipcRenderer.invoke('spotify-get', id, path),
+  ytApi: (path, key) => ipcRenderer.invoke('yt-api', path, key),
   store: { get: (n) => ipcRenderer.invoke('store-get', n), set: (n, v) => ipcRenderer.invoke('store-set', n, v) },
   lib: { load: () => ipcRenderer.invoke('lib-load'), add: (recs) => ipcRenderer.invoke('lib-add', recs), clear: () => ipcRenderer.invoke('lib-clear') },
   dataDir: () => ipcRenderer.invoke('data-dir'),
