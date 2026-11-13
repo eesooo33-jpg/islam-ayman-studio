@@ -335,7 +335,7 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
         <h3>الجديد والترند</h3><p>إصدارات جديدة لكل نوع مزيكا (House، Afro، Latin، Reggaeton، R&amp;B…) وترند النهاردة من Spotify و YouTube و Beatport.</p></div>
       <div class="module" onclick="go('shz')"><span class="led"></span>
         <span class="gear-logo big" id="home-shz"></span>
-        <h3>شازام</h3><p>افتح شازام جوه البرنامج، وأي أغنية يعرفها تفتحها في Spotify أو أنغامي بدوسة.</p></div>
+        <h3>Shazam</h3><p>افتح Shazam جوه البرنامج، وأي أغنية يعرفها تفتحها في Spotify أو أنغامي بدوسة.</p></div>
       <div class="module" onclick="go('full')"><span class="led"></span>
         <img class="gear" src="icons/speaker.png" alt="">
         <h3>اسمع السيت كامل</h3><p>حط لينك أو ملف السيت، والبرنامج يسمعه كله ويكتبلك كل تراك مرة واحدة.</p></div>
@@ -449,14 +449,14 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
           <div style="font-size:13px;margin-top:4px">MP3 أو WAV · ساعة ميكس بتخلص في دقايق</div>
           <input type="file" id="m-fin" accept=".mp3,.wav,audio/mpeg,audio/wav" hidden></div>
         <div class="daw" id="shz">
-          <h3 style="margin:0 0 6px;font-size:16px" class="logo-btn" id="shz-h">وضع شازام</h3>
+          <h3 style="margin:0 0 6px;font-size:16px" class="logo-btn" id="shz-h">وضع Shazam</h3>
           <ol class="steps" style="margin:4px 0 10px">
             <li>افتح Shazam على الموبايل، ودوس مطوّلاً على زرار Shazam الكبير عشان يشتغل <b>Auto Shazam</b>.</li>
             <li>حط الموبايل جنب سماعة الكمبيوتر، وعلّي الصوت شوية.</li>
-            <li>دوس الزرار تحت واختار ملف الميكس. البرنامج هيقطّعه ويشغّل 12 ثانية من كل دقيقة ورا بعض، وشازام هيتعرّف على كل تراك.</li>
-            <li>لما يخلص، افتح Library في شازام، هتلاقي التراكات كلها بالترتيب.</li>
+            <li>دوس الزرار تحت واختار ملف الميكس. البرنامج هيقطّعه ويشغّل 12 ثانية من كل دقيقة ورا بعض، وShazam هيتعرّف على كل تراك.</li>
+            <li>لما يخلص، افتح Library في Shazam، هتلاقي التراكات كلها بالترتيب.</li>
           </ol>
-          <div class="row"><button class="btn primary logo-btn" id="shz-go">اختار الميكس وشغّله لشازام</button>
+          <div class="row"><button class="btn primary logo-btn" id="shz-go">اختار الميكس وشغّله لـ Shazam</button>
             <select id="shz-step" data-keep><option value="60">مقطع من كل دقيقة</option><option value="90">مقطع كل دقيقة ونص</option><option value="120">مقطع كل دقيقتين</option></select>
             <input type="file" id="shz-file" accept=".mp3,.wav,audio/mpeg,audio/wav" hidden></div>
           <div id="shz-now" class="shz-now hidden"></div>
@@ -465,7 +465,7 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
       </div>
 
       <div id="m-lib" class="hidden">
-        <div class="note" style="margin-top:0">البرنامج بيتعرّف على التراكات زي شازام، بس من غير إنترنت ومن غير اشتراك ومن غير حد أقصى. بيعمل "بصمة صوت" لكل أغنية في مكتبتك مرة واحدة بس، وبعد كده يقدر يعرفها في أي ميكس. كل ما تضيف أغاني أكتر، كل ما يعرف تراكات أكتر.</div>
+        <div class="note" style="margin-top:0">البرنامج بيتعرّف على التراكات زي Shazam، بس من غير إنترنت ومن غير اشتراك ومن غير حد أقصى. بيعمل "بصمة صوت" لكل أغنية في مكتبتك مرة واحدة بس، وبعد كده يقدر يعرفها في أي ميكس. كل ما تضيف أغاني أكتر، كل ما يعرف تراكات أكتر.</div>
         <div class="row" style="margin-top:14px">
           <button class="btn primary" id="lib-add">ضيف فولدر أغاني</button>
           <button class="btn" id="lib-clear">امسح المكتبة</button>
@@ -475,7 +475,7 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
       </div>
 
       <div id="m-set" class="hidden">
-        <label class="f">خدمة التعرّف على الأغاني (نفس تكنولوجيا شازام)</label>
+        <label class="f">خدمة التعرّف على الأغاني (نفس تكنولوجيا Shazam)</label>
         <select id="m-prov" data-keep style="width:100%"><option value="acr">ACRCloud (الأقوى، بتستخدمها منصّات الموسيقى)</option><option value="audd">AudD (الأسهل في التسجيل)</option></select>
         <div id="m-acr-box">
           <label class="f">ACRCloud: Host</label><input type="text" id="m-acr-host" data-keep class="latin" placeholder="identify-eu-west-1.acrcloud.com">
@@ -580,6 +580,12 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
         <li>سجل بكل تعديل عملته على أي أغنية</li>
       </ul>
       <div class="row"><button class="btn primary" id="d-open">افتح فولدر البيانات</button></div>
+      <h3 style="margin:22px 0 6px">أصوات الأفكتات</h3>
+      <div class="row">
+        <label class="chk" style="margin:0"><input type="checkbox" id="sfx-on" data-keep checked> شغّل أصوات الدي جي لما البرنامج يفتح ولما تفتح أو تقفل أيقونة</label>
+        <label style="display:flex;align-items:center;gap:8px;color:var(--muted);font-size:14px">علو الصوت <input type="range" id="sfx-vol" data-keep min="0.05" max="1" step="0.05" value="0.35" style="accent-color:var(--wine2);direction:ltr"></label>
+        <button class="btn" id="sfx-try">جرّب الصوت</button>
+      </div>
       <h3 style="margin:22px 0 6px">تصحيحات الفرانكو اللي البرنامج اتعلّمها <span id="d-fn" style="color:var(--muted)"></span></h3>
       <div class="tbl-wrap" style="max-height:240px;margin-top:6px"><table><thead><tr><th>بالعربي</th><th>بيتكتب</th><th></th></tr></thead><tbody id="d-franco"></tbody></table></div>
       <h3 style="margin:22px 0 6px">آخر التعديلات <span id="d-hn" style="color:var(--muted)"></span></h3>
@@ -682,17 +688,17 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
   <!-- SHAZAM -->
   <section id="v-shz" class="hidden">
     <div class="panel">
-      <div class="ptitle"><span class="gear-logo" id="z-logo"></span><div><h2>شازام</h2></div>
+      <div class="ptitle"><span class="gear-logo" id="z-logo"></span><div><h2>Shazam</h2></div>
         <button class="btn back" onclick="go('home')">رجوع</button></div>
-      <div class="note" style="margin-top:0">شازام بيفتح في Chrome على جهازك. لما يتعرّف على أغنية، انسخ لينكها (Share ← Copy link) والصقه هنا، وهيظهرلك زرار <b>"افتح في Spotify"</b> و<b>"افتح في أنغامي"</b> وتضيفها لقايمة التراكات.<br>وعشان البرنامج نفسه يسمع ويتعرّف على التراكات لوحده، شغّل خدمة <b>ACRCloud</b> أو <b>AudD</b> من "اعرف أسامي التراكات" ← الإعدادات، واستخدم "اسمع السيت كامل".</div>
+      <div class="note" style="margin-top:0">Shazam بيفتح في Chrome على جهازك. لما يتعرّف على أغنية، انسخ لينكها (Share ← Copy link) والصقه هنا، وهيظهرلك زرار <b>"افتح في Spotify"</b> و<b>"افتح في أنغامي"</b> وتضيفها لقايمة التراكات.<br>وعشان البرنامج نفسه يسمع ويتعرّف على التراكات لوحده، شغّل خدمة <b>ACRCloud</b> أو <b>AudD</b> من "اعرف أسامي التراكات" ← الإعدادات، واستخدم "اسمع السيت كامل".</div>
       <div class="row" style="margin-top:14px">
-        <button class="btn primary logo-btn" id="z-open">افتح شازام في Chrome</button>
+        <button class="btn primary logo-btn" id="z-open">افتح Shazam في Chrome</button>
         <button class="btn" id="z-open-in">جرّب جوه البرنامج</button>
-        <input type="text" id="z-link" class="latin" placeholder="الصق لينك أغنية من شازام أو لينك يوتيوب" style="flex:1;min-width:240px">
+        <input type="text" id="z-link" class="latin" placeholder="الصق لينك أغنية من Shazam أو لينك يوتيوب" style="flex:1;min-width:240px">
         <button class="btn" id="z-go">افتح اللينك</button>
       </div>
       <div id="z-card" class="daw hidden"></div>
-      <div class="note">لو موقع شازام ما سمعش الأغنية من الكمبيوتر، استخدم "وضع شازام" مع موبايلك من أيقونة "اعرف أسامي التراكات"، أو أيقونة "اسمع السيت كامل".</div>
+      <div class="note">لو موقع Shazam ما سمعش الأغنية من الكمبيوتر، استخدم "وضع Shazam" مع موبايلك من أيقونة "اعرف أسامي التراكات"، أو أيقونة "اسمع السيت كامل".</div>
       <div class="msg" id="z-msg"></div>
       <div class="trk-res hidden"><h3 style="margin:18px 0 6px;font-size:16px">التراكات</h3>
         <div class="tbl-wrap"><table class="tl"><thead><tr><th>الوقت</th><th>التراك</th><th>المصدر</th><th>افتحه في</th></tr></thead><tbody class="trk-body"></tbody></table></div>
@@ -876,12 +882,55 @@ function learnFranco(orig,edited){
   Store.set('franco',USERDICT);
 }
 
+/* ================= DJ sound effects (made right here, soft) ================= */
+const SFX={ctx:null};
+function sfxOn(){ const c=document.getElementById('sfx-on'); return !c||c.checked; }
+function sfxVol(){ const v=document.getElementById('sfx-vol'); return v?+v.value:0.35; }
+function sfxCtx(){ if(!SFX.ctx){ try{ SFX.ctx=new AudioContext(); }catch(e){ return null; } } SFX.ctx.resume(); return SFX.ctx; }
+function sfxOut(ctx,t0,len){ const g=ctx.createGain(); g.gain.value=sfxVol()*0.5; const comp=ctx.createDynamicsCompressor(); g.connect(comp); comp.connect(ctx.destination); return g; }
+function noiseBuf(ctx,sec){ const b=ctx.createBuffer(1,Math.round(ctx.sampleRate*sec),ctx.sampleRate),d=b.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1; return b; }
+// a little "record" to scratch: a short chord-like stab
+function stabBuf(ctx){ const sr=ctx.sampleRate,n=Math.round(sr*.6),b=ctx.createBuffer(1,n,sr),d=b.getChannelData(0);
+  for(let i=0;i<n;i++){const t=i/sr;let v=0;for(const f of [220,277,330,440])v+=((t*f)%1)*2-1;d[i]=v/4*Math.exp(-t*2)+(Math.random()*2-1)*.08;} return b; }
+const FX={
+  scratch(ctx,out,t,dir=1){ const s=ctx.createBufferSource(); s.buffer=stabBuf(ctx); const bp=ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1400; bp.Q.value=.8;
+    const g=ctx.createGain(); s.connect(bp); bp.connect(g); g.connect(out);
+    const r=s.playbackRate; r.setValueAtTime(.05,t); r.linearRampToValueAtTime(dir>0?2.2:1.6,t+.07); r.linearRampToValueAtTime(.05,t+.13); r.linearRampToValueAtTime(1.8,t+.2); r.linearRampToValueAtTime(.05,t+.28);
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.9,t+.02); g.gain.setValueAtTime(.9,t+.12); g.gain.linearRampToValueAtTime(.2,t+.14); g.gain.linearRampToValueAtTime(.8,t+.17); g.gain.linearRampToValueAtTime(0,t+.3);
+    s.start(t); s.stop(t+.32); },
+  whoosh(ctx,out,t,up=true,len=.45){ const s=ctx.createBufferSource(); s.buffer=noiseBuf(ctx,len); const bp=ctx.createBiquadFilter(); bp.type='bandpass'; bp.Q.value=2.5;
+    bp.frequency.setValueAtTime(up?300:5000,t); bp.frequency.exponentialRampToValueAtTime(up?6000:250,t+len); const g=ctx.createGain(); s.connect(bp); bp.connect(g); g.connect(out);
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.7,t+len*.6); g.gain.linearRampToValueAtTime(0,t+len); s.start(t); s.stop(t+len); },
+  zap(ctx,out,t,down=true){ const o=ctx.createOscillator(); o.type='sawtooth'; const f=ctx.createBiquadFilter(); f.type='lowpass'; f.frequency.value=3000; const g=ctx.createGain();
+    o.frequency.setValueAtTime(down?1800:200,t); o.frequency.exponentialRampToValueAtTime(down?120:1600,t+.18); o.connect(f); f.connect(g); g.connect(out);
+    g.gain.setValueAtTime(1.1,t); g.gain.exponentialRampToValueAtTime(.001,t+.2); o.start(t); o.stop(t+.21); },
+  kick(ctx,out,t,vol=.9){ const o=ctx.createOscillator(); const g=ctx.createGain(); o.frequency.setValueAtTime(150,t); o.frequency.exponentialRampToValueAtTime(45,t+.12);
+    o.connect(g); g.connect(out); g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(.001,t+.35); o.start(t); o.stop(t+.36); },
+  hat(ctx,out,t){ const s=ctx.createBufferSource(); s.buffer=noiseBuf(ctx,.05); const hp=ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=8000; const g=ctx.createGain();
+    s.connect(hp); hp.connect(g); g.connect(out); g.gain.setValueAtTime(.35,t); g.gain.exponentialRampToValueAtTime(.001,t+.05); s.start(t); },
+  tapeStop(ctx,out,t){ const o=ctx.createOscillator(); o.type='sawtooth'; const o2=ctx.createOscillator(); o2.type='square'; const lp=ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=900; const g=ctx.createGain();
+    for(const [osc,f] of [[o,220],[o2,110]]){ osc.frequency.setValueAtTime(f,t); osc.frequency.exponentialRampToValueAtTime(f/8,t+.45); osc.connect(lp); }
+    lp.connect(g); g.connect(out); g.gain.setValueAtTime(.18,t); g.gain.linearRampToValueAtTime(0,t+.45); o.start(t); o2.start(t); o.stop(t+.46); o2.stop(t+.46); }
+};
+const SFX_SETS={
+  welcome:(c,o,t)=>{ FX.whoosh(c,o,t,true,.9); FX.scratch(c,o,t+.85); FX.kick(c,o,t+1.18); FX.hat(c,o,t+1.18); FX.scratch(c,o,t+1.25,-1); FX.kick(c,o,t+1.6,.7); },
+  back:(c,o,t)=>FX.tapeStop(c,o,t),
+  single:(c,o,t)=>FX.scratch(c,o,t), batch:(c,o,t)=>{FX.whoosh(c,o,t,true,.35);FX.kick(c,o,t+.33,.6);}, enh:(c,o,t)=>FX.whoosh(c,o,t,true,.5),
+  remix:(c,o,t)=>{FX.zap(c,o,t,false);FX.kick(c,o,t+.18,.6);}, mash:(c,o,t)=>{FX.scratch(c,o,t);FX.scratch(c,o,t+.3,-1);}, tag:(c,o,t)=>FX.zap(c,o,t,true),
+  mix:(c,o,t)=>{FX.scratch(c,o,t,-1);}, full:(c,o,t)=>{FX.kick(c,o,t,.6);FX.hat(c,o,t+.12);FX.kick(c,o,t+.24,.6);}, shz:(c,o,t)=>FX.zap(c,o,t,false),
+  new:(c,o,t)=>FX.whoosh(c,o,t,true,.6), search:(c,o,t)=>FX.scratch(c,o,t), data:(c,o,t)=>FX.whoosh(c,o,t,false,.4)
+};
+function sfx(name){ if(!sfxOn()) return; const ctx=sfxCtx(); if(!ctx) return; const f=SFX_SETS[name]; if(!f) return;
+  try{ const t=ctx.currentTime+.03; f(ctx,sfxOut(ctx),t); }catch(e){} }
+
 /* ================= welcome ================= */
-(()=>{const w=document.getElementById('welcome'); const hide=()=>w.classList.add('gone'); w.addEventListener('click',hide); w.addEventListener('animationend',e=>{if(e.animationName==='wOut')hide();});})();
+(()=>{const w=document.getElementById('welcome'); dataReady.then(()=>setTimeout(()=>sfx('welcome'),250)); const hide=()=>w.classList.add('gone'); w.addEventListener('click',hide); w.addEventListener('animationend',e=>{if(e.animationName==='wOut')hide();});})();
 
 /* ================= navigation ================= */
 
+let curView='home';
 function go(v){
+  if(v!==curView) sfx(v==='home'?'back':v); curView=v;
   for(const s of document.querySelectorAll('main>section')) s.classList.add('hidden');
   document.getElementById('v-'+v).classList.remove('hidden');
   if(v==='search') setTimeout(()=>document.getElementById('q').focus(),50);
@@ -1523,7 +1572,7 @@ function merged(){
   const ex=(M.extra||[]).filter(m=>![...timed,...ytm].some(h=>keyOf(h)===keyOf(m)));
   return [...timed,...ytm,...ex];
 }
-const SRC={shz:['ear','من شازام'],lib:['ear','سمعها (مكتبتك)'],ear:['ear','سمعها (أونلاين)'],ytm:['ear','يوتيوب سمعها'],chap:['desc','فصول الفيديو'],desc:['desc','الوصف'],cmt:['desc','التعليقات']};
+const SRC={shz:['ear','من Shazam'],lib:['ear','سمعها (مكتبتك)'],ear:['ear','سمعها (أونلاين)'],ytm:['ear','يوتيوب سمعها'],chap:['desc','فصول الفيديو'],desc:['desc','الوصف'],cmt:['desc','التعليقات']};
 // every music app, one tap each
 const APPS=[['Spotify','#1DB954',(q,h)=>h.spotify||'https://open.spotify.com/search/'+q],['Anghami','#A13CFF',q=>'https://play.anghami.com/search/'+q],
   ['Apple Music','#FA57C1',(q,h)=>h.apple||'https://music.apple.com/search?term='+q],['YouTube Music','#FF0033',q=>'https://music.youtube.com/search?q='+q],
@@ -1636,7 +1685,7 @@ async function shazamReel(file){
           const dup=M.hits.some(x=>keyOf(x)===keyOf(h)); addHit(rt,h);
           cell.innerHTML=(dup?'<span style="color:var(--muted)">نفس التراك اللي فات: </span>':'')+esc((h.artist?h.artist+' - ':'')+h.title); }).catch(e=>{ $('shz-r'+ri).querySelector('.nm').textContent='AudD: '+e.message; });
       }
-      now.innerHTML=`<div class="big latin">${fmt(t)}</div><div>المقطع ${i+1} من ${times.length} · شازام بيسمع…</div>`;
+      now.innerHTML=`<div class="big latin">${fmt(t)}</div><div>المقطع ${i+1} من ${times.length} · Shazam بيسمع…</div>`;
       document.querySelectorAll('#shz-list tr').forEach(r=>r.classList.remove('done')); const row=$('shz-r'+i); row.classList.add('done'); row.querySelector('.st').textContent='▶'; row.scrollIntoView({block:'nearest'});
       const src=ctx.createBufferSource(); src.buffer=ab; const g=ctx.createGain(); src.connect(g); g.connect(ctx.destination);
       const T=ctx.currentTime+0.05, L=Math.min(SNIP,ab.duration); g.gain.setValueAtTime(0,T); g.gain.linearRampToValueAtTime(1,T+0.08); g.gain.setValueAtTime(1,T+L-0.1); g.gain.linearRampToValueAtTime(0,T+L);
@@ -1647,10 +1696,10 @@ async function shazamReel(file){
     if(!SH.stop){ await new Promise(r=>setTimeout(r,2500));
       const n=heard().length;
       msg('m-msg', n?`خلص ✓ لقى ${n} تراك مختلف (كل تراك مرة واحدة)، وقدام كل واحد زرار يفتحه في Spotify أو أنغامي.`
-        :`خلص ✓ شغّل ${times.length} مقطع. افتح Library في شازام على الموبايل، هتلاقي التراكات بالترتيب.`,true);
-      logEdit('وضع شازام',file.name,times.length+' مقطع'+(n?` · ${n} تراك`:'')); }
+        :`خلص ✓ شغّل ${times.length} مقطع. افتح Library في Shazam على الموبايل، هتلاقي التراكات بالترتيب.`,true);
+      logEdit('وضع Shazam',file.name,times.length+' مقطع'+(n?` · ${n} تراك`:'')); }
   }catch(e){ msg('m-msg','حصلت مشكلة: '+e.message,false); }
-  SH.running=false; busy(false); go.lastChild.textContent=' اختار الميكس وشغّله لشازام'; now.classList.add('hidden');
+  SH.running=false; busy(false); go.lastChild.textContent=' اختار الميكس وشغّله لـ Shazam'; now.classList.add('hidden');
 }
 
 /* ---------- mix file from my computer ---------- */
@@ -2542,9 +2591,9 @@ function showSongCard(song,shazamUrl){
     <div class="apps" style="gap:8px"><a class="open-btn sp" href="https://open.spotify.com/search/${q}" target="_blank">${logo('Spotify',16)}افتح في Spotify</a>
     <a class="open-btn an" href="https://play.anghami.com/search/${q}" target="_blank">${logo('Anghami',16)}افتح في أنغامي</a>
     ${APPS.filter(a=>a[0]!=='Spotify'&&a[0]!=='Anghami').map(([n,c,u])=>`<a class="open-btn" style="border:1px solid var(--line)" href="${u(q,{})}" target="_blank">${logo(n,16)}${n}</a>`).join('')}</div>
-    <div class="row" style="margin-top:12px"><button class="btn primary" id="z-addcard">+ ضيفه لقايمة التراكات</button>${shazamUrl?`<a class="btn" href="${esc(shazamUrl)}" target="_blank" style="text-decoration:none">افتح صفحته في شازام (المتصفح)</a>`:''}</div>`;
+    <div class="row" style="margin-top:12px"><button class="btn primary" id="z-addcard">+ ضيفه لقايمة التراكات</button>${shazamUrl?`<a class="btn" href="${esc(shazamUrl)}" target="_blank" style="text-decoration:none">افتح صفحته في Shazam (المتصفح)</a>`:''}</div>`;
   card.classList.remove('hidden');
-  $('z-addcard').onclick=()=>{ const h={...song,src:'shz',start:null}; if(![...M.hits,...M.extra].some(x=>keyOf(x)===keyOf(h))) M.extra.push(h); renderMix(); msg('z-msg','اتضاف ✓ '+song.title,true); logEdit('شازام',song.title,'اتضاف لقايمة التراكات'); };
+  $('z-addcard').onclick=()=>{ const h={...song,src:'shz',start:null}; if(![...M.hits,...M.extra].some(x=>keyOf(x)===keyOf(h))) M.extra.push(h); renderMix(); msg('z-msg','اتضاف ✓ '+song.title,true); logEdit('Shazam',song.title,'اتضاف لقايمة التراكات'); };
 }
 let lastWeb='';
 $('z-go').onclick=()=>{ const u=$('z-link').value.trim();
@@ -2555,7 +2604,7 @@ $('z-open').addEventListener('click',()=>{ lastWeb='https://www.shazam.com/'; })
 if(APP&&APP.onWebError) APP.onWebError(d=>{
   const shz=/shazam\.com/i.test(d.url||lastWeb), target=d.url||lastWeb;
   const box=shz?'z-msg':(MSGID||'m-msg');
-  msg(box,(shz?'موقع شازام رفض يفتح جوه البرنامج':'الموقع رفض يفتح جوه البرنامج')+` (${d.code}). افتحه في المتصفح العادي، ولو معاك لينك أغنية من شازام الصقه فوق وهيظهرلك زراير Spotify وأنغامي على طول.`,false);
+  msg(box,(shz?'موقع Shazam رفض يفتح جوه البرنامج':'الموقع رفض يفتح جوه البرنامج')+` (${d.code}). افتحه في المتصفح العادي، ولو معاك لينك أغنية من Shazam الصقه فوق وهيظهرلك زراير Spotify وأنغامي على طول.`,false);
   const b=document.createElement('button'); b.className='btn'; b.style.cssText='padding:4px 10px;margin-inline-start:10px'; b.textContent='افتح في المتصفح';
   b.onclick=()=>APP.openExternal(target); $(box).append(b);
 });
@@ -2563,7 +2612,7 @@ if(APP&&APP.onWebTrack) APP.onWebTrack(d=>{
   const h={artist:d.artist||'',title:d.title||'',spotify:d.spotify||'',apple:d.apple||'',src:'shz',start:null};
   if(!h.title) return;
   if(![...M.hits,...M.extra].some(x=>keyOf(x)===keyOf(h))) M.extra.push(h);
-  renderMix(); msg('z-msg','اتضاف ✓ '+(h.artist?h.artist+' - ':'')+h.title,true); logEdit('شازام',(h.artist?h.artist+' - ':'')+h.title,'اتضاف لقايمة التراكات');
+  renderMix(); msg('z-msg','اتضاف ✓ '+(h.artist?h.artist+' - ':'')+h.title,true); logEdit('Shazam',(h.artist?h.artist+' - ':'')+h.title,'اتضاف لقايمة التراكات');
 });
 // whole set
 document.querySelectorAll('#f-tabs .tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('#f-tabs .tab').forEach(x=>x.classList.toggle('on',x===t));
@@ -2724,6 +2773,7 @@ async function renderData(){
 }
 $('d-franco').onclick=e=>{const b=e.target.closest('button');if(!b)return; delete (b.dataset.w==='1'?USERDICT.word:USERDICT.phrase)[b.dataset.k]; Store.set('franco',USERDICT); renderData();};
 $('d-open').onclick=()=>APP&&APP.openDataDir();
+$('sfx-try').onclick=()=>sfx('welcome');
 
 /* ================= Search ================= */
 const SITES=[
