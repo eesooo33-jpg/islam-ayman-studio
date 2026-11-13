@@ -167,17 +167,20 @@ ipcMain.handle('spotify-playlist', async (e, clientId, name, tracks) => {
   const api = async (p, opt = {}) => { const r = await fetch('https://api.spotify.com/v1' + p, { ...opt, headers: { Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json', ...(opt.headers || {}) } });
     const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error((j.error && j.error.message) || ('Spotify ' + r.status)); return j; };
   const norm = x => String(x || '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/\(.*?\)|\[.*?\]/g, '').replace(/feat\.?.*$|ft\.?.*$/, '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
-  const uris = [], missing = [], seen = new Set();
+  // check first that Spotify lets this account use the app (clear message instead of "not found")
+  try { await api('/me'); } catch (err) { throw new Error('SPOTIFY_REFUSED: ' + err.message); }
+  const uris = [], missing = [], seen = new Set(); let lastErr = null;
   for (const t of tracks) {
     let id = (String(t.spotify || '').match(/track\/([A-Za-z0-9]+)/) || [])[1];
     if (!id) for (const q of [`track:"${t.title}"${t.artist ? ` artist:"${t.artist.split(/,|&| x /i)[0].trim()}"` : ''}`, `${t.title} ${t.artist || ''}`.trim()]) {
-      const j = await api('/search?type=track&limit=5&q=' + encodeURIComponent(q)).catch(() => null);
+      const j = await api('/search?type=track&limit=5&q=' + encodeURIComponent(q)).catch(err => { lastErr = err; return null; });
       const items = (j && j.tracks && j.tracks.items) || [];
       const hit = items.find(it => norm(it.name).includes(norm(t.title)) || norm(t.title).includes(norm(it.name))) || (q.startsWith('track:') ? items[0] : null);
       if (hit) { id = hit.id; break; }
     }
     if (id && !seen.has(id)) { seen.add(id); uris.push('spotify:track:' + id); } else if (!id) missing.push(t);
   }
+  if (!uris.length && lastErr) throw new Error('SPOTIFY_REFUSED: ' + lastErr.message);
   if (!uris.length) return { url: '', added: 0, missing };
   const pl = await api('/me/playlists', { method: 'POST', body: JSON.stringify({ name, public: false, description: 'Made with Islam Ayman Studio · DJ ISLAM AYMAN' }) });
   for (let i = 0; i < uris.length; i += 100) await api(`/playlists/${pl.id}/tracks`, { method: 'POST', body: JSON.stringify({ uris: uris.slice(i, i + 100) }) });

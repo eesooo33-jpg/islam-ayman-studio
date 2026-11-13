@@ -1398,7 +1398,7 @@ async function recognize(blob,name){
     const code=j&&j.status&&j.status.code; if(code===1001) return null;                      // 1001 = no match
     if(code!==0) throw new Error('ACRCloud: '+((j&&j.status&&j.status.msg)||'error'));
     const m=j.metadata&&j.metadata.music&&j.metadata.music[0]; if(!m) return null; const ex=m.external_metadata||{};
-    const sp=ex.spotify&&ex.spotify.track&&ex.spotify.track.id, dz=ex.deezer&&ex.deezer.track&&ex.deezer.track.id;
+    const one=x=>Array.isArray(x)?x[0]:x, sp=one(ex.spotify)&&one(ex.spotify).track&&one(ex.spotify).track.id, dz=one(ex.deezer)&&one(ex.deezer).track&&one(ex.deezer).track.id;
     return {artist:(m.artists||[]).map(a=>a.name).join(', '),title:m.title||'',spotify:sp?'https://open.spotify.com/track/'+sp:'',deezer:dz?'https://www.deezer.com/track/'+dz:'',apple:'',src:'ear'};
   }
   if(j.status==='error') throw new Error((j.error&&j.error.error_message)||'AudD error');
@@ -2464,7 +2464,12 @@ document.addEventListener('click',async e=>{
     say((r.url?`تمام ✓ اتعملت بلاي ليست فيها ${r.added} تراك من ${list.length}. <a class="open-btn sp" href="${r.url}" target="_blank">${logo('Spotify',16)}افتح البلاي ليست</a>`:'ملقاش ولا تراك على Spotify.')+
       (miss?`<div style="margin-top:8px">التراكات دي مش موجودة على Spotify (غالباً ريمكس أو edit مش مرفوع):<ul style="margin:6px 0 0">${miss}</ul></div>`:''),!!r.url);
     logEdit('بلاي ليست Spotify',name,`${r.added}/${list.length} تراك`);
-  }catch(err){ say(err.message==='login'?'اربط حساب Spotify تاني من الإعدادات':'حصلت مشكلة: '+err.message,false); }
+  }catch(err){
+    const m=String(err.message||'');
+    if(m==='login'||/login/.test(m)) say('اربط حساب Spotify تاني من الإعدادات',false);
+    else if(/SPOTIFY_REFUSED/.test(m)) say(`سبوتيفاي رفض الطلب، والتراكات موجودة بس البرنامج مش مسموحله يوصلها. الرسالة من سبوتيفاي: <b class="latin">${esc(m.replace(/.*SPOTIFY_REFUSED:\s*/,''))}</b><br>
+      الحل في <a href="https://developer.spotify.com/dashboard" target="_blank">developer.spotify.com/dashboard</a>: افتح الـ app ← <b>Settings</b> ← <b>User Management</b> ← ضيف اسمك والإيميل بتاع حساب سبوتيفاي اللي بتسمع بيه ← <b>Add user</b>. وبعدها في البرنامج دوس "اربط حساب Spotify" تاني.`,false);
+    else say('حصلت مشكلة: '+esc(m),false); }
   b.disabled=false; busy(false);
 });
 
