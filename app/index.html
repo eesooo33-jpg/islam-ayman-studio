@@ -2567,8 +2567,9 @@ document.addEventListener('click',async e=>{
       (miss?`<div style="margin-top:8px">التراكات دي مش موجودة على Spotify (غالباً ريمكس أو edit مش مرفوع):<ul style="margin:6px 0 0">${miss}</ul></div>`:''),!!r.url);
     logEdit('بلاي ليست Spotify',name,`${r.added}/${list.length} تراك`);
   }catch(err){
-    const m=String(err.message||'');
-    if(m==='login'||/login/.test(m)) say('اربط حساب Spotify تاني من الإعدادات',false);
+    const m=cleanErr(err.message);
+    if(/^login$/.test(m)) say('اربط حساب Spotify تاني من الإعدادات',false);
+    else if(/SPOTIFY_REFUSED/.test(m)&&/403|forbidden/i.test(m)) say(SP_FIX.replace('استخدم YouTube هنا','انسخ التراك ليست واستخدم زراير Spotify اللي جنب كل تراك'),false);
     else if(/SPOTIFY_REFUSED/.test(m)) say(`سبوتيفاي رفض الطلب، والتراكات موجودة بس البرنامج مش مسموحله يوصلها. الرسالة من سبوتيفاي: <b class="latin">${esc(m.replace(/.*SPOTIFY_REFUSED:\s*/,''))}</b><br>
       الحل في <a href="https://developer.spotify.com/dashboard" target="_blank">developer.spotify.com/dashboard</a>: افتح الـ app ← <b>Settings</b> ← <b>User Management</b> ← ضيف اسمك والإيميل بتاع حساب سبوتيفاي اللي بتسمع بيه ← <b>Add user</b>. وبعدها في البرنامج دوس "اربط حساب Spotify" تاني.`,false);
     else say('حصلت مشكلة: '+esc(m),false); }
@@ -2696,9 +2697,18 @@ function nRender(items,title){
         <span class="more">${it.kind==='yt'?`<a href="${it.url}" target="_blank" title="افتح في YouTube">${logo('YouTube',18)}</a>`:`<a href="https://www.youtube.com/results?search_query=${q}" target="_blank" title="YouTube">${logo('YouTube',18)}</a>`}
         <a href="https://www.beatport.com/search?q=${q}" target="_blank" title="Beatport">${logo('Beatport',18)}</a><a href="https://soundcloud.com/search?q=${q}" target="_blank" title="SoundCloud">${logo('SoundCloud',18)}</a></span></div></div>`;}).join('');
 }
+const SP_FIX=`سبوتيفاي رافض إن البرنامج يكلّمه (403). ده من إعدادات الـ app عند سبوتيفاي، مش من البرنامج. اعمل الآتي في <a href="https://developer.spotify.com/dashboard" target="_blank">developer.spotify.com/dashboard</a> ← الـ app بتاعك:
+  <ol style="margin:6px 0 0;padding-inline-start:20px;line-height:1.9"><li><b>Settings</b> ← <b>User Management</b>: ضيف اسمك وإيميل حساب سبوتيفاي اللي بتسمع بيه ← <b>Add user</b>.</li>
+  <li><b>Settings</b> ← <b>Edit</b> (تحت Basic Information): اتأكد إن <b>Web API</b> متعلّم عليه في <b>APIs used</b>، ولو مقفول كمّل عادي.</li>
+  <li>ارجع للبرنامج: "اعرف أسامي التراكات" ← الإعدادات ← دوس <b>"اربط حساب Spotify"</b> تاني، وادخل بنفس الحساب اللي ضفته.</li></ol>
+  لو لسه 403: سبوتيفاي بقت بتقفل الـ apps الجديدة على حسابات معيّنة (أحياناً بتطلب Premium لصاحب الـ app). لحد ما ده يتحل، استخدم YouTube هنا.`;
+const cleanErr=m=>String(m||'').replace(/^Error invoking remote method '[^']+':\s*/,'').replace(/^Error:\s*/,'');
 function nError(e){
-  const m=String(e.message||e);
-  if(m==='NEED_SP'||m==='login') return msg('n-msg','اربط حساب Spotify الأول: "اعرف أسامي التراكات" ← الإعدادات ← Spotify',false);
+  const m=cleanErr(e.message||e);
+  if(/SPOTIFY_REFUSED/.test(m)&&/403|not be registered|forbidden/i.test(m)){ $('n-msg').className='msg show err';
+    $('n-msg').innerHTML=SP_FIX+(NW.src==='sp'?' <button class="btn" id="n-to-yt" style="padding:4px 10px">اعرض من YouTube</button>':'');
+    const b=document.getElementById('n-to-yt'); if(b) b.onclick=()=>document.querySelector('#n-src [data-s=yt]').click(); return; }
+  if(m==='NEED_SP'||/^login$/.test(m)) return msg('n-msg','اربط حساب Spotify الأول: "اعرف أسامي التراكات" ← الإعدادات ← Spotify',false);
   if(m==='NEED_YT') return msg('n-msg','حط YouTube API Key الأول من تاب "الإعدادات" هنا',false);
   msg('n-msg','حصلت مشكلة: '+m.replace('SPOTIFY_REFUSED: ','سبوتيفاي رفض: '),false);
 }
