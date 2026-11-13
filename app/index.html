@@ -651,6 +651,7 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
         <input type="text" id="z-link" class="latin" placeholder="أو الصق لينك أغنية من شازام: https://www.shazam.com/song/…" style="flex:1;min-width:240px">
         <button class="btn" id="z-go">افتح اللينك</button>
       </div>
+      <div id="z-card" class="daw hidden"></div>
       <div class="note">لو موقع شازام ما سمعش الأغنية من الكمبيوتر، استخدم "وضع شازام" مع موبايلك من أيقونة "اعرف أسامي التراكات"، أو أيقونة "اسمع السيت كامل".</div>
       <div class="msg" id="z-msg"></div>
       <div class="trk-res hidden"><h3 style="margin:18px 0 6px;font-size:16px">التراكات</h3>
@@ -2391,7 +2392,30 @@ $('z-logo').innerHTML=logo('Shazam',60); $('z-open').insertAdjacentHTML('afterbe
 M.extra=[];
 function openWeb(url,live){ if(!APP){ window.open(url,'_blank'); return; } if(live){ startLive(); } APP.openYouTube(url); }
 $('z-open').onclick=()=>openWeb('https://www.shazam.com/',false);
-$('z-go').onclick=()=>{ const u=$('z-link').value.trim(); if(!/^https?:\/\/(www\.)?shazam\.com\//i.test(u)) return msg('z-msg','حط لينك من موقع shazam.com',false); openWeb(u,false); };
+// a Shazam song link → show the song right here with "open in Spotify / Anghami …" (works even if the Shazam site won't open)
+function songFromShazamUrl(u){ const m=u.match(/shazam\.com\/(?:[a-z-]+\/)?(?:song|track)\/\d+\/([^/?#]+)/i); if(!m) return null;
+  const t=decodeURIComponent(m[1]).replace(/-/g,' ').trim(); return t?{title:titleCaseEn(t),artist:''}:null; }
+function showSongCard(song,shazamUrl){
+  const q=encodeURIComponent((song.artist?song.artist+' ':'')+song.title), card=$('z-card');
+  card.innerHTML=`<div style="font-size:18px;font-weight:800;margin-bottom:10px" class="latin">${esc((song.artist?song.artist+' - ':'')+song.title)}</div>
+    <div class="apps" style="gap:8px"><a class="open-btn sp" href="https://open.spotify.com/search/${q}" target="_blank">${logo('Spotify',16)}افتح في Spotify</a>
+    <a class="open-btn an" href="https://play.anghami.com/search/${q}" target="_blank">${logo('Anghami',16)}افتح في أنغامي</a>
+    ${APPS.filter(a=>a[0]!=='Spotify'&&a[0]!=='Anghami').map(([n,c,u])=>`<a class="open-btn" style="border:1px solid var(--line)" href="${u(q,{})}" target="_blank">${logo(n,16)}${n}</a>`).join('')}</div>
+    <div class="row" style="margin-top:12px"><button class="btn primary" id="z-addcard">+ ضيفه لقايمة التراكات</button>${shazamUrl?`<a class="btn" href="${esc(shazamUrl)}" target="_blank" style="text-decoration:none">افتح صفحته في شازام (المتصفح)</a>`:''}</div>`;
+  card.classList.remove('hidden');
+  $('z-addcard').onclick=()=>{ const h={...song,src:'shz',start:null}; if(![...M.hits,...M.extra].some(x=>keyOf(x)===keyOf(h))) M.extra.push(h); renderMix(); msg('z-msg','اتضاف ✓ '+song.title,true); logEdit('شازام',song.title,'اتضاف لقايمة التراكات'); };
+}
+let lastWeb='';
+$('z-go').onclick=()=>{ const u=$('z-link').value.trim(); if(!/^https?:\/\/(www\.)?shazam\.com\//i.test(u)) return msg('z-msg','حط لينك من موقع shazam.com',false);
+  const song=songFromShazamUrl(u); if(song) showSongCard(song,u); lastWeb=u; openWeb(u,false); };
+$('z-open').addEventListener('click',()=>{ lastWeb='https://www.shazam.com/'; });
+if(APP&&APP.onWebError) APP.onWebError(d=>{
+  const shz=/shazam\.com/i.test(d.url||lastWeb), target=d.url||lastWeb;
+  const box=shz?'z-msg':(MSGID||'m-msg');
+  msg(box,(shz?'موقع شازام رفض يفتح جوه البرنامج':'الموقع رفض يفتح جوه البرنامج')+` (${d.code}). افتحه في المتصفح العادي، ولو معاك لينك أغنية من شازام الصقه فوق وهيظهرلك زراير Spotify وأنغامي على طول.`,false);
+  const b=document.createElement('button'); b.className='btn'; b.style.cssText='padding:4px 10px;margin-inline-start:10px'; b.textContent='افتح في المتصفح';
+  b.onclick=()=>APP.openExternal(target); $(box).append(b);
+});
 if(APP&&APP.onWebTrack) APP.onWebTrack(d=>{
   const h={artist:d.artist||'',title:d.title||'',spotify:d.spotify||'',apple:d.apple||'',src:'shz',start:null};
   if(!h.title) return;

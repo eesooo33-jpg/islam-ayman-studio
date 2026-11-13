@@ -8,6 +8,8 @@ contextBridge.exposeInMainWorld('djApp', {
   onYtClosed: (cb) => ipcRenderer.on('yt-closed', () => cb()),
   onYtInfo: (cb) => ipcRenderer.on('yt-info', (e, d) => cb(d)),
   onWebTrack: (cb) => ipcRenderer.on('web-track', (e, d) => cb(d)),
+  onWebError: (cb) => ipcRenderer.on('web-error', (e, d) => cb(d)),
+  openExternal: (url) => ipcRenderer.send('open-external', url),
   store: { get: (n) => ipcRenderer.invoke('store-get', n), set: (n, v) => ipcRenderer.invoke('store-set', n, v) },
   lib: { load: () => ipcRenderer.invoke('lib-load'), add: (recs) => ipcRenderer.invoke('lib-add', recs), clear: () => ipcRenderer.invoke('lib-clear') },
   dataDir: () => ipcRenderer.invoke('data-dir'),

@@ -1,5 +1,5 @@
 // Islam Ayman Studio — desktop app (Windows / Mac)
-const { app, BrowserWindow, ipcMain, shell, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, dialog, session } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -151,20 +151,49 @@ function createMain() {
   win.on('closed', () => { win = null; if (yt) yt.close(); });
 }
 // YouTube plays in its own window; its audio is streamed to the main window for track ID
+// Web windows (YouTube, Shazam, SoundCloud…) look exactly like Google Chrome to the sites,
+// otherwise some sites (Shazam) refuse to open ("405 Not Allowed").
+let webSession = null;
+function chromeUA() {
+  const os = process.platform === 'darwin' ? 'Macintosh; Intel Mac OS X 10_15_7' : process.platform === 'win32' ? 'Windows NT 10.0; Win64; x64' : 'X11; Linux x86_64';
+  return `Mozilla/5.0 (${os}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${process.versions.chrome.split('.')[0]}.0.0.0 Safari/537.36`;
+}
+function getWebSession() {
+  if (webSession) return webSession;
+  webSession = session.fromPartition('persist:web');
+  webSession.setUserAgent(chromeUA(), 'en-US,en;q=0.9,ar;q=0.8');
+  const major = process.versions.chrome.split('.')[0];
+  const plat = process.platform === 'darwin' ? '"macOS"' : process.platform === 'win32' ? '"Windows"' : '"Linux"';
+  webSession.webRequest.onBeforeSendHeaders((d, cb) => {
+    const h = d.requestHeaders;
+    for (const k of Object.keys(h)) {
+      const l = k.toLowerCase();
+      if (l === 'sec-ch-ua') h[k] = `"Chromium";v="${major}", "Google Chrome";v="${major}", "Not?A_Brand";v="99"`;
+      else if (l === 'sec-ch-ua-platform') h[k] = plat;
+      else if (l === 'user-agent') h[k] = chromeUA();
+    }
+    cb({ requestHeaders: h });
+  });
+  return webSession;
+}
 function openYouTube(url) {
   if (yt) { yt.loadURL(url); yt.focus(); return; }
   yt = new BrowserWindow({
     width: 1100, height: 760, title: 'Islam Ayman Studio', autoHideMenuBar: true, backgroundColor: '#000',
     icon: path.join(__dirname, 'build', 'icon.png'),
-    webPreferences: { preload: path.join(__dirname, 'yt-preload.js'), contextIsolation: true, nodeIntegration: false }
+    webPreferences: { session: getWebSession(), preload: path.join(__dirname, 'yt-preload.js'), contextIsolation: true, nodeIntegration: false }
   });
-  yt.webContents.setUserAgent(yt.webContents.getUserAgent().replace(/\s(Electron|dj-islam-ayman-studio|islam-ayman-edits|islam-ayman-studio)\/\S+/gi, ''));
+  yt.webContents.setUserAgent(chromeUA());
+  // if a site refuses to open (an error page), tell the main window so it can offer the normal browser
+  yt.webContents.on('did-navigate', (e, u, code) => { if (code >= 400 && win) win.webContents.send('web-error', { url: u, code }); });
+  yt.webContents.on('did-fail-load', (e, code, desc, u, isMain) => { if (isMain && code !== -3 && win) win.webContents.send('web-error', { url: u, code: desc }); });
   yt.webContents.setWindowOpenHandler(({ url }) => { if (/^https?:/i.test(url)) shell.openExternal(url); return { action: 'deny' }; });
   yt.on('closed', () => { yt = null; if (win) win.webContents.send('yt-closed'); });
   yt.loadURL(url);
 }
 ipcMain.on('yt-open', (e, url) => { if (typeof url === 'string' && /^https?:\/\//i.test(url)) openYouTube(url); });   // YouTube, Shazam, SoundCloud, any site
 ipcMain.on('yt-close', () => { if (yt) yt.close(); });
+ipcMain.on('open-external', (e, url) => { if (typeof url === 'string' && /^https?:\/\//i.test(url)) shell.openExternal(url); });
 ipcMain.on('yt-audio', (e, d) => { if (win && yt && e.sender === yt.webContents) win.webContents.send('yt-audio', d); });
 ipcMain.on('yt-info', (e, d) => { if (win && yt && e.sender === yt.webContents) win.webContents.send('yt-info', d); });
 ipcMain.on('web-track', (e, d) => { if (win && yt && e.sender === yt.webContents) { win.webContents.send('web-track', d); win.focus(); } });
