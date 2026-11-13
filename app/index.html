@@ -188,6 +188,7 @@ img.gear{width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 10px 14p
 @media(min-width:900px){#v-home .grid{grid-template-columns:repeat(3,1fr)}}
 .gear-logo{display:inline-grid;place-items:center;width:64px;height:64px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))}
 .gear-logo.big{width:150px;height:150px;margin:-14px auto 4px;display:grid}
+.sp-out{margin-top:10px}.sp-out ul{padding-inline-start:20px;line-height:1.9}.sp-out a{color:var(--wine3)}
 footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding:20px;direction:ltr}
 </style>
 </head>
@@ -484,7 +485,18 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
         </ol>
         </div>
         <div class="row" style="margin-top:12px"><button class="btn primary" id="m-test">جرّب الاتصال</button></div>
-        <div class="note">مع المفتاح، البرنامج بيبعت مقطع من كل دقيقة في الميكس لـ AudD، ويكتبلك اسم كل تراك وجنبه زرار "افتح في Spotify" و"افتح في أنغامي". كل تراك بيظهر مرة واحدة حتى لو اتسمع كذا مرة. AudD فيه تجربة مجانية، وبعدها بفلوس قليلة حسب عدد المقاطع.</div>
+        <div class="note">البرنامج بيبعت مقطع من الميكس للخدمة اللي اخترتها، ويكتبلك اسم كل تراك وجنبه زرار "افتح في Spotify" و"افتح في أنغامي". كل تراك بيظهر مرة واحدة حتى لو اتسمع كذا مرة. الخدمتين فيهم تجربة مجانية، وبعدها بفلوس حسب عدد المقاطع.</div>
+        <h3 style="margin:22px 0 6px;font-size:16px" class="logo-btn" id="sp-h">Spotify: عمل البلاي ليست</h3>
+        <label class="f">Spotify Client ID</label>
+        <input type="text" id="sp-client" data-keep class="latin" placeholder="الصق الـ Client ID هنا">
+        <ol class="steps" style="margin-top:10px">
+          <li>افتح <a href="https://developer.spotify.com/dashboard" target="_blank" style="color:var(--wine3)">developer.spotify.com/dashboard</a> وادخل بحساب سبوتيفاي بتاعك.</li>
+          <li>دوس <b>Create app</b>، واكتب أي اسم ووصف.</li>
+          <li>في <b>Redirect URIs</b> الصق ده بالظبط: <b class="latin" style="user-select:all">http://127.0.0.1:43821/callback</b> ودوس <b>Add</b>.</li>
+          <li>في <b>Which API/SDKs</b> علّم على <b>Web API</b>، ووافق على الشروط، ودوس <b>Save</b>.</li>
+          <li>انسخ الـ <b>Client ID</b> والصقه هنا، ودوس "اربط حساب Spotify".</li>
+        </ol>
+        <div class="row"><button class="btn primary logo-btn" id="sp-login">اربط حساب Spotify</button><span id="sp-state" style="color:var(--muted);font-size:14px"></span></div>
       </div>
 
       <details style="margin-top:18px"><summary style="cursor:pointer;color:var(--muted);font-size:14px">وصف الفيديو، آخر حاجة البرنامج يرجعلها (اختياري)</summary>
@@ -496,7 +508,8 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
       <div class="msg" id="m-msg"></div>
       <div id="m-res" class="hidden trk-res">
         <div class="tbl-wrap"><table class="tl"><thead><tr><th>الوقت</th><th>التراك</th><th>المصدر</th><th>هات التراك</th></tr></thead><tbody id="m-body" class="trk-body"></tbody></table></div>
-        <div class="row" style="margin-top:14px"><button class="btn" id="m-copy">انسخ التراك ليست</button></div>
+        <div class="row" style="margin-top:14px"><button class="btn primary trk-sp logo-btn">اعمل بلاي ليست على Spotify</button><button class="btn" id="m-copy">انسخ التراك ليست</button></div>
+        <div class="sp-out"></div>
       </div>
     </div>
   </section>
@@ -672,7 +685,7 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
       <div class="msg" id="z-msg"></div>
       <div class="trk-res hidden"><h3 style="margin:18px 0 6px;font-size:16px">التراكات</h3>
         <div class="tbl-wrap"><table class="tl"><thead><tr><th>الوقت</th><th>التراك</th><th>المصدر</th><th>افتحه في</th></tr></thead><tbody class="trk-body"></tbody></table></div>
-        <div class="row" style="margin-top:12px"><button class="btn trk-copy">انسخ التراك ليست</button></div></div>
+        <div class="row" style="margin-top:12px"><button class="btn primary trk-sp logo-btn">اعمل بلاي ليست على Spotify</button><button class="btn trk-copy">انسخ التراك ليست</button></div><div class="sp-out"></div></div>
     </div>
   </section>
 
@@ -706,7 +719,7 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
       <div class="progress" id="f-prog"><i></i></div>
       <div class="msg" id="f-msg"></div>
       <div class="trk-res hidden"><div class="tbl-wrap" style="margin-top:14px"><table class="tl"><thead><tr><th>الوقت</th><th>التراك</th><th>المصدر</th><th>افتحه في</th></tr></thead><tbody class="trk-body"></tbody></table></div>
-        <div class="row" style="margin-top:12px"><button class="btn trk-copy">انسخ التراك ليست</button></div></div>
+        <div class="row" style="margin-top:12px"><button class="btn primary trk-sp logo-btn">اعمل بلاي ليست على Spotify</button><button class="btn trk-copy">انسخ التراك ليست</button></div><div class="sp-out"></div></div>
     </div>
   </section>
 
@@ -2423,6 +2436,37 @@ $('x-save').onclick=async()=>{
   }catch(e){ msg('x-msg','حصلت مشكلة: '+e.message,false); }
   prog.classList.remove('show'); $('x-save').disabled=false; busy(false);
 };
+
+/* ================= Spotify playlist from the found tracks ================= */
+$('sp-h').insertAdjacentHTML('afterbegin',logo('Spotify',20)); $('sp-login').insertAdjacentHTML('afterbegin',logo('Spotify',16));
+document.querySelectorAll('.trk-sp').forEach(b=>b.insertAdjacentHTML('afterbegin',logo('Spotify',16)));
+async function spState(){ const id=$('sp-client').value.trim(); if(!APP||!APP.spotifyStatus){ $('sp-state').textContent='شغّال في البرنامج المتسطّب بس'; return false; }
+  const ok=id?await APP.spotifyStatus(id):false; $('sp-state').textContent=ok?'✓ حساب Spotify متربط':(id?'لسه مش متربط':''); return ok; }
+dataReady.then(spState);
+$('sp-login').onclick=async()=>{ const id=$('sp-client').value.trim(); if(!id) return msg('m-msg','الصق الـ Client ID الأول',false);
+  $('sp-state').textContent='كمّل تسجيل الدخول في المتصفح اللي اتفتح…';
+  try{ await APP.spotifyLogin(id); await spState(); msg('m-msg','تمام ✓ حساب Spotify اتربط. دلوقتي زرار "اعمل بلاي ليست على Spotify" شغّال.',true); }
+  catch(e){ $('sp-state').textContent=''; msg('m-msg','ربط Spotify ما نجحش: '+e.message+'. اتأكد إن الـ Redirect URI مكتوب بالظبط زي ما هو فوق.',false); } };
+document.addEventListener('click',async e=>{
+  const b=e.target.closest('.trk-sp'); if(!b) return;
+  const out=b.closest('.trk-res,#m-res').querySelector('.sp-out'), id=$('sp-client').value.trim(), list=merged();
+  const say=(h,ok)=>{ out.innerHTML=`<div class="msg show ${ok?'ok':'err'}">${h}</div>`; };
+  if(!APP||!APP.spotifyPlaylist) return say('عمل البلاي ليست شغّال في البرنامج المتسطّب بس',false);
+  if(!id||!(await APP.spotifyStatus(id))) return say('اربط حساب Spotify الأول: "اعرف أسامي التراكات" ← الإعدادات ← Spotify',false);
+  if(!list.length) return say('مفيش تراكات لسه',false);
+  b.disabled=true; busy(true); say('بيدوّر على '+list.length+' تراك في Spotify ويعمل البلاي ليست…',true);
+  try{
+    const src=$('m-link').value.trim()||$('f-link').value.trim();
+    const name='DJ ISLAM AYMAN · '+(M.yt&&M.yt.title?M.yt.title.slice(0,60):'Set')+' · '+new Date().toLocaleDateString('en-GB');
+    const r=await APP.spotifyPlaylist(id,name,list.map(h=>({artist:h.artist||'',title:h.title,spotify:h.spotify||''})));
+    const miss=r.missing.map(h=>{const q=encodeURIComponent((h.artist?h.artist+' ':'')+h.title);
+      return `<li class="latin" style="text-align:right">${esc((h.artist?h.artist+' - ':'')+h.title)} · <a href="https://open.spotify.com/search/${q}" target="_blank">دوّر عليه</a> · <a href="https://play.anghami.com/search/${q}" target="_blank">أنغامي</a> · <a href="https://www.youtube.com/results?search_query=${q}" target="_blank">YouTube</a></li>`;}).join('');
+    say((r.url?`تمام ✓ اتعملت بلاي ليست فيها ${r.added} تراك من ${list.length}. <a class="open-btn sp" href="${r.url}" target="_blank">${logo('Spotify',16)}افتح البلاي ليست</a>`:'ملقاش ولا تراك على Spotify.')+
+      (miss?`<div style="margin-top:8px">التراكات دي مش موجودة على Spotify (غالباً ريمكس أو edit مش مرفوع):<ul style="margin:6px 0 0">${miss}</ul></div>`:''),!!r.url);
+    logEdit('بلاي ليست Spotify',name,`${r.added}/${list.length} تراك`);
+  }catch(err){ say(err.message==='login'?'اربط حساب Spotify تاني من الإعدادات':'حصلت مشكلة: '+err.message,false); }
+  b.disabled=false; busy(false);
+});
 
 /* ================= Shazam window + listen to a whole set ================= */
 $('home-shz').innerHTML=logo('Shazam',120);
