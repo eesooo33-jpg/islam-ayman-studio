@@ -188,11 +188,24 @@ ipcMain.handle('spotify-playlist', async (e, clientId, name, tracks) => {
 });
 
 /* ---------- New releases & trends: read-only calls to the official Spotify / YouTube APIs ---------- */
-ipcMain.handle('spotify-get', async (e, clientId, p) => {
+// app-only token (Client ID + Client Secret): reading public catalog data doesn't need the user's account
+let spApp = { key: '', tok: '', exp: 0 };
+async function spAppToken(clientId, secret) {
+  if (!clientId || !secret) return null;
+  if (spApp.key === clientId + secret && Date.now() < spApp.exp - 60000) return spApp.tok;
+  const r = await fetch('https://accounts.spotify.com/api/token', { method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded', Authorization: 'Basic ' + Buffer.from(clientId + ':' + secret).toString('base64') },
+    body: new URLSearchParams({ grant_type: 'client_credentials' }) });
+  const j = await r.json().catch(() => ({})); if (!j.access_token) throw new Error('SPOTIFY_REFUSED: Client Secret: ' + (j.error_description || j.error || r.status));
+  spApp = { key: clientId + secret, tok: j.access_token, exp: Date.now() + j.expires_in * 1000 }; return spApp.tok;
+}
+ipcMain.handle('spotify-get', async (e, clientId, p, secret) => {
   if (typeof p !== 'string' || !/^\/(search|browse\/new-releases)\?/.test(p)) throw new Error('not allowed');
-  const tok = await spToken(clientId); if (!tok) throw new Error('login');
-  const r = await fetch('https://api.spotify.com/v1' + p, { headers: { Authorization: 'Bearer ' + tok } });
-  const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error('SPOTIFY_REFUSED: ' + ((j.error && j.error.message) || r.status)); return j;
+  const call = async tok => { const r = await fetch('https://api.spotify.com/v1' + p, { headers: { Authorization: 'Bearer ' + tok } }); return { r, j: await r.json().catch(() => ({})) }; };
+  let tok = await spToken(clientId).catch(() => null), res = tok ? await call(tok) : null;
+  if ((!res || !res.r.ok) && secret) { const at = await spAppToken(clientId, secret); if (at) res = await call(at); }   // fall back to the app-only token
+  if (!res) throw new Error('login');
+  if (!res.r.ok) throw new Error('SPOTIFY_REFUSED: ' + ((res.j.error && res.j.error.message) || res.r.status)); return res.j;
 });
 ipcMain.handle('yt-api', async (e, p, key) => {
   if (typeof p !== 'string' || !/^\/(search|videos)\?/.test(p)) throw new Error('not allowed');

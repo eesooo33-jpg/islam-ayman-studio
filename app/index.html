@@ -500,12 +500,15 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
         <h3 style="margin:22px 0 6px;font-size:16px" class="logo-btn" id="sp-h">Spotify: عمل البلاي ليست</h3>
         <label class="f">Spotify Client ID</label>
         <input type="text" id="sp-client" data-keep class="latin" placeholder="الصق الـ Client ID هنا">
+        <label class="f">Spotify Client Secret (عشان قوايم الجديد والترند تشتغل حتى لو سبوتيفاي رافض حسابك)</label>
+        <input type="password" id="sp-secret" data-keep class="latin" placeholder="من Settings ← View client secret">
         <ol class="steps" style="margin-top:10px">
           <li>افتح <a href="https://developer.spotify.com/dashboard" target="_blank" style="color:var(--wine3)">developer.spotify.com/dashboard</a> وادخل بحساب سبوتيفاي بتاعك.</li>
           <li>دوس <b>Create app</b>، واكتب أي اسم ووصف.</li>
           <li>في <b>Redirect URIs</b> الصق ده بالظبط: <b class="latin" style="user-select:all">http://127.0.0.1:43821/callback</b> ودوس <b>Add</b>.</li>
           <li>في <b>Which API/SDKs</b> علّم على <b>Web API</b>، ووافق على الشروط، ودوس <b>Save</b>.</li>
-          <li>انسخ الـ <b>Client ID</b> والصقه هنا، ودوس "اربط حساب Spotify".</li>
+          <li>انسخ الـ <b>Client ID</b> والصقه هنا. وتحته دوس <b>View client secret</b> وانسخ الـ <b>Client Secret</b> والصقه في الخانة التانية.</li>
+          <li>دوس "اربط حساب Spotify" (ده عشان عمل البلاي ليستات في حسابك).</li>
         </ol>
         <div class="row"><button class="btn primary logo-btn" id="sp-login">اربط حساب Spotify</button><span id="sp-state" style="color:var(--muted);font-size:14px"></span></div>
       </div>
@@ -750,7 +753,7 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
       <div id="n-new">
         <div class="genres" id="n-genres"></div>
         <div class="row" style="margin-top:14px" id="n-src">
-          <span class="tab on" data-s="sp"></span><span class="tab" data-s="yt"></span><span class="tab" data-s="bp"></span>
+          <span class="tab on" data-s="sp"></span><span class="tab" data-s="an"></span><span class="tab" data-s="sc"></span><span class="tab" data-s="yt"></span><span class="tab" data-s="bp"></span>
           <select id="n-market" data-keep style="margin-inline-start:auto"></select>
         </div>
       </div>
@@ -2663,11 +2666,12 @@ const REGIONS=[['US','عالمي (أمريكا)'],['GB','بريطانيا'],['EG
 const NW={genre:0,src:'sp',items:[]};
 $('n-genres').innerHTML=NG.map((g,i)=>`<button class="genre${i?'':' on'}" data-g="${i}"><b>${esc(g[0])}</b></button>`).join('');
 $('n-market').innerHTML=REGIONS.map(([c,n])=>`<option value="${c}">${n}</option>`).join(''); $('n-region').innerHTML=$('n-market').innerHTML;
-const srcBtn={sp:logo('Spotify',16)+' Spotify',yt:logo('YouTube',16)+' YouTube',bp:logo('Beatport',16)+' Beatport'};
+const srcBtn={sp:logo('Spotify',16)+' Spotify',an:logo('Anghami',16)+' أنغامي',sc:logo('SoundCloud',16)+' SoundCloud',yt:logo('YouTube',16)+' YouTube',bp:logo('Beatport',16)+' Beatport'};
 document.querySelectorAll('#n-src [data-s]').forEach(t=>t.innerHTML=srcBtn[t.dataset.s]);
 $('n-yt-h').insertAdjacentHTML('afterbegin',logo('YouTube',20)); $('n-pl').insertAdjacentHTML('afterbegin',logo('Spotify',16));
 $('n-trend-links').innerHTML=[['Spotify Top 50 Global','Spotify','https://open.spotify.com/playlist/37i9dQZEVXbMDoHDwVN2tF'],['Spotify Charts','Spotify','https://charts.spotify.com/charts/view/regional-global-daily/latest'],
-  ['Beatport Top 100','Beatport','https://www.beatport.com/top-100'],['YouTube Charts','YouTube','https://charts.youtube.com/charts/TopSongs/global/weekly'],['Shazam Global Top 200','Shazam','https://www.shazam.com/charts/top-200/world']]
+  ['Spotify Viral 50','Spotify','https://open.spotify.com/playlist/37i9dQZEVXbLiRSasKsNU9'],['أنغامي: الأكثر استماعاً','Anghami','https://play.anghami.com/search/top%20songs'],
+  ['SoundCloud Discover','SoundCloud','https://soundcloud.com/discover'],['Beatport Top 100','Beatport','https://www.beatport.com/top-100'],['YouTube Charts','YouTube','https://charts.youtube.com/charts/TopSongs/global/weekly'],['Shazam Global Top 200','Shazam','https://www.shazam.com/charts/top-200/world']]
   .map(([n,l,u])=>`<a class="open-btn" style="border:1px solid var(--line)" href="${u}" target="_blank">${logo(l,16)}${n}</a>`).join('');
 document.querySelectorAll('#n-tabs .tab').forEach(t=>t.onclick=()=>{ document.querySelectorAll('#n-tabs .tab').forEach(x=>x.classList.toggle('on',x===t));
   ['new','trend','set'].forEach(k=>$('n-'+k).classList.toggle('hidden',k!==t.dataset.t)); if(t.dataset.t==='new') nLoad(); });
@@ -2675,7 +2679,7 @@ $('n-genres').onclick=e=>{const b=e.target.closest('.genre'); if(!b) return; NW.
 $('n-src').onclick=e=>{const t=e.target.closest('[data-s]'); if(!t) return; NW.src=t.dataset.s; document.querySelectorAll('#n-src [data-s]').forEach(x=>x.classList.toggle('on',x===t)); nLoad();};
 $('n-market').onchange=()=>nLoad();
 const spId=()=>$('sp-client').value.trim(), ytKey=()=>$('n-yt-key').value.trim();
-async function spGet(p){ if(!APP||!APP.spotifyGet) throw new Error('سبوتيفاي شغّال في البرنامج المتسطّب بس'); if(!spId()) throw new Error('NEED_SP'); return APP.spotifyGet(spId(),p); }
+async function spGet(p){ if(!APP||!APP.spotifyGet) throw new Error('سبوتيفاي شغّال في البرنامج المتسطّب بس'); if(!spId()) throw new Error('NEED_SP'); return APP.spotifyGet(spId(),p,$('sp-secret').value.trim()); }
 async function ytGet(p){ if(!ytKey()) throw new Error('NEED_YT'); if(APP&&APP.ytApi) return APP.ytApi(p,ytKey());
   const r=await fetch('https://www.googleapis.com/youtube/v3'+p+'&key='+encodeURIComponent(ytKey())); const j=await r.json(); if(!r.ok) throw new Error((j.error&&j.error.message)||'YouTube'); return j; }
 const fmtViews=n=>n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?Math.round(n/1e3)+'K':String(n||'');
@@ -2716,6 +2720,19 @@ let nSeq=0;
 async function nLoad(){
   const g=NG[NW.genre], seq=++nSeq, Y=new Date().getFullYear(), mk=$('n-market').value;
   $('n-list').innerHTML=''; $('n-bar').classList.add('hidden');
+  const card=(title,links,note)=>`<div class="daw" style="margin-top:0"><div style="font-size:16px;font-weight:800;margin-bottom:10px">${title}</div><div class="apps" style="gap:8px">
+      ${links.map(([l,n,u])=>`<a class="open-btn" style="border:1px solid var(--line)" href="${u}" target="_blank">${logo(l,16)}${n}</a>`).join('')}</div>${note?`<div class="note">${note}</div>`:''}</div>`;
+  const q=encodeURIComponent(g[1]);
+  const spPages=card(`${esc(g[0])}: صفحات Spotify الرسمية`,[['Spotify','قوايم '+g[0]+' الجديدة',`https://open.spotify.com/search/${encodeURIComponent(g[1]+' new')}/playlists`],
+    ['Spotify','تراكات '+g[0],`https://open.spotify.com/search/${q}/tracks`],['Spotify','New Music Friday','https://open.spotify.com/playlist/37i9dQZF1DX4JAvHpjipBk'],
+    ['Spotify','Top 50 Global','https://open.spotify.com/playlist/37i9dQZEVXbMDoHDwVN2tF'],['Spotify','Viral 50 Global','https://open.spotify.com/playlist/37i9dQZEVXbLiRSasKsNU9']]);
+  if(NW.src==='an'){ $('n-msg').className='msg';
+    $('n-list').innerHTML=card(`${esc(g[0])} على أنغامي`,[['Anghami','الجديد',`https://play.anghami.com/search/${encodeURIComponent(g[1]+' '+Y)}`],['Anghami','كل '+g[0],`https://play.anghami.com/search/${q}`],
+      ['Anghami','قوايم '+g[0],`https://play.anghami.com/search/${encodeURIComponent(g[1]+' playlist')}`]],'أنغامي مالوش طريقة رسمية تخلّي البرامج تقرا قوايمه، فالزراير دي بتفتح نتايجه على طول في أنغامي.'); return; }
+  if(NW.src==='sc'){ $('n-msg').className='msg';
+    $('n-list').innerHTML=card(`${esc(g[0])} على SoundCloud`,[['SoundCloud','جديد الأسبوع ده',`https://soundcloud.com/search/sounds?q=${q}&filter.created_at=last_week`],
+      ['SoundCloud','جديد الشهر ده',`https://soundcloud.com/search/sounds?q=${q}&filter.created_at=last_month`],['SoundCloud','ريمكسات جديدة',`https://soundcloud.com/search/sounds?q=${encodeURIComponent(g[1]+' remix')}&filter.created_at=last_week`],
+      ['SoundCloud','قوايم '+g[0],`https://soundcloud.com/search/sets?q=${q}`]],'SoundCloud قفل التسجيل للبرامج الجديدة، فالزراير دي بتفتح بحثه الرسمي بفلتر "الجديد".'); return; }
   if(NW.src==='bp'){ $('n-msg').className='msg';
     $('n-list').innerHTML=g[3]?`<div class="daw"><div style="font-size:16px;font-weight:800;margin-bottom:10px">${esc(g[0])} على Beatport</div><div class="apps" style="gap:8px">
       <a class="open-btn" style="border:1px solid var(--line)" href="https://www.beatport.com/genre/${g[3][0]}/${g[3][1]}/top-100" target="_blank">${logo('Beatport',16)}Top 100</a>
@@ -2729,13 +2746,13 @@ async function nLoad(){
       const j=await spGet(`/search?type=track&limit=50&market=${mk}&q=`+encodeURIComponent(`genre:"${g[1]}" year:${Y-1}-${Y}`));
       let items=nItemsFromSpotifyTracks((j.tracks&&j.tracks.items)||[]);
       items.sort((a,b)=>(b.date||'').localeCompare(a.date||'')||b.pop-a.pop);
-      if(seq===nSeq) nRender(items,`جديد ${g[0]} على Spotify`);
+      if(seq===nSeq){ nRender(items,`جديد ${g[0]} على Spotify`); $('n-list').insertAdjacentHTML('afterbegin',spPages); }
     } else {
       const after=new Date(Date.now()-14*864e5).toISOString();
       const j=await ytGet(`/search?part=snippet&type=video&videoCategoryId=10&order=viewCount&maxResults=30&regionCode=${mk}&publishedAfter=${after}&q=`+encodeURIComponent(g[2]));
       const items=await nYouTubeItems(j); if(seq===nSeq) nRender(items,`أكتر ${g[0]} جديد اتشاف على YouTube آخر أسبوعين`);
     }
-  }catch(e){ if(seq===nSeq) nError(e); }
+  }catch(e){ if(seq===nSeq){ nError(e); if(NW.src==='sp') $('n-list').innerHTML=spPages; } }
   busy(false);
 }
 $('n-trend-go').onclick=async()=>{
