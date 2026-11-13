@@ -20,15 +20,18 @@ function migrateOldData() {
   } catch (e) {}
 }
 const LIB = () => path.join(DATA(), 'library');
-const STORES = new Set(['settings', 'franco', 'history']);
+const STORES = new Set(['settings', 'franco', 'history', 'sets']);
 function ensure() { fs.mkdirSync(LIB(), { recursive: true }); }
 function writeAtomic(file, data) { const tmp = file + '.tmp'; fs.writeFileSync(tmp, data); fs.renameSync(tmp, file); }
 function readJson(file, def) { try { return JSON.parse(fs.readFileSync(file, 'utf8')); } catch (e) { return def; } }
 
-ipcMain.handle('store-get', (e, name) => STORES.has(name) ? readJson(path.join(DATA(), name + '.json'), null) : null);
+// every saved file keeps a backup copy (.bak); if the main file is ever damaged, the backup is used
+ipcMain.handle('store-get', (e, name) => { if (!STORES.has(name)) return null;
+  const f = path.join(DATA(), name + '.json'); return readJson(f, null) ?? readJson(f + '.bak', null); });
 ipcMain.handle('store-set', (e, name, value) => {
   if (!STORES.has(name)) return false; ensure();
-  writeAtomic(path.join(DATA(), name + '.json'), JSON.stringify(value, null, 1)); return true;
+  const f = path.join(DATA(), name + '.json'), txt = JSON.stringify(value, null, 1);
+  writeAtomic(f, txt); try { JSON.parse(fs.readFileSync(f, 'utf8')); writeAtomic(f + '.bak', txt); } catch (err) {} return true;
 });
 ipcMain.handle('data-dir', () => { ensure(); return DATA(); });
 ipcMain.handle('open-data-dir', () => { ensure(); return shell.openPath(DATA()); });

@@ -197,6 +197,9 @@ img.gear{width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 10px 14p
 .n-txt{flex:1;min-width:180px;display:grid;gap:2px}.n-txt small{color:var(--muted)}
 .n-chk input{accent-color:var(--wine2);width:17px;height:17px}
 #n-src .tab{display:inline-flex;align-items:center;gap:6px}
+.health{max-width:900px;margin:0 auto 16px;padding:12px 16px;border-radius:12px;font-size:14px;line-height:1.7}
+.health.bad{background:rgba(255,45,85,.12);border:1px solid rgba(255,45,85,.45);color:#ffb3c2}
+.health.warn{background:rgba(255,176,32,.1);border:1px solid rgba(255,176,32,.4);color:#ffd27a}
 footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding:20px;direction:ltr}
 </style>
 </head>
@@ -316,6 +319,7 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
 <main>
   <!-- HOME -->
   <section id="v-home">
+    <div id="health" class="health hidden"></div>
     <div class="hero"><div class="hero-small">WELCOME BACK</div><div class="hero-name">DJ ISLAM AYMAN</div><div class="hero-sub">اختار الأداة اللي عايز تشتغل عليها</div></div>
     <div class="grid">
       <div class="module" onclick="go('single')"><span class="led"></span>
@@ -1492,16 +1496,39 @@ function onlineCfg(){ const prov=$('m-prov').value;
 const hasOnline=()=>!!onlineCfg();
 function syncProv(){ const a=$('m-prov').value==='acr'; $('m-acr-box').classList.toggle('hidden',!a); $('m-audd-box').classList.toggle('hidden',a); }
 $('m-prov').addEventListener('change',syncProv); dataReady.then(syncProv);
+// ---- safety around recognition: retry, switch service, explain clearly ----
+const REC={status:'',lastErr:''};
+const ACR_ERR={3001:'مفتاح ACRCloud (Access Key) مش صحيح',3002:'ACRCloud رفض الطلب',3003:'رصيد ACRCloud خلص أو فترة التجربة انتهت',3006:'البيانات اللي اتبعتت لـ ACRCloud ناقصة',
+  3014:'الـ Access Secret مش صحيح',3015:'طلبات كتير في وقت واحد',3000:'مشكلة في سيرفر ACRCloud',2004:'المقطع ضعيف ومقدرش يتحلل'};
+function allCfgs(){ const list=[], acr={host:$('m-acr-host').value.trim(),key:$('m-acr-key').value.trim(),secret:$('m-acr-secret').value.trim()}, tok=$('m-token').value.trim();
+  const a=acr.host&&acr.key&&acr.secret?{prov:'acr',cfg:acr}:null, d=tok?{prov:'audd',cfg:{token:tok}}:null;
+  if($('m-prov').value==='audd'){ if(d)list.push(d); if(a)list.push(a); } else { if(a)list.push(a); if(d)list.push(d); } return list; }
+function recStatus(state,why){ REC.status=state; REC.lastErr=why||''; const b=document.getElementById('health'); if(!b) return;
+  if(state==='bad'){ b.className='health bad'; b.innerHTML=`⚠ التعرّف على الأغاني واقف: <b>${esc(why)}</b>. افتح "اعرف أسامي التراكات" ← الإعدادات ← دوس "جرّب الاتصال".`+(why.includes('رصيد')?' لو التجربة خلصت، اشترك في خطة في ACRCloud، أو حط مفتاح AudD كخدمة احتياطية.':''); }
+  else if(state==='switched'){ b.className='health warn'; b.innerHTML=`ℹ ACRCloud وقف (<b>${esc(why)}</b>)، والبرنامج كمّل بـ AudD لوحده.`; }
+  else b.className='health hidden'; }
 async function recognize(blob,name){
-  const o=onlineCfg(); if(!o) return null;
+  const cfgs=allCfgs(); if(!cfgs.length) return null;
+  let lastE=null;
+  for(let k=0;k<cfgs.length;k++){
+    for(let attempt=0;attempt<3;attempt++){
+      try{ const h=await recognizeWith(cfgs[k],blob,name); if(REC.status!=='switched'||k===0) recStatus(k?'switched':'ok',lastE&&lastE.message); return h; }
+      catch(e){ lastE=e; if(!e.retry) break; await new Promise(r=>setTimeout(r,800*(attempt+1))); }   // network hiccup: try again
+    }
+  }
+  recStatus('bad',lastE?lastE.message:'غير معروف'); throw lastE||new Error('recognition failed');
+}
+async function recognizeWith(o,blob,name){
   let j;
-  if(APP&&APP.recognize) j=await APP.recognize(o.prov,o.cfg,new Uint8Array(await blob.arrayBuffer()),name);
+  const net=e=>{ const er=new Error('مفيش اتصال بالإنترنت أو السيرفر مش بيرد'); er.retry=true; return er; };
+  if(APP&&APP.recognize){ try{ j=await APP.recognize(o.prov,o.cfg,new Uint8Array(await blob.arrayBuffer()),name); }catch(e){ throw net(e); } }
   else if(o.prov==='audd'){ const fd=new FormData(); fd.append('file',blob,name); fd.append('return','spotify,apple_music,deezer'); fd.append('api_token',o.cfg.token);
     j=await (await fetch('https://api.audd.io/',{method:'POST',body:fd})).json(); }
   else throw new Error('ACRCloud شغّال في البرنامج المتسطّب بس');
   if(o.prov==='acr'){
     const code=j&&j.status&&j.status.code; if(code===1001) return null;                      // 1001 = no match
-    if(code!==0) throw new Error('ACRCloud: '+((j&&j.status&&j.status.msg)||'error'));
+    if(code===2004) return null;
+    if(code!==0){ const er=new Error(ACR_ERR[code]||('ACRCloud: '+((j&&j.status&&j.status.msg)||'error'))); er.retry=(code===3015||code===3000); throw er; }
     const m=j.metadata&&j.metadata.music&&j.metadata.music[0]; if(!m) return null; const ex=m.external_metadata||{};
     const one=x=>Array.isArray(x)?x[0]:x, sp=one(ex.spotify)&&one(ex.spotify).track&&one(ex.spotify).track.id, dz=one(ex.deezer)&&one(ex.deezer).track&&one(ex.deezer).track.id;
     return {artist:(m.artists||[]).map(a=>a.name).join(', '),title:m.title||'',spotify:sp?'https://open.spotify.com/track/'+sp:'',deezer:dz?'https://www.deezer.com/track/'+dz:'',apple:'',src:'ear'};
@@ -1515,16 +1542,21 @@ function wavBlob(pcm,sr){const n=pcm.length,b=new ArrayBuffer(44+n*2),v=new Data
   v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*2,true);
   for(let i=0;i<n;i++)v.setInt16(44+i*2,Math.max(-1,Math.min(1,pcm[i]))*32767,true);return new Blob([b],{type:'audio/wav'});}
 let lastOnline=-1e9;
+function testTone(){ const sr=11025,n=sr*5,pcm=new Float32Array(n); for(let i=0;i<n;i++) pcm[i]=0.3*Math.sin(2*Math.PI*440*i/sr)*Math.sin(Math.PI*i/n); return wavBlob(pcm,sr); }
+// once a day, quietly check that song recognition still works, and warn on the home screen if not
+dataReady.then(async()=>{ if(!allCfgs().length) return; const today=new Date().toISOString().slice(0,10);
+  if(SETTINGS.__recCheck===today&&SETTINGS.__recOk) return;
+  try{ await recognize(testTone(),'check.wav'); SETTINGS.__recCheck=today; SETTINGS.__recOk=true; }catch(e){ SETTINGS.__recCheck=today; SETTINGS.__recOk=false; }
+  saveSettings(); });
 $('m-test').onclick=async()=>{
   if(!hasOnline()) return msg('m-msg','حط بيانات الخدمة الأول',false);
-  const sr=11025,n=sr*5,pcm=new Float32Array(n); for(let i=0;i<n;i++) pcm[i]=0.3*Math.sin(2*Math.PI*440*i/sr)*Math.sin(Math.PI*i/n);
-  try{ const h=await recognize(wavBlob(pcm,sr),'test.wav'); msg('m-msg','الاتصال شغّال ✓ '+(h?'(رد بأغنية)':'(الخدمة ردّت ومفيش أغنية في المقطع التجريبي، وده الطبيعي)'),true); }
+  try{ const h=await recognize(testTone(),'test.wav'); msg('m-msg','الاتصال شغّال ✓ '+(h?'(رد بأغنية)':'(الخدمة ردّت ومفيش أغنية في المقطع التجريبي، وده الطبيعي)'),true); }
   catch(e){ msg('m-msg','الاتصال فشل: '+e.message,false); }
 };
 async function identify(pcm,t,raw){
   let h=matchLocal(pcm);
   if(!h && hasOnline() && t-lastOnline>=ONLINE_EVERY){ lastOnline=t;     // online at most once every ONLINE_EVERY seconds of mix
-    try{ h=raw?await recognize(raw.blob,raw.name):await recognize(wavBlob(pcm.subarray(0,FP.SR*12),FP.SR),'snip.wav'); }catch(e){ msg(MSGID,'AudD: '+e.message,false); }
+    try{ h=raw?await recognize(raw.blob,raw.name):await recognize(wavBlob(pcm.subarray(0,FP.SR*12),FP.SR),'snip.wav'); }catch(e){ M.failed=true; msg(MSGID,'التعرّف أونلاين وقف: '+e.message,false); }
   }
   if(h) addHit(t,h);
 }
@@ -1713,33 +1745,65 @@ mDrop.ondrop=e=>{e.preventDefault();mDrop.classList.remove('over');if(e.dataTran
 mFin.onchange=()=>{if(mFin.files[0])scanMixFile(mFin.files[0]);mFin.value='';};
 function fileDuration(file){return new Promise((res,rej)=>{const a=new Audio();a.preload='metadata';a.src=URL.createObjectURL(file);
   a.onloadedmetadata=()=>{URL.revokeObjectURL(a.src);res(a.duration)};a.onerror=()=>rej(new Error('مقدرتش أقرا مدة الملف'));});}
+// ---- set analysis that doesn't lose tracks: pass 1 + second pass on empty parts + saved results + resume ----
+let SETS=null; async function setsLoad(){ if(!SETS) SETS=await Store.get('sets')||{}; return SETS; }
+async function setsSave(key,data){ await setsLoad(); SETS[key]=data; const ks=Object.keys(SETS); if(ks.length>200) delete SETS[ks.sort((x,y)=>(SETS[x].at||'').localeCompare(SETS[y].at||''))[0]]; Store.set('sets',SETS); }
+function setSlicer(file,dur,head,bps,isWav,wavHdr,align){
+  return async(t,len=WIN)=>{ let from=head+Math.floor(Math.max(0,t)*bps); if(isWav) from-=(from-head)%align; const to=Math.min(file.size, from+Math.floor(len*bps));
+    let buf; if(isWav){ const hdr=wavHdr.slice(),dv=new DataView(hdr.buffer); dv.setUint32(4,36+(to-from),true); dv.setUint32(40,to-from,true); buf=await new Blob([hdr,file.slice(from,to)]).arrayBuffer(); }
+    else buf=await file.slice(from,to).arrayBuffer();
+    return {buf,raw:{blob:new Blob([buf.slice(0)],{type:isWav?'audio/wav':'audio/mpeg'}),name:isWav?'snip.wav':'snip.mp3'}}; };
+}
+function emptyParts(dur,minLen=45){ const cov=heard().map(h=>[Math.max(0,h.start-HOPW),h.end+WIN]).sort((a,b)=>a[0]-b[0]); const gaps=[]; let x=0;
+  for(const [a,b] of cov){ if(a-x>=minLen) gaps.push([x,a]); x=Math.max(x,b); } if(dur-x>=minLen) gaps.push([x,dur]); return gaps; }
+async function fillGaps(slice,dur,prog,label){
+  if(!hasOnline()) return 0; const gaps=emptyParts(dur); let n=0, asked=0; const total=gaps.reduce((a,[s,e])=>a+Math.max(1,Math.floor((e-s)/30)),0);
+  for(const [s,e] of gaps){ for(let t=s+8;t<e-8;t+=30){   // a few points in each empty part, shifted away from the transitions
+      asked++; prog.firstElementChild.style.width=(asked/Math.max(1,total)*100)+'%';
+      document.querySelectorAll('.live-ind').forEach(el=>el.lastElementChild.textContent=`${label} ${fmt(t)} · عرف ${heard().length} تراك`);
+      try{ const {raw}=await slice(t,14); const h=await recognize(raw.blob,raw.name); if(h){ addHit(t,h); n++; } }catch(err){ M.failed=true; return n; } } }
+  return n;
+}
 async function scanMixFile(file){
   if(M.running) return;
   if(PROGID!=='f-prog'){ MSGID='m-msg'; PROGID='m-prog'; ONLINE_EVERY=60; }
   const isWav=/\.wav$/i.test(file.name);
   if(!isWav && !/\.mp3$/i.test(file.name)) return msg('m-msg','الملف لازم يكون MP3 أو WAV',false);
   if(!startCheck()) return;
-  M.running=true; M.hits=[]; lastOnline=-1e9; renderMix(); busy(true); $(MSGID).className='msg';
+  const key=file.name+'|'+file.size, saved=(await setsLoad())[key];
+  if(saved&&!M.forceRescan){ M.hits=saved.hits; M.yt=null; renderMix();
+    msg(MSGID,`دي نتيجة السيت ده المحفوظة من ${new Date(saved.at).toLocaleDateString('ar-EG')} (${saved.hits.length} تراك)، من غير ما يصرف رصيد.`,true);
+    const b=document.createElement('button'); b.className='btn'; b.style.cssText='padding:4px 10px;margin-inline-start:10px'; b.textContent='حلّله تاني من الأول';
+    b.onclick=()=>{ M.forceRescan=true; scanMixFile(file).finally(()=>M.forceRescan=false); }; $(MSGID).append(b); return; }
+  M.running=true; M.hits=[]; M.failed=false; lastOnline=-1e9; renderMix(); busy(true); $(MSGID).className='msg';
   const prog=$(PROGID); prog.classList.add('show'); prog.firstElementChild.style.width='0';
   try{
     const dur=await fileDuration(file);
     let head=0, wavHdr=null, bps, align=1;
     if(isWav){ wavHdr=new Uint8Array(await file.slice(0,44).arrayBuffer()); head=44; const dv=new DataView(wavHdr.buffer); bps=dv.getUint32(28,true); align=dv.getUint16(32,true); }
     else { const h=new Uint8Array(await file.slice(0,10).arrayBuffer()); if(h[0]===73&&h[1]===68&&h[2]===51) head=10+ss(h,6); bps=(file.size-head)/dur; }
+    const slice=setSlicer(file,dur,head,bps,isWav,wavHdr,align);
+    if(hasOnline()) msg(MSGID,`السيت مدته ${fmt(dur)} · هيستخدم حوالي ${Math.ceil(dur/ONLINE_EVERY)+Math.ceil(dur/300)} طلب من رصيد التعرّف أونلاين`,true);
+    // pass 1
     const times=[]; for(let t=0; t<Math.max(1,dur-WIN/2); t+=HOPW) times.push(t);
     for(let i=0;i<times.length;i++){
       const t=times[i];
-      let from=head+Math.floor(t*bps); if(isWav) from-=(from-head)%align;
-      const to=Math.min(file.size, from+Math.floor(WIN*bps));
-      let buf;
-      if(isWav){ const hdr=wavHdr.slice(); const dv=new DataView(hdr.buffer); dv.setUint32(4,36+(to-from),true); dv.setUint32(40,to-from,true);
-        buf=await new Blob([hdr,file.slice(from,to)]).arrayBuffer(); }
-      else buf=await file.slice(from,to).arrayBuffer();
-      try{ const raw={blob:new Blob([buf.slice(0)],{type:isWav?'audio/wav':'audio/mpeg'}),name:isWav?'snip.wav':'snip.mp3'}; const pcm=await decodeMono(buf); if(pcm.length>FP.SR*3) await identify(pcm,t,raw); }catch(e){}
+      try{ const {buf,raw}=await slice(t); const pcm=await decodeMono(buf); if(pcm.length>FP.SR*3) await identify(pcm,t,raw); }catch(e){}
       prog.firstElementChild.style.width=((i+1)/times.length*100)+'%';
       document.querySelectorAll('.live-ind').forEach(el=>el.lastElementChild.textContent=`بيسمع ${fmt(t)} من ${fmt(dur)} · عرف ${heard().length} تراك`);
     }
+    // pass 2: go back to the empty parts
+    if(!M.failed&&emptyParts(dur).length) await fillGaps(slice,dur,prog,'لفّة تانية على الأجزاء الفاضية:');
+    await setsSave(key,{name:file.name,dur,at:new Date().toISOString(),hits:heard()});
     doneMsg();
+    const gaps=emptyParts(dur);
+    if(gaps.length&&(M.failed||REC.status==='bad')){
+      const b=document.createElement('button'); b.className='btn primary'; b.style.cssText='padding:4px 10px;margin-inline-start:10px'; b.textContent=`كمّل الأماكن الناقصة (${gaps.length})`;
+      b.onclick=async()=>{ if(M.running) return; M.running=true; M.failed=false; busy(true); prog.classList.add('show');
+        await fillGaps(slice,dur,prog,'بيكمّل:'); await setsSave(key,{name:file.name,dur,at:new Date().toISOString(),hits:heard()});
+        M.running=false; busy(false); prog.classList.remove('show'); doneMsg(); };
+      $(MSGID).append(' ',b);
+    }
   }catch(e){ msg(MSGID,e.message,false); }
   M.running=false; busy(false); document.querySelectorAll('.live-ind').forEach(el=>el.lastElementChild.textContent='مش بيسمع'); PROGID='m-prog';
 }
