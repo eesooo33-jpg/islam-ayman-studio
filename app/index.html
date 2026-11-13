@@ -461,9 +461,15 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
             <li>لما يخلص، افتح Library في Shazam، هتلاقي التراكات كلها بالترتيب.</li>
           </ol>
           <div class="row"><button class="btn primary logo-btn" id="shz-go">اختار الميكس وشغّله لـ Shazam</button>
-            <select id="shz-step" data-keep><option value="60">مقطع من كل دقيقة</option><option value="90">مقطع كل دقيقة ونص</option><option value="120">مقطع كل دقيقتين</option></select>
+            <select id="shz-step" data-keep><option value="smart">مقطع واحد لكل تراك (ذكي وأسرع)</option><option value="60">مقطع من كل دقيقة</option><option value="90">مقطع كل دقيقة ونص</option><option value="120">مقطع كل دقيقتين</option></select>
             <input type="file" id="shz-file" accept=".mp3,.wav,audio/mpeg,audio/wav" hidden></div>
           <div id="shz-now" class="shz-now hidden"></div>
+          <div id="shz-paste" class="hidden" style="margin-top:12px">
+            <label class="f">الصق هنا أسامي الأغاني اللي Shazam لقاها، بالترتيب، كل أغنية في سطر (مثلاً: Artist - Title)</label>
+            <textarea id="shz-names" class="latin" placeholder="Artist - Title&#10;Artist - Title"></textarea>
+            <div class="row" style="margin-top:8px"><button class="btn primary" id="shz-apply">حطهم في قايمة التراكات</button>
+              <span style="color:var(--muted);font-size:13px">كل سطر بياخد وقت المقطع اللي قصاده. ولو فيه مقطع Shazam ما عرفوش، اكتب مكانه سطر فاضي أو "-".</span></div>
+          </div>
           <div class="tbl-wrap hidden" id="shz-wrap" style="max-height:220px"><table><thead><tr><th>المقطع</th><th>الوقت في الميكس</th><th>التراك (لو مفتاح AudD موجود)</th><th></th></tr></thead><tbody id="shz-list"></tbody></table></div>
         </div>
       </div>
@@ -1565,7 +1571,7 @@ async function identify(pcm,t,raw){
 const keyOf=h=>normAr(h.artist)+'|'+normAr(h.title);
 const STAMPED=new Set(['desc','chap','cmt']);
 let MSGID='m-msg', PROGID='m-prog', ONLINE_EVERY=60;
-const heard=()=>M.hits.filter(h=>h.src==='lib'||h.src==='ear');
+const heard=()=>M.hits.filter(h=>h.src==='lib'||h.src==='ear'||(h.src==='shz'&&h.start!=null));
 function addHit(t,h){
   const same=M.hits.find(x=>keyOf(x)===keyOf(h));
   if(same){   // already found: show it once only
@@ -1695,16 +1701,47 @@ $('shz-h').insertAdjacentHTML('afterbegin',logo('Shazam',22)); $('shz-go').inser
 const SH={running:false,stop:false,src:null,ctx:null};
 $('shz-go').onclick=()=>{ if(SH.running){ SH.stop=true; try{SH.src&&SH.src.stop();}catch(e){} return; } $('shz-file').click(); };
 $('shz-file').onchange=()=>{ const f=$('shz-file').files[0]; $('shz-file').value=''; if(f) shazamReel(f); };
+// find where the tracks change in a set (sound "colour" changes), so Shazam hears one piece per track
+async function trackPoints(file,dur,head,bps,isWav,wavHdr,align,onP){
+  const BLK=5, N=2048, H=1024, fft=makeFFT(N), w=new Float64Array(N).map((_,i)=>0.5-0.5*Math.cos(2*Math.PI*i/N)), re=new Float64Array(N), im=new Float64Array(N);
+  const NB=20, edges=[...Array(NB+1)].map((_,i)=>Math.round(60*Math.pow(5000/60,i/NB)*N/FP.SR)), feats=[];
+  const slice=setSlicer(file,dur,head,bps,isWav,wavHdr,align);
+  for(let t0=0;t0<dur;t0+=60){
+    let pcm; try{ pcm=await decodeMono((await slice(t0,61)).buf); }catch(e){ for(let b=0;b<12;b++) feats.push(null); continue; }
+    for(let b=0;b<12&&t0+b*BLK<dur;b++){ const a=b*BLK*FP.SR, z=Math.min(pcm.length,a+BLK*FP.SR), v=new Float64Array(NB); let fr=0;
+      for(let o=a;o+N<=z;o+=H){ for(let i=0;i<N;i++){re[i]=pcm[o+i]*w[i];im[i]=0;} fft(re,im); fr++;
+        for(let k=0;k<NB;k++){let e=0;for(let j=edges[k];j<Math.max(edges[k]+1,edges[k+1]);j++)e+=re[j]*re[j]+im[j]*im[j];v[k]+=e;} }
+      if(!fr){ feats.push(null); continue; } let m=0; for(let k=0;k<NB;k++){v[k]=Math.log(v[k]/fr+1e-9);m+=v[k];} m/=NB; for(let k=0;k<NB;k++)v[k]-=m; feats.push(v); }
+    onP(Math.min(1,(t0+60)/dur)); await tick();
+  }
+  const W=6, nov=new Float64Array(feats.length), avg=(a,b)=>{const v=new Float64Array(NB);let c=0;for(let i=a;i<b;i++)if(feats[i]){c++;for(let k=0;k<NB;k++)v[k]+=feats[i][k];}return c?v:null;};
+  for(let i=W;i<feats.length-W;i++){ const A=avg(i-W,i),B=avg(i,i+W); if(!A||!B) continue; let ab=0,aa=0,bb=0; for(let k=0;k<NB;k++){ab+=A[k]*B[k];aa+=A[k]*A[k];bb+=B[k]*B[k];} nov[i]=1-ab/Math.sqrt(aa*bb+1e-12); }
+  const vals=[...nov].filter(x=>x>0), mean=vals.reduce((a,b)=>a+b,0)/Math.max(1,vals.length), sd=Math.sqrt(vals.reduce((a,b)=>a+(b-mean)**2,0)/Math.max(1,vals.length));
+  const cand=[]; for(let i=W;i<nov.length-W;i++){ let peak=true; for(let j=i-W;j<=i+W;j++) if(nov[j]>nov[i]) peak=false; if(peak&&nov[i]>mean+0.6*sd) cand.push(i); }
+  const bounds=[0]; for(const i of cand){ const t=i*BLK; if(t-bounds[bounds.length-1]>=60) bounds.push(t); } bounds.push(dur);
+  const pts=[]; for(let k=0;k<bounds.length-1;k++){ const a=bounds[k],b=bounds[k+1],len=b-a;
+    pts.push(Math.min(b-15,a+Math.min(35,Math.max(10,len/3))));                        // a bit after the transition, inside the track
+    for(let t=a+35+180;t<b-40;t+=180) pts.push(t); }                                     // long parts: one more piece every 3 minutes
+  // safety: never leave more than 2 minutes without a piece, and always listen near the end (no track gets skipped)
+  const out=[...new Set(pts.filter(t=>t>=0&&t<dur-12).map(Math.round))].sort((a,b)=>a-b);
+  for(let i=0;i<out.length-1;i++) if(out[i+1]-out[i]>120){ out.splice(i+1,0,out[i]+100); }
+  if(!out.length||dur-out[out.length-1]>60) out.push(Math.max((out[out.length-1]||0)+40,dur-45));
+  return out.filter(t=>t>=0&&t<dur-12);
+}
 async function shazamReel(file){
   const isWav=/\.wav$/i.test(file.name); if(!isWav&&!/\.mp3$/i.test(file.name)) return msg('m-msg','الملف لازم يكون MP3 أو WAV',false);
   SH.running=true; SH.stop=false; busy(true); $('m-msg').className='msg';
   const go=$('shz-go'), now=$('shz-now'), list=$('shz-list'); go.lastChild.textContent=' وقّف'; now.classList.remove('hidden'); $('shz-wrap').classList.remove('hidden'); list.innerHTML='';
   try{
-    const dur=await fileDuration(file), SNIP=12, step=+$('shz-step').value;
+    const dur=await fileDuration(file), SNIP=12;
     let head=0,wavHdr=null,bps,align=1;
     if(isWav){ wavHdr=new Uint8Array(await file.slice(0,44).arrayBuffer()); head=44; const dv=new DataView(wavHdr.buffer); bps=dv.getUint32(28,true); align=dv.getUint16(32,true); }
     else { const h=new Uint8Array(await file.slice(0,10).arrayBuffer()); if(h[0]===73&&h[1]===68&&h[2]===51) head=10+ss(h,6); bps=(file.size-head)/dur; }
-    const times=[]; for(let t=Math.min(30,dur/3); t<dur-SNIP; t+=step) times.push(t);
+    let times=[];
+    if($('shz-step').value==='smart'){ now.innerHTML='<div>بيحلّل السيت عشان يعرف التراك بيتغيّر فين…</div>';
+      times=await trackPoints(file,dur,head,bps,isWav,wavHdr,align,p=>{now.innerHTML=`<div>بيحلّل السيت… ${Math.round(p*100)}%</div>`;}); }
+    else { const step=+$('shz-step').value; for(let t=Math.min(30,dur/3); t<dur-SNIP; t+=step) times.push(t); }
+    SH.times=times;
     list.innerHTML=times.map((t,i)=>`<tr id="shz-r${i}"><td>${i+1}</td><td class="latin">${fmt(t)}</td><td class="nm latin" style="text-align:right"></td><td class="st"></td></tr>`).join('');
     M.hits=[]; M.yt=null; renderMix();
     const ctx=SH.ctx||(SH.ctx=new AudioContext()); await ctx.resume();
@@ -1728,7 +1765,7 @@ async function shazamReel(file){
       row.querySelector('.st').textContent='✓';
       if(!SH.stop) await new Promise(r=>setTimeout(r,700));
     }
-    if(!SH.stop){ await new Promise(r=>setTimeout(r,2500));
+    if(!SH.stop){ await new Promise(r=>setTimeout(r,2500)); $('shz-paste').classList.remove('hidden');
       const n=heard().length;
       msg('m-msg', n?`خلص ✓ لقى ${n} تراك مختلف (كل تراك مرة واحدة)، وقدام كل واحد زرار يفتحه في Spotify أو أنغامي.`
         :`خلص ✓ شغّل ${times.length} مقطع. افتح Library في Shazam على الموبايل، هتلاقي التراكات بالترتيب.`,true);
@@ -2699,6 +2736,13 @@ fDrop.ondragover=e=>{e.preventDefault();fDrop.classList.add('over')}; fDrop.ondr
 fDrop.ondrop=e=>{e.preventDefault();fDrop.classList.remove('over');if(e.dataTransfer.files[0])fRun(e.dataTransfer.files[0]);};
 fFile.onchange=()=>{const f=fFile.files[0];fFile.value='';if(f)fRun(f);};
 let fTap=null;
+$('shz-apply').onclick=()=>{
+  const lines=$('shz-names').value.split(/\n/), times=SH.times||[]; let n=0;
+  lines.forEach((l,i)=>{ const name=cleanName(l.trim()); if(!name||name==='-'||i>=times.length) return; const at=splitAT(name);
+    addHit(times[i],{artist:at.artist,title:at.title,src:'shz'}); n++; });
+  renderMix(); msg('m-msg',`تمام ✓ اتحط ${n} تراك في القايمة بأوقاتهم، وجنب كل واحد زرار Spotify وأنغامي.`,true);
+  logEdit('Shazam Mode','',n+' تراك اتلصق');
+};
 $('f-stop').onclick=()=>{ const au=$('f-audio'); au.pause(); stopLive(); $('f-stop').classList.add('hidden'); };
 async function fRun(file){
   if(M.running) return; fBegin();
