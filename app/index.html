@@ -201,6 +201,9 @@ img.gear{width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 10px 14p
 .health.bad{background:rgba(255,45,85,.12);border:1px solid rgba(255,45,85,.45);color:#ffb3c2}
 .msg.warn{display:block;background:rgba(255,176,32,.08);border:1px solid rgba(255,176,32,.35);color:#ffd27a}.msg.warn a{color:var(--wine3)}
 .health.warn{background:rgba(255,176,32,.1);border:1px solid rgba(255,176,32,.4);color:#ffd27a}
+.x2-strip{display:flex;height:34px;border-radius:10px;overflow:hidden;border:1px solid var(--line);direction:ltr}
+.x2-strip .seg{display:grid;place-items:center;font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;min-width:2px}
+.seg.dr{background:#3a2a40;color:#d9c6e0}.seg.gr{background:#5a1a33;color:#f2dfe5}.seg.so{background:linear-gradient(90deg,#7a1530,#a3203f);color:#fff}
 footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding:20px;direction:ltr}
 </style>
 </head>
@@ -344,6 +347,9 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
       <div class="module" onclick="go('full')"><span class="led"></span>
         <img class="gear" src="icons/speaker.png" alt="">
         <h3>اسمع السيت كامل</h3><p>حط لينك أو ملف السيت، والبرنامج يسمعه كله ويكتبلك كل تراك مرة واحدة.</p></div>
+      <div class="module" onclick="go('ext')"><span class="led"></span>
+        <img class="gear" src="icons/reels.png" alt="">
+        <h3>اعمل Extended</h3><p>علّم البرنامج من فولدر ريمكساتك، وهو يعمل Extended لأي أغنية بنفس الستايل: Intro و Outro على الإيقاع.</p></div>
       <div class="module" onclick="go('mash')"><span class="led"></span>
         <img class="gear" src="icons/controller.png" alt="">
         <h3>اعمل ماشاب</h3><p>حط مجموعة أغاني، والبرنامج يعمل ميجامكس بانتقالات دي جي، أو يحط صوت أغنية على مزيكا أغنية تانية.</p></div>
@@ -792,6 +798,51 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
         <button class="btn primary logo-btn" id="n-pl" style="margin-inline-start:auto">اعمل بلاي ليست على Spotify من اللي اخترته</button>
       </div>
       <div class="n-list" id="n-list"></div>
+    </div>
+  </section>
+
+  <!-- EXTENDED MIX -->
+  <section id="v-ext" class="hidden">
+    <div class="panel">
+      <div class="ptitle"><img class="gear" src="icons/reels.png" alt=""><div><h2>اعمل Extended</h2></div>
+        <button class="btn back" onclick="go('home')">رجوع</button></div>
+      <div class="tabs" id="x2-tabs"><span class="tab on" data-t="learn">1. علّم البرنامج من ريمكساتك</span><span class="tab" data-t="make">2. اعمل Extended لأغنية</span></div>
+
+      <div id="x2-learn">
+        <div class="note" style="margin-top:0">اختار الفولدر اللي فيه الريمكسات والإكستندد بتوعك. البرنامج هيحلل كل تراك على جهازك: السرعة، والمقام، وطول الـ Intro، والبيز بيدخل إمتى، والـ Breakdowns، وطول الـ Outro. وبعدين يحفظ ده كستايل يقلّده. التحليل بيفضل محفوظ، وكل ما تضيف فولدرات أكتر، البرنامج يتعلّم أكتر.</div>
+        <div class="row" style="margin-top:12px"><button class="btn primary" id="x2-add">اختار فولدر الريمكسات</button><button class="btn" id="x2-clear">امسح الستايلات</button><span id="x2-count" style="color:var(--muted);font-size:14px"></span></div>
+        <div class="progress" id="x2-lprog"><i></i></div>
+        <div id="x2-summary"></div>
+        <div class="tbl-wrap" id="x2-refwrap" style="max-height:300px;margin-top:12px"><table><thead><tr><th>التراك</th><th>BPM</th><th>المقام</th><th>Intro</th><th>البيز بيدخل</th><th>Breakdowns</th><th>Outro</th><th>الطول</th></tr></thead><tbody id="x2-refs"></tbody></table></div>
+      </div>
+
+      <div id="x2-make" class="hidden">
+        <div id="x2-drop" class="drop"><img class="gear" src="icons/reels.png" alt="">
+          <div style="font-size:17px;margin-top:8px">اسحب الأغنية هنا أو دوس للاختيار</div><div style="font-size:13px;margin-top:4px">MP3 · WAV · M4A · FLAC</div>
+          <input type="file" id="x2-file" accept="audio/*,.mp3,.m4a,.wav,.flac,.aac,.ogg" hidden></div>
+        <div id="x2-edit" class="hidden">
+          <div class="row" style="justify-content:space-between"><div><b id="x2-name" class="latin"></b> <span id="x2-dur" style="color:var(--muted);font-size:13px"></span></div>
+            <div class="chips"><span class="chip">BPM <b id="x2-bpm" class="latin">…</b></span><span class="chip">المقام <b id="x2-key" class="latin">…</b></span><span class="chip">Intro الأصلي <b id="x2-oi" class="latin">…</b></span><span class="chip">Outro الأصلي <b id="x2-oo" class="latin">…</b></span></div></div>
+          <div class="enh-grid" style="margin-top:14px">
+            <label class="knob"><span><b>الستايل</b><small>تلقائي: أقرب ريمكسات ليها في السرعة</small></span><select id="x2-ref" style="width:100%"></select></label>
+            <label class="knob"><span><b>طول الـ Intro الجديد</b><small>بالمازورة</small></span><select id="x2-in" data-keep style="width:100%"><option value="auto">زي الستايل</option><option>16</option><option>32</option><option>64</option></select></label>
+            <label class="knob"><span><b>طول الـ Outro الجديد</b><small>بالمازورة</small></span><select id="x2-out" data-keep style="width:100%"><option value="auto">زي الستايل</option><option>16</option><option>32</option><option>64</option></select></label>
+            <label class="knob"><input type="checkbox" id="x2-novox" data-keep checked><span><b>من غير صوت المطرب في الـ Intro والـ Outro</b><small>زي الإكستندد الحقيقي (ذكاء اصطناعي)</small></span></label>
+          </div>
+          <div class="x2-map" id="x2-map"></div>
+          <div class="row" style="margin-top:14px">
+            <button class="btn primary" id="x2-run">🎚 اعمل الـ Extended</button>
+            <button class="btn" id="x2-play" disabled>▶ تشغيل</button>
+            <input type="range" id="x2-pos" min="0" max="1000" value="0" style="direction:ltr;flex:1;min-width:160px;accent-color:var(--wine2)" disabled>
+            <span id="x2-time" class="latin" style="font-family:Consolas,monospace;color:var(--muted)">0:00</span>
+          </div>
+          <div class="row" style="margin-top:12px"><select id="x2-fmt" data-keep><option value="mp3">MP3 320</option><option value="wav">WAV</option></select>
+            <button class="btn primary" id="x2-save" disabled>احفظ الـ Extended</button><button class="btn" id="x2-other">أغنية تانية</button></div>
+          <div class="progress" id="x2-prog"><i></i></div>
+          <div class="msg" id="x2-msg"></div>
+        </div>
+      </div>
+      <div class="msg" id="x2-lmsg"></div>
     </div>
   </section>
 
@@ -1905,11 +1956,16 @@ async function tLoad(file){
 }
 // tempo from the beat (autocorrelation of the energy envelope)
 function detectBpm(buf){
-  const d=buf.getChannelData(0), hop=512, n=Math.floor(d.length/hop), env=new Float32Array(n);
+  // onset envelope at ~11.6 ms steps (same precision at any sample rate)
+  const d=buf.getChannelData(0), hop=Math.max(64,Math.round(buf.sampleRate*.0116)), n=Math.floor(d.length/hop), env=new Float32Array(n);
   let prev=0; for(let f=0;f<n;f++){let e=0;for(let i=f*hop;i<(f+1)*hop;i++)e+=d[i]*d[i];e=Math.sqrt(e);env[f]=Math.max(0,e-prev);prev=e;}
-  const fps=buf.sampleRate/hop; let best=0,bl=0;
-  for(let lag=Math.floor(fps*60/180);lag<=Math.ceil(fps*60/70);lag++){let s=0;for(let i=0;i+lag<n;i++)s+=env[i]*env[i+lag];if(s>best){best=s;bl=lag;}}
-  if(!bl) return 0; let bpm=60*fps/bl; while(bpm<85)bpm*=2; while(bpm>175)bpm/=2; return Math.round(bpm);
+  const fps=buf.sampleRate/hop, ac=lag=>{let s=0;const L=Math.floor(lag),fr=lag-L;for(let i=0;i+L+1<n;i++)s+=env[i]*(env[i+L]*(1-fr)+env[i+L+1]*fr);return s;};
+  let best=0,bl=0;
+  for(let lag=Math.floor(fps*60/180);lag<=Math.ceil(fps*60/70);lag++){const s=ac(lag);if(s>best){best=s;bl=lag;}}
+  if(!bl) return 0;
+  // refine on one bar (4 beats) with sub-step search → much finer tempo
+  let b4=bl*4, bv=0; for(let L=bl*4-6;L<=bl*4+6;L+=.25){const v=ac(L);if(v>bv){bv=v;b4=L;}}
+  let bpm=60*fps*4/b4; while(bpm<85)bpm*=2; while(bpm>175)bpm/=2; return Math.round(bpm*10)/10;
 }
 const tBar=()=>{const b=parseFloat($('t-bpm').value); return b>40&&b<250 ? 240/b : 2;};   // 1 bar = 4 beats
 
@@ -2932,6 +2988,186 @@ $('n-pl').onclick=async()=>{
     logEdit('بلاي ليست Spotify',name,`${r.added}/${pick.length} تراك`); }
   catch(e){ nError(e); }
   busy(false);
+};
+
+/* ================= Extended Mix (learns from your remixes) ================= */
+// structure of a track: tempo, key, and per-bar energy (all / bass / mids / highs) → intro, bass entry, breakdowns, outro
+function bufView(pcm,sr){ return {getChannelData:()=>pcm,sampleRate:sr,length:pcm.length,numberOfChannels:1,duration:pcm.length/sr}; }
+async function analyzeStructure(pcm,sr){
+  const w=bufView(pcm,sr), bpm=detectBpm(w)||120, phase=beatPhase(w,bpm), key=detectKey(w), barLen=240/bpm;
+  const nBars=Math.max(0,Math.floor((pcm.length/sr-phase)/barLen)), N=1024, fft=makeFFT(N), re=new Float64Array(N), im=new Float64Array(N);
+  const hz=sr/N, band=(a,b)=>[Math.max(1,Math.round(a/hz)),Math.min(N/2,Math.round(b/hz))], LO=band(30,150), MI=band(300,2500), HI=band(4000,sr/2-200);
+  const F={rms:[],low:[],mid:[],high:[],bass:[]};
+  for(let b=0;b<nBars;b++){ const a=Math.round((phase+b*barLen)*sr), z=Math.round((phase+(b+1)*barLen)*sr); let r=0,l=0,m=0,h=0,c=0; const lows=[];
+    for(let o=a;o+N<=z;o+=N){ for(let i=0;i<N;i++){re[i]=pcm[o+i];im[i]=0;r+=pcm[o+i]*pcm[o+i];} fft(re,im); c++;
+      const e=(x,y)=>{let s=0;for(let k=x;k<y;k++)s+=re[k]*re[k]+im[k]*im[k];return s;}; const le=e(...LO); lows.push(le); l+=le; m+=e(...MI); h+=e(...HI); }
+    lows.sort((x,y)=>x-y);
+    F.rms.push(Math.sqrt(r/Math.max(1,c*N))); F.low.push(l/Math.max(1,c)); F.mid.push(m/Math.max(1,c)); F.high.push(h/Math.max(1,c));
+    F.bass.push(lows[Math.floor(lows.length*.3)]||0);   // held low notes (bass), not the short kick hits
+    if(b%40===0) await tick(); }
+  for(const k in F){ const s=[...F[k]].sort((a,b)=>a-b), p=s[Math.floor(s.length*.95)]||1; F[k]=F[k].map(v=>Math.min(1.2,v/p)); }
+  const groove=i=>F.mid[i]>=.45&&F.rms[i]>=.5;   // the full song: melody / vocals playing
+  let first=-1; for(let i=0;i+3<nBars;i++) if(groove(i)&&groove(i+1)&&groove(i+2)&&groove(i+3)){ first=i; break; }
+  let last=-1; for(let i=nBars-1;i>=3;i--) if(groove(i)&&groove(i-1)&&groove(i-2)&&groove(i-3)){ last=i; break; }
+  const r8=x=>Math.max(0,Math.round(x/8)*8);
+  const introBars=first<0?0:r8(first), outroBars=last<0?0:r8(nBars-1-last);
+  let bassStart=0; for(let i=0;i<nBars;i++) if(F.bass[i]>=.35){ bassStart=i; break; }
+  let bassEnd=nBars-1; for(let i=nBars-1;i>=0;i--) if(F.bass[i]>=.35){ bassEnd=i; break; }
+  const brk=[]; if(first>=0&&last>first){ let s=-1; for(let i=first;i<=last;i++){ const lowB=F.low[i]<.3&&F.bass[i]<.25;
+      if(lowB&&s<0) s=i; if((!lowB||i===last)&&s>=0){ const len=i-s; if(len>=4) brk.push({at:+((s-first)/Math.max(1,last-first)).toFixed(2),len:r8(len)||4}); s=-1; } } }
+  const curve=[]; for(let i=0;i<nBars;i+=8){ let s=0,c=0; for(let j=i;j<Math.min(nBars,i+8);j++){s+=F.rms[j];c++;} curve.push(+(s/c).toFixed(2)); }
+  return {bpm,key:{name:key.name,camelot:key.camelot,tonic:key.tonic,mode:key.mode},phase,barLen,nBars,introBars,firstGroove:first,lastGroove:last,outroBars,bassStart,bassEnd,breakdowns:brk,curve,dur:pcm.length/sr};
+}
+let STYLES=null; async function stylesLoad(){ if(!STYLES) STYLES=await Store.get('styles')||{refs:[]}; return STYLES; }
+function stylesRender(){
+  const refs=STYLES.refs; $('x2-count').textContent=refs.length?`${refs.length} ريمكس متحلّل`:'لسه مفيش ريمكسات متحلّلة';
+  $('x2-refs').innerHTML=refs.map(r=>`<tr><td class="latin" style="text-align:right">${esc(r.name)}</td><td class="latin">${r.bpm}</td><td class="latin">${r.key.camelot}</td><td class="latin">${r.introBars} bars</td><td class="latin">bar ${r.bassStart+1}</td>
+    <td class="latin">${r.breakdowns.map(b=>Math.round(b.at*100)+'% ('+b.len+')').join(', ')||'—'}</td><td class="latin">${r.outroBars} bars</td><td class="latin">${fmt(r.dur)}</td></tr>`).join('');
+  // summary per tempo group
+  const groups={}; for(const r of refs){ const g=r.bpm<100?'أقل من 100 BPM':r.bpm<116?'100 – 115 BPM':r.bpm<123?'116 – 122 BPM':r.bpm<128?'123 – 127 BPM':r.bpm<135?'128 – 134 BPM':'135+ BPM'; (groups[g]=groups[g]||[]).push(r); }
+  const med=a=>{const s=[...a].sort((x,y)=>x-y);return s[Math.floor(s.length/2)]||0;};
+  $('x2-summary').innerHTML=refs.length?`<div class="enh-grid" style="margin-top:12px">${Object.entries(groups).map(([g,a])=>`<div class="knob" style="cursor:default"><span><b>${g}</b><small>${a.length} تراك · Intro غالباً ${med(a.map(r=>r.introBars))} مازورة · البيز بيدخل حوالي مازورة ${med(a.map(r=>r.bassStart))+1} · Outro ${med(a.map(r=>r.outroBars))} مازورة · Breakdown في ${a.filter(r=>r.breakdowns.length).length} منهم</small></span></div>`).join('')}</div>`:'';
+  $('x2-ref').innerHTML=`<option value="auto">تلقائي (أقرب الريمكسات)</option>`+refs.map((r,i)=>`<option value="${i}">${esc(r.name)} · ${r.bpm} BPM</option>`).join('');
+}
+document.querySelectorAll('#x2-tabs .tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('#x2-tabs .tab').forEach(x=>x.classList.toggle('on',x===t));
+  $('x2-learn').classList.toggle('hidden',t.dataset.t!=='learn'); $('x2-make').classList.toggle('hidden',t.dataset.t!=='make');});
+dataReady.then(async()=>{ await stylesLoad(); stylesRender(); });
+async function learnFrom(files){
+  await stylesLoad(); busy(true); const prog=$('x2-lprog'); prog.classList.add('show'); let ok=0,bad=0;
+  const have=new Set(STYLES.refs.map(r=>r.key2));
+  for(let i=0;i<files.length;i++){ const f=files[i], k=f.name+'|'+f.size; prog.firstElementChild.style.width=((i+1)/files.length*100)+'%';
+    $('x2-count').textContent=`بيحلّل ${i+1} من ${files.length}: ${f.name}`; if(have.has(k)) continue;
+    try{ const pcm=await decodeMono(await f.arrayBuffer()); const a=await analyzeStructure(pcm,FP.SR); delete a.phase;
+      STYLES.refs.push({...a,name:cleanName(f.name),key2:k}); have.add(k); ok++; }catch(e){ bad++; } await tick(); }
+  await Store.set('styles',STYLES); prog.classList.remove('show'); busy(false); stylesRender();
+  msg('x2-lmsg',`تمام ✓ اتحلّل ${ok} ريمكس جديد`+(bad?` · ${bad} ملف مقدرش يقراه`:'')+'. دلوقتي روح لتاب "اعمل Extended لأغنية".',!bad);
+  logEdit('علّم البرنامج (Extended)',ok+' ريمكس','');
+}
+$('x2-add').onclick=async()=>{ if(APP&&APP.pickFolder){ const f=await pickAudioFolder('اختار فولدر الريمكسات'); if(f) learnFrom(f); }
+  else { const inp=Object.assign(document.createElement('input'),{type:'file',multiple:true,webkitdirectory:true}); inp.onchange=()=>learnFrom([...inp.files].filter(f=>AUDIO.test(f.name))); inp.click(); } };
+$('x2-clear').onclick=async()=>{ if(!confirm('تمسح كل الستايلات المتعلّمة؟ (الريمكسات نفسها مش هتتمسح)')) return; STYLES={refs:[]}; await Store.set('styles',STYLES); stylesRender(); };
+
+// ---- make the extended version ----
+const XT={buf:null,track:null,an:null,out:null,stems:null,ctx:null,src:null,t0:0,from:0,playing:false,raf:0};
+const xDrop=$('x2-drop'), xFile=$('x2-file');
+xDrop.onclick=()=>xFile.click(); xDrop.ondragover=e=>{e.preventDefault();xDrop.classList.add('over')}; xDrop.ondragleave=()=>xDrop.classList.remove('over');
+xDrop.ondrop=e=>{e.preventDefault();xDrop.classList.remove('over');if(e.dataTransfer.files[0])xLoad(e.dataTransfer.files[0]);};
+xFile.onchange=()=>{if(xFile.files[0])xLoad(xFile.files[0]);xFile.value='';};
+$('x2-other').onclick=()=>{xStop();Object.assign(XT,{buf:null,out:null,stems:null});$('x2-edit').classList.add('hidden');xDrop.classList.remove('hidden');};
+async function xLoad(file){
+  busy(true); $('x2-msg').className='msg';
+  try{ const track=await readTrack(file); const buf=await new OfflineAudioContext(2,1,SR_OUT).decodeAudioData(track.bytes.buffer.slice(0));
+    const pcm=await decodeMono(track.bytes.buffer.slice(0)); const an=await analyzeStructure(pcm,FP.SR);
+    Object.assign(XT,{buf,track,an,out:null,stems:null,from:0});
+    $('x2-name').textContent=cleanName(file.name); $('x2-dur').textContent=fmt(buf.duration); $('x2-bpm').textContent=an.bpm; $('x2-key').textContent=an.key.name+' · '+an.key.camelot;
+    $('x2-oi').textContent=an.introBars+' bars'; $('x2-oo').textContent=an.outroBars+' bars';
+    xDrop.classList.add('hidden'); $('x2-edit').classList.remove('hidden'); xUi(); xPlan();
+  }catch(e){ alert('مقدرتش أقرا الأغنية: '+e.message); }
+  busy(false);
+}
+// pick the closest remixes (by tempo, half/double counted) and take their typical intro/outro
+function xStyle(){
+  const refs=(STYLES&&STYLES.refs)||[], an=XT.an, v=$('x2-ref').value, med=a=>{const s=[...a].sort((x,y)=>x-y);return s[Math.floor(s.length/2)];};
+  const def={introBars:32,outroBars:32,bassFrac:.5,outFrac:.5,from:'الافتراضي (مفيش ريمكسات متحلّلة)'};
+  if(!refs.length) return def;
+  let pick;
+  if(v!=='auto') pick=[refs[+v]];
+  else { const d=r=>Math.min(...[.5,1,2].map(m=>Math.abs(Math.log(r.bpm*m/an.bpm)))); pick=[...refs].sort((a,b)=>d(a)-d(b)).slice(0,3); }
+  const ib=Math.min(64,Math.max(8,med(pick.map(r=>r.introBars))||16)), ob=Math.min(64,Math.max(8,med(pick.map(r=>r.outroBars))||16));
+  const bf=med(pick.map(r=>r.introBars?Math.min(1,r.bassStart/r.introBars):.5));
+  const of=med(pick.map(r=>r.outroBars&&r.bassEnd!=null?Math.min(1,Math.max(0,(r.nBars-1-r.bassEnd)/r.outroBars)):.5));
+  return {introBars:ib,outroBars:ob,bassFrac:bf,outFrac:of,from:pick.map(r=>r.name).join('، ')};
+}
+function xPlan(){
+  const an=XT.an, st=xStyle(), ti=$('x2-in').value==='auto'?st.introBars:+$('x2-in').value, to=$('x2-out').value==='auto'?st.outroBars:+$('x2-out').value;
+  const addIn=Math.max(0,ti-an.introBars), addOut=Math.max(0,to-an.outroBars), drumsIn=Math.round(addIn*st.bassFrac/4)*4, drumsOut=Math.round(addOut*st.outFrac/4)*4;
+  XT.plan={addIn,addOut,drumsIn,drumsOut,st};
+  const songBars=an.nBars, tot=addIn+songBars+addOut, pct=x=>(x/Math.max(1,tot)*100).toFixed(2)+'%';
+  $('x2-map').innerHTML=`<div class="note" style="margin:12px 0 6px">الستايل: ${esc(st.from)}</div><div class="x2-strip">
+    ${drumsIn?`<span class="seg dr" style="width:${pct(drumsIn)}">Drums ${drumsIn}</span>`:''}${addIn-drumsIn?`<span class="seg gr" style="width:${pct(addIn-drumsIn)}">Groove ${addIn-drumsIn}</span>`:''}
+    <span class="seg so" style="width:${pct(songBars)}">الأغنية</span>
+    ${addOut-drumsOut?`<span class="seg gr" style="width:${pct(addOut-drumsOut)}">Groove ${addOut-drumsOut}</span>`:''}${drumsOut?`<span class="seg dr" style="width:${pct(drumsOut)}">Drums ${drumsOut}</span>`:''}</div>
+    <div class="note">${addIn||addOut?`هيضيف <b>${addIn}</b> مازورة Intro و <b>${addOut}</b> مازورة Outro، كلها على الإيقاع.`:'الأغنية فيها Intro و Outro بطول الستايل أصلاً، غيّر الطول من فوق لو عايز أطول.'}</div>`;
+}
+['x2-ref','x2-in','x2-out'].forEach(id=>$(id).addEventListener('change',()=>{ if(XT.an) xPlan(); }));
+// exact length of 8 bars, measured on the song itself (repeats line up perfectly, no drift)
+function exactEight(x,start,approx,sr){
+  const hop=64, from=Math.max(0,Math.floor(start)), len=Math.min(x.length-from,Math.round(approx*2.2)), n=Math.floor(len/hop), env=new Float32Array(n); let prev=0;
+  for(let f=0;f<n;f++){let e=0;for(let i=0;i<hop;i++){const v=x[from+f*hop+i]||0;e+=v*v;} e=Math.sqrt(e); env[f]=Math.max(0,e-prev); prev=e;}
+  const a0=approx/hop; let best=-1,bl=a0;
+  for(let L=a0*.985;L<=a0*1.015;L+=.05){ const Li=Math.floor(L),fr=L-Li; let s=0; for(let i=0;i+Li+1<n;i++) s+=env[i]*(env[i+Li]*(1-fr)+env[i+Li+1]*fr); if(s>best){best=s;bl=L;} }
+  return n>a0*1.5 ? bl*hop : approx;
+}
+// "drums only": percussive part + the kick's low end, only right on the beats (the bass in between stays out)
+async function drumsOnly(seg,sr,beatS){
+  const h=await harmonicOnly(seg,sr,()=>{}), n=seg[0].length, gate=new Float32Array(n), K=Math.round(.17*sr), A=Math.round(.004*sr);
+  for(let b=0;b*beatS<n;b++){ const o=Math.round(b*beatS); for(let i=0;i<K&&o+i<n;i++) gate[o+i]=Math.max(gate[o+i],i<A?i/A:1-(i-A)/(K-A)*.15); for(let i=K;i<K+A*4&&o+i<n;i++) gate[o+i]=Math.max(gate[o+i],.85*(1-(i-K)/(A*4))); }
+  return seg.map((c,ch)=>{ const low=biquadRun(c,'lp',140,.7,sr), perc=c.map((v,k)=>v-h[ch][k]), percHi=biquadRun(perc,'hp',140,.7,sr); return percHi.map((v,k)=>v+low[k]*gate[k]); });
+}
+function loopBars(src,barS,bars,sr){ // repeat an 8-bar piece seamlessly to `bars` bars
+  const piece=src[0].length, len=Math.round(bars*barS), F=Math.round(.012*sr), out=src.map(()=>new Float32Array(len));
+  for(let c=0;c<src.length;c++){ const s=src[c],d=out[c]; for(let o=0;o<len;o+=piece){ for(let i=0;i<piece&&o+i<len;i++){ let v=s[i]; if(o>0&&i<F) v=v*(i/F)+s[piece-F+i]*(1-i/F); d[o+i]=v; } } }
+  return out;
+}
+$('x2-run').onclick=async()=>{
+  if(!XT.buf) return; xStop(); xPlan(); busy(true); $('x2-run').disabled=true; const prog=$('x2-prog'); prog.classList.add('show');
+  const P=(p,t)=>{prog.firstElementChild.style.width=(p*100)+'%';$('x2-msg').className='msg show ok';$('x2-msg').textContent=t;};
+  try{
+    const an=XT.an, pl=XT.plan, sr=XT.buf.sampleRate, L0=XT.buf.getChannelData(0), R0=XT.buf.numberOfChannels>1?XT.buf.getChannelData(1):L0;
+    const phaseS=Math.round((an.phase||0)*sr);
+    let barS=an.barLen*sr; const gStart=phaseS+Math.max(0,an.firstGroove)*barS; barS=exactEight(L0,gStart,8*barS,sr)/8;   // true bar length from the song
+    let mus=[L0,R0];
+    if($('x2-novox').checked&&APP&&APP.separateFull&&(pl.addIn||pl.addOut)){ if(!XT.stems){ P(.05,'الذكاء الاصطناعي بيشيل صوت المطرب من الأجزاء اللي هتتكرر…'); const r=await APP.separateFull(L0,R0); XT.stems=[new Float32Array(r.mL),new Float32Array(r.mR)]; } mus=XT.stems; }
+    const g0=Math.max(0,an.firstGroove), gl=an.lastGroove>g0?an.lastGroove:an.nBars-1;
+    const cut=(bar,n)=>{ const a=phaseS+Math.round(bar*barS), z=a+Math.round(n*barS); return mus.map(c=>c.slice(Math.max(0,a),Math.min(c.length,z))); };
+    const drumsOf=seg=>drumsOnly(seg,sr,barS/4);
+    P(.4,'بيبني الـ Intro والـ Outro على الإيقاع…'); await tick();
+    const parts=[];
+    if(pl.addIn){ const seg=cut(g0,8); if(pl.drumsIn) parts.push(loopBars(await drumsOf(seg),barS,pl.drumsIn,sr)); if(pl.addIn-pl.drumsIn) parts.push(loopBars(seg,barS,pl.addIn-pl.drumsIn,sr)); }
+    const introLen=parts.reduce((a,p)=>a+p[0].length,0);
+    const endBar=pl.addOut?gl+1:an.nBars, songEnd=pl.addOut?Math.min(L0.length,phaseS+Math.round(endBar*barS)):L0.length;
+    const outParts=[]; if(pl.addOut){ const seg=cut(Math.max(g0,endBar-8),8); if(pl.addOut-pl.drumsOut) outParts.push(loopBars(seg,barS,pl.addOut-pl.drumsOut,sr)); if(pl.drumsOut) outParts.push(loopBars(await drumsOf(seg),barS,pl.drumsOut,sr)); }
+    const outroLen=outParts.reduce((a,p)=>a+p[0].length,0), songStart=introLen-phaseS;            // song's first downbeat lands exactly where the intro ends
+    const N=Math.max(introLen,songStart+songEnd)+outroLen, OL=new Float32Array(N), OR=new Float32Array(N);
+    let o=0; for(const p of parts){ for(let i=0;i<p[0].length;i++){ OL[o+i]+=p[0][i]; OR[o+i]+=p[1][i]; } o+=p[0].length; }
+    const xf=Math.round(barS);                                                                     // 1-bar blend into the song and out of it
+    for(let i=0;i<songEnd;i++){ const j=songStart+i; if(j<0) continue; let g=1;
+      if(introLen&&j<introLen) g=Math.max(0,1-(introLen-j)/Math.max(1,phaseS||xf));
+      if(pl.addOut&&i>songEnd-xf) g*=Math.max(0,(songEnd-i)/xf);
+      if(introLen&&j>=introLen-xf&&j<introLen){ const k=(j-(introLen-xf))/xf; OL[j]*=1-k; OR[j]*=1-k; }
+      OL[j]+=L0[i]*g; OR[j]+=R0[i]*g; }
+    o=songStart+songEnd-xf; let first=true;
+    for(const p of outParts){ for(let i=0;i<p[0].length;i++){ const j=o+i; if(j>=N) break; const g=first&&i<xf?i/xf:1; OL[j]+=p[0][i]*g; OR[j]+=p[1][i]*g; } o+=p[0].length; first=false; }
+    const end=Math.min(N,o+xf), fade=Math.round(barS/4); for(let j=Math.max(0,end-fade);j<end;j++){ const g=(end-j)/fade; OL[j]*=g; OR[j]*=g; }
+    const chs=[OL.subarray(0,end),OR.subarray(0,end)].map(c=>c.slice()); limit(chs,sr,1);
+    const out=new AudioBuffer({length:chs[0].length,numberOfChannels:2,sampleRate:sr}); out.copyToChannel(chs[0],0); out.copyToChannel(chs[1],1);
+    XT.out=out; XT.introSec=introLen/sr;
+    msg('x2-msg',`خلص ✓ الـ Extended طوله ${fmt(out.duration)} بدل ${fmt(XT.buf.duration)}: اتضاف ${pl.addIn} مازورة Intro و ${pl.addOut} مازورة Outro على ${an.bpm} BPM. اسمعه وبعدين احفظ.`,true);
+    xUi();
+  }catch(e){ msg('x2-msg','حصلت مشكلة: '+e.message,false); }
+  prog.classList.remove('show'); $('x2-run').disabled=false; busy(false);
+};
+function xHead(){ return XT.playing?Math.min(XT.out.duration,XT.from+(XT.ctx.currentTime-XT.t0)):XT.from; }
+function xStop(){ if(XT.src){try{XT.src.onended=null;XT.src.stop();}catch(e){}} XT.src=null; if(XT.playing) XT.from=xHead(); XT.playing=false; cancelAnimationFrame(XT.raf); $('x2-play').textContent='▶ تشغيل'; }
+function xPlay(from){ xStop(); const ctx=XT.ctx||(XT.ctx=new AudioContext()); ctx.resume(); const s=ctx.createBufferSource(); s.buffer=XT.out; s.connect(ctx.destination);
+  const t=ctx.currentTime+.05; s.start(t,Math.max(0,Math.min(from,XT.out.duration-.1))); s.onended=()=>{xStop();XT.from=0;}; Object.assign(XT,{src:s,t0:t,from:Math.max(0,from),playing:true}); $('x2-play').textContent='⏸ إيقاف';
+  const loop=()=>{const h=xHead();$('x2-pos').value=h/XT.out.duration*1000;$('x2-time').textContent=fmt(h);if(XT.playing)XT.raf=requestAnimationFrame(loop);};loop(); }
+function xUi(){ const has=!!XT.out; $('x2-play').disabled=$('x2-save').disabled=$('x2-pos').disabled=!has; }
+$('x2-play').onclick=()=>{ XT.playing?xStop():xPlay(XT.from); };
+$('x2-pos').oninput=e=>{ if(!XT.out) return; const t=e.target.value/1000*XT.out.duration; $('x2-time').textContent=fmt(t); if(XT.playing) xPlay(t); else XT.from=t; };
+$('x2-save').onclick=async()=>{
+  xStop(); busy(true); const prog=$('x2-prog'); prog.classList.add('show'); $('x2-save').disabled=true;
+  try{ const isWav=$('x2-fmt').value==='wav', t=XT.track, base=safeFile(cleanName(t.file.name))+' (Extended Mix)';
+    let blob; if(isWav) blob=wav16(XT.out);
+    else { const mp3=await encodeMp3(XT.out,p=>{prog.firstElementChild.style.width=(p*100)+'%';$('x2-msg').className='msg show ok';$('x2-msg').textContent='بيحفظ… '+Math.round(p*100)+'%';});
+      const keep=(t.isMp3?t.parsed.frames:[]).filter(f=>!['TIT2','TBPM','TKEY'].includes(f.id)).map(f=>frame(f.id,f.data));
+      const frames=[textFrame('TIT2',(t.title||cleanName(t.file.name))+' (Extended Mix)'),textFrame('TBPM',String(XT.an.bpm)),textFrame('TKEY',XT.an.key.name),...keep];
+      const head=new Uint8Array(10),fl=frames.reduce((a,b)=>a+b.length,0); head.set([73,68,51,4,0,0],0); head.set(ssBytes(fl+1024),6);
+      blob=new Blob([head,...frames,new Uint8Array(1024),...mp3],{type:'audio/mpeg'}); }
+    const r=await saveOut(blob,base+(isWav?'.wav':'.mp3'));
+    if(r){ savedMsg('x2-msg',r); logEdit('اعمل Extended',t.file.name,`+${XT.plan.addIn} Intro / +${XT.plan.addOut} Outro → ${r.name}`); } else $('x2-msg').className='msg';
+  }catch(e){ msg('x2-msg','حصلت مشكلة: '+e.message,false); }
+  prog.classList.remove('show'); $('x2-save').disabled=false; busy(false);
 };
 
 /* ================= Data & history screen ================= */

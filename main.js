@@ -20,7 +20,7 @@ function migrateOldData() {
   } catch (e) {}
 }
 const LIB = () => path.join(DATA(), 'library');
-const STORES = new Set(['settings', 'franco', 'history', 'sets']);
+const STORES = new Set(['settings', 'franco', 'history', 'sets', 'styles']);
 function ensure() { fs.mkdirSync(LIB(), { recursive: true }); }
 function writeAtomic(file, data) { const tmp = file + '.tmp'; fs.writeFileSync(tmp, data); fs.renameSync(tmp, file); }
 function readJson(file, def) { try { return JSON.parse(fs.readFileSync(file, 'utf8')); } catch (e) { return def; } }
