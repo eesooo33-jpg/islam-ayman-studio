@@ -2,6 +2,7 @@
 const { app, BrowserWindow, ipcMain, shell, dialog, session } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const updater = require('./updater.js');
 
 let win = null, yt = null;
 const YT_RE = /^https?:\/\/(www\.|m\.|music\.)?(youtube\.com|youtu\.be)\//i;
@@ -259,7 +260,7 @@ function createMain() {
     icon: path.join(__dirname, 'build', 'icon.png'),
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false }
   });
-  win.loadFile(path.join(__dirname, 'app', 'index.html'));
+  win.loadFile(path.join(updater.appDir(), 'index.html'));
   win.webContents.setWindowOpenHandler(({ url }) => { if (/^https?:/i.test(url)) shell.openExternal(url); return { action: 'deny' }; });
   win.on('closed', () => { win = null; if (yt) yt.close(); });
 }
@@ -312,5 +313,19 @@ ipcMain.on('yt-info', (e, d) => { if (win && yt && e.sender === yt.webContents) 
 ipcMain.on('web-track', (e, d) => { if (win && yt && e.sender === yt.webContents) { win.webContents.send('web-track', d); win.focus(); } });
 if (process.env.DJ_TEST_YT) ipcMain.on('yt-open-test', (e, url) => openYouTube(url));  // automated tests only
 
-app.whenReady().then(() => { migrateOldData(); createMain(); });
+/* ---------- automatic updates ---------- */
+ipcMain.handle('app-version', () => updater.version());
+ipcMain.handle('update-state', () => updater.getState());
+ipcMain.handle('update-check', () => updater.check());
+ipcMain.handle('update-apply', () => {
+  const st = updater.getState();
+  if (st.status !== 'ready') return false;
+  if (st.kind === 'quick') { updater.markApplied(); if (win) win.loadFile(path.join(updater.appDir(), 'index.html')); return true; }
+  return updater.installNow(true);
+});
+
+app.whenReady().then(() => {
+  migrateOldData(); createMain();
+  if (!process.env.DJ_NO_UPDATE) updater.start((st) => { if (win) win.webContents.send('update-state', st); });
+});
 app.on('window-all-closed', () => app.quit());

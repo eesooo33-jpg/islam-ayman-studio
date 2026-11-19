@@ -2,9 +2,10 @@ Unicode true
 ManifestDPIAware true
 SetCompressor /SOLID lzma
 !include "MUI2.nsh"
+!include "FileFunc.nsh"
 !define APPNAME "Islam Ayman Studio"
 !define EXE "Islam Ayman Studio.exe"
-!define VER "1.14.0"
+!define VER "1.15.0"
 !define UKEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\db33b85e-9994-5692-b4c1-4653137e21a0"
 Name "${APPNAME}"
 OutFile "Islam-Ayman-Studio-Setup-${VER}.exe"
@@ -50,6 +51,17 @@ Section "Install"
   WriteRegDWORD HKCU "${UKEY}" "NoModify" 1
   WriteRegDWORD HKCU "${UKEY}" "NoRepair" 1
 SectionEnd
+
+; silent update from inside the program: /S /R reopens the program afterwards
+Function .onInstSuccess
+  IfSilent 0 done
+  ${GetParameters} $0
+  ClearErrors
+  ${GetOptions} $0 "/R" $1
+  IfErrors done
+  Exec '"$INSTDIR\${EXE}"'
+  done:
+FunctionEnd
 
 Section "Uninstall"
   nsExec::Exec 'taskkill /F /IM "${EXE}"'

@@ -1,7 +1,7 @@
 {
   "name": "islam-ayman-studio",
   "productName": "Islam Ayman Studio",
-  "version": "1.14.0",
+  "version": "1.15.0",
   "description": "Islam Ayman Studio: Franco names, covers, playlists, quality, tag remover and mix track ID",
   "main": "main.js",
   "author": "DJ Islam Ayman",
@@ -24,6 +24,7 @@
       "preload.js",
       "yt-preload.js",
       "separate.js",
+      "updater.js",
       "app/**",
       "build/icon.png"
     ],

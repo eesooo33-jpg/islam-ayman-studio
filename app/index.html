@@ -205,6 +205,10 @@ img.gear{width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 10px 14p
 .x2-strip .seg{display:grid;place-items:center;font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;min-width:2px}
 .seg.dr{background:#3a2a40;color:#d9c6e0}.seg.gr{background:#5a1a33;color:#f2dfe5}.seg.so{background:linear-gradient(90deg,#7a1530,#a3203f);color:#fff}
 footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding:20px;direction:ltr}
+#upd{position:fixed;left:18px;bottom:18px;z-index:60;max-width:340px;background:linear-gradient(160deg,#1d1820,#141016);border:1px solid var(--wine2);border-radius:14px;padding:12px 14px;box-shadow:0 12px 40px rgba(0,0,0,.6);display:grid;gap:8px;direction:rtl;font-size:14px}
+#upd.hidden{display:none}#upd b{color:#f2dfe5}#upd .ubar{height:6px;background:#241d27;border-radius:4px;overflow:hidden}#upd .ubar i{display:block;height:100%;background:linear-gradient(90deg,var(--wine),#c94a6a);width:0;transition:width .3s}
+#upd .urow{display:flex;gap:8px}#upd .urow .btn{flex:1;padding:8px 10px;font-size:13px}
+#ver{cursor:pointer}
 </style>
 </head>
 <body>
@@ -904,7 +908,8 @@ footer{text-align:center;color:#5d535a;font-size:12px;letter-spacing:3px;padding
     </div>
   </section>
 </main>
-<footer>ISLAM AYMAN STUDIO · BY DJ ISLAM AYMAN</footer>
+<footer>ISLAM AYMAN STUDIO · BY DJ ISLAM AYMAN <span id="ver" title="دوس عشان تدوّر على تحديث"></span></footer>
+<div id="upd" class="hidden" role="status"></div>
 
 <script src="fp.js"></script>
 <script src="lame.min.js"></script>
@@ -3213,6 +3218,34 @@ function renderLinks(){
 }
 $('q').addEventListener('input',renderLinks);
 $('q').addEventListener('keydown',e=>{if(e.key==='Enter'){const a=$('links').querySelector('a');if(a)a.click();}});
+
+/* ---------- automatic updates ---------- */
+(function(){
+  if(!APP||!APP.update) return;
+  const box=document.getElementById('upd'), ver=document.getElementById('ver');
+  APP.appVersion().then(v=>{ver.textContent='· v'+v;});
+  let hideT=null, manual=false;
+  function show(html,keep){box.innerHTML=html;box.classList.remove('hidden');clearTimeout(hideT);if(!keep)hideT=setTimeout(()=>box.classList.add('hidden'),6000);}
+  function render(st){
+    if(st.status==='downloading') show(`<div>⬇ بينزّل تحديث <b>${st.version}</b>… ${st.kind==='full'?'(نسخة كاملة، ممكن ياخد شوية)':''}</div><div class="ubar"><i style="width:${st.progress||0}%"></i></div>`,true);
+    else if(st.status==='ready'){
+      const q=st.kind==='quick';
+      show(`<div>✓ تحديث <b>${st.version}</b> جاهز.${st.notes?'<br><span style="color:var(--muted)">'+esc(st.notes)+'</span>':''}</div>
+        <div style="color:var(--muted);font-size:12px">${q?'هيشتغل لوحده أول ما تفتح البرنامج المرة الجاية.':'هيتسطّب لوحده لما تقفل البرنامج.'}</div>
+        <div class="urow"><button class="btn primary" id="upd-go">${q?'شغّله دلوقتي':'سطّبه دلوقتي'}</button><button class="btn" id="upd-later">بعدين</button></div>`,true);
+      document.getElementById('upd-go').onclick=()=>{box.innerHTML='<div>بيحدّث… البرنامج هيقفل ويفتح تاني لوحده.</div>';APP.update.apply();};
+      document.getElementById('upd-later').onclick=()=>box.classList.add('hidden');
+    }
+    else if(st.status==='manual') show(`<div>فيه نسخة جديدة <b>${st.version}</b>. نزّلها من صفحة البرنامج على GitHub.</div>`,true);
+    else if(manual&&st.status==='latest') show('<div>✓ إنت على آخر نسخة.</div>');
+    else if(manual&&st.status==='error') show('<div>ماقدرتش أوصل للتحديثات دلوقتي. اتأكد إن النت شغال وجرّب تاني.</div>');
+    if(st.status!=='checking') manual=false;
+  }
+  function esc(t){return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+  APP.update.on(render);
+  APP.update.state().then(st=>{if(st.status==='ready'||st.status==='downloading')render(st);});
+  ver.onclick=()=>{manual=true;APP.update.check().then(render);};
+})();
 </script>
 </body>
 </html>

@@ -30,5 +30,8 @@ contextBridge.exposeInMainWorld('djApp', {
   separateFull: (L, R) => ipcRenderer.invoke('separate-full', L, R),
   openDaw: (id, folder) => ipcRenderer.invoke('open-daw', id, folder),
   openFolder: (p) => ipcRenderer.invoke('open-folder', p),
+  appVersion: () => ipcRenderer.invoke('app-version'),
+  update: { state: () => ipcRenderer.invoke('update-state'), check: () => ipcRenderer.invoke('update-check'), apply: () => ipcRenderer.invoke('update-apply'),
+    on: (cb) => ipcRenderer.on('update-state', (e, d) => cb(d)) },
   _testOpen: process.env.DJ_TEST_YT ? (url) => ipcRenderer.send('yt-open-test', url) : undefined
 });

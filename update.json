@@ -1,0 +1,32 @@
+{
+ "version": "1.15.0",
+ "shell": 1,
+ "notes": "تحديث تلقائي: البرنامج بقى بينزّل أي تحديث جديد لوحده",
+ "app": {
+  "files": {
+   "fp.js": "6e9830e633eb606279d6a53df68bc49acaac2c0f71f7e34ad0cf564ff0d8f762",
+   "icons/cdj.png": "d25420ec2ef0fc4d080e0d9a56bebe485edc210802134c178d12a0cd8a3013cc",
+   "icons/charts.png": "6996e903d30c29f343c50d46959d9f39ca3e8e5bca4cff8c187e4545ddb80240",
+   "icons/controller.png": "4c9ecb1d1f66ded0c101c6232e088803b09c996188c579d5de6a58b80888c693",
+   "icons/crate.png": "319b4764d062851213634e343c46b65c476f49c3fafd0a0c968df955ffbb7333",
+   "icons/deck.png": "bad1acb7973578a92ae59aa0786581126a03d2b8f36c2c7b3efdd3a7dcca8e47",
+   "icons/keys.png": "2c4860acfe7a45818779519b29e857e1bb6b603414deb2f4c878df19aac04d41",
+   "icons/mixer.png": "992c29e1da009feef7b3cd42d6a28ab170385e5be526abe70adef17496e19486",
+   "icons/phones.png": "64ea147b3ec9b3587544ada7f835138ee2d6b6033f5a20a9cb779c80ab256e8b",
+   "icons/rack.png": "e3678e27bb229788122b816e0d5bd6bec20b68972b529ec7036b6013041a54bd",
+   "icons/reels.png": "66b17d8d095a0f8d0a33d15650ff9ec27d77b353ff280ddb10a593712432219e",
+   "icons/sampler.png": "8cc5b7404572c8ba2cb180a9fc13454ca3d9ee47f5682bbbd76a26ef5b9c765d",
+   "icons/speaker.png": "496ee096b63389fcd2dd15a09d43ce4a4b28bf6dc02196289093d8441d6b5e07",
+   "index.html": "750759e03fdb19d9276d1f25ae2b0576d2a566b81b0dfd1e5865a9713be78ba7",
+   "lame.min.js": "15d285e2587b3bdbfd18a68de6ce07cc074f7480a82c3815da2dc1c348ec6df4"
+  }
+ },
+ "installer": {
+  "parts": [
+   "Windows-Setup/setup00.part",
+   "Windows-Setup/setup01.part"
+  ],
+  "size": 191396639,
+  "sha256": "a0b81b8516bc0b0eeeedafd1c8c0f5827c1e03d0c4916fce769801fe60da2324"
+ }
+}
